@@ -1,0 +1,43 @@
+@import "styles/global/vars";
+
+form.base {
+  max-width: 310px;
+  margin: 0 auto;
+
+  .input-group {
+    position: relative;
+    margin-bottom: 30px;
+
+    label {
+      position: absolute;
+      font-size: .8rem;
+      font-weight: 900;
+      font-family: $condensed;
+      top: 0;
+      left: 3px;
+      transition: .2s;
+      color: $grey-light;
+    }
+
+    input {
+      height: 40px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid $grey;
+      transition: .2s;
+      font-size: 1rem;
+      padding: 15px 5px 0 5px;
+      font-weight: 600;
+      color: $black;
+
+      &:active,
+      &:hover,
+      &:focus {
+        border-color: $cyan;
+      }
+    }
+  }
+}

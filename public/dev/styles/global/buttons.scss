@@ -1,0 +1,142 @@
+@import "styles/global/vars";
+
+button {
+  display: inline-block;
+  padding: 5px 10px;
+  border: none;
+  transition: .2s;
+  cursor: pointer;
+}
+
+.btn {
+  font-family: $normal;
+  border: 1px solid;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 15px;
+  cursor: pointer;
+  transition: .2s;
+
+  &-white {
+    background-color: $white;
+    color: $grey;
+    border-color: $grey;
+  }
+
+  &-light {
+    background-color: $light;
+    color: $grey;
+    border-color: $light;
+  }
+
+  &-grey-light {
+    background-color: $grey-light;
+    color: $grey;
+    border-color: $grey-light;
+  }
+
+  &-grey {
+    background-color: $grey;
+    color: $white;
+    border-color: $grey;
+  }
+
+  &-yellow {
+    background-color: $yellow;
+    color: $white;
+    border-color: $yellow;
+  }
+
+  &-orange {
+    background-color: $orange;
+    color: $white;
+    border-color: $orange;
+  }
+
+  &-red {
+    background-color: $red;
+    color: $white;
+    border-color: $red;
+  }
+
+  &-blue {
+    background-color: $blue;
+    color: $white;
+    border-color: $blue;
+
+    &:hover {
+      background-color: darken($blue, 7%);
+      border-color: darken($blue, 7%);
+    }
+
+    &-outline {
+      background-color: $white;
+      color: darken($blue, 10%);
+      border-color: $blue;
+
+      &:hover {
+        background-color: darken($blue, 7%);
+        color: $white;
+        border-color: darken($blue, 7%);
+      }
+    }
+  }
+
+  &-cyan {
+    background-color: $cyan;
+    color: $white;
+    border-color: $cyan;
+
+    &:hover {
+      background-color: darken($cyan, 7%);
+      border-color: darken($cyan, 7%);
+    }
+
+    &-outline {
+      background-color: $white;
+      color: darken($cyan, 10%);
+      border-color: $cyan;
+
+      &:hover {
+        background-color: darken($cyan, 7%);
+        color: $white;
+        border-color: darken($cyan, 7%);
+      }
+    }
+  }
+
+  &-green {
+    background-color: $green;
+    color: $white;
+    border-color: $green;
+
+    &:hover {
+      background-color: darken($green, 7%);
+      border-color: darken($green, 7%);
+    }
+
+    &-outline {
+      background-color: $white;
+      color: darken($green, 10%);
+      border-color: $green;
+
+      &:hover {
+        background-color: darken($green, 7%);
+        color: $white;
+        border-color: darken($green, 7%);
+      }
+    }
+  }
+
+  &-dark {
+    background-color: $dark;
+    color: $white;
+    border-color: $dark;
+  }
+
+  &-black {
+    background-color: $black;
+    color: $white;
+    border-color: $black;
+  }
+}

@@ -1,0 +1,85 @@
+@import "styles/global/vars";
+@import "styles/global/fonts";
+@import "styles/global/buttons";
+@import "styles/global/colors";
+
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  outline: none;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: $white;
+  color: $black;
+  font-family: $normal;
+  font-size: 16px;
+}
+
+main {
+  flex-grow: 1;
+}
+
+a {
+  color: $black;
+  display: inline-block;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.decoration-none {
+  text-decoration: none !important;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.check-group {
+  input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+
+    &:checked+label::before {
+      border-color: $green;
+      background-color: $green;
+      box-shadow: inset 0 0 0 2px #fff;
+    }
+
+    &+label {
+      display: inline-flex;
+      align-items: center;
+      user-select: none;
+      font-size: .8rem;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+        &:before {
+          border-color: $green !important;
+        }
+      }
+
+      &:before {
+        content: '';
+        display: inline-block;
+        width: 13px;
+        height: 13px;
+        flex-shrink: 0;
+        flex-grow: 0;
+        border: 1px solid $grey-light;
+        margin-right: 10px;
+        transition: .2s;
+      }
+    }
+  }
+}
+

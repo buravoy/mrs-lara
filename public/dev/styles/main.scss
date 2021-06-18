@@ -1,0 +1,17 @@
+@import "~bootstrap/dist/css/bootstrap-grid.min";
+@import "global/global";
+@import "styles/sections/top-menu";
+
+.logo {
+  width: 48px;
+  height: auto;
+  transition: .2s;
+
+  &:hover {
+    filter: brightness(0.9);
+  }
+  > img {
+    width: 100%;
+    height: auto;
+  }
+}
