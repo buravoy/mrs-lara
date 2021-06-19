@@ -3,3 +3,26 @@
         margin: 0;
     }
 }
+
+.navbar {
+    &-toggler:focus {
+        outline: none;
+    }
+
+    &-brand {
+        .logo-img{
+            width: 30px;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: grayscale(1);
+
+            > img {
+                width: 100%;
+                height: auto;
+            }
+        }
+    }
+}
+

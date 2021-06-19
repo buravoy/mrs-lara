@@ -9,6 +9,6 @@
     </div>
 </div>
 
-<a href="/admin" class="admin-signin">
+<a href="/admin" class="admin-signin" target="_blank">
     <i class="las la-lock"></i>
 </a>
