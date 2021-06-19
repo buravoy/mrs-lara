@@ -11,7 +11,7 @@
 @section('content')
     <div class="container-xxl">
 
-    <form method="POST" action="{{ route('register') }}" class="@if ($errors->any()) error @endif base">
+    <form method="POST" action="{{ route('register') }}" class="my-5 @if ($errors->any()) error @endif base">
         @csrf
 
         <div class="input-group">

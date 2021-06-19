@@ -3,15 +3,33 @@
 @import "styles/sections/top-menu";
 
 .logo {
-  width: 48px;
-  height: auto;
-  transition: .2s;
+    &:hover {
+        filter: brightness(0.9);
+    }
 
-  &:hover {
-    filter: brightness(0.9);
-  }
-  > img {
-    width: 100%;
-    height: auto;
-  }
+    &-img {
+        width: 40px;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        > img {
+            width: 100%;
+            height: auto;
+        }
+    }
+}
+
+.admin {
+    &-signin {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        color: transparent;
+
+        &:hover {
+            color: $grey;
+        }
+    }
 }

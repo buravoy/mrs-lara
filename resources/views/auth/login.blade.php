@@ -10,7 +10,7 @@
 
 @section('content')
     <div class="container-xxl">
-        <form method="POST" action="{{ route('login') }}" class="@if ($errors->any()) error @endif base">
+        <form method="POST" action="{{ route('login') }}" class="my-5 @if ($errors->any()) error @endif base">
             @csrf
 
             <div class="input-group" tabindex="0">
