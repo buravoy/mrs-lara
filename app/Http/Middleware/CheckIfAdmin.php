@@ -28,8 +28,8 @@ class CheckIfAdmin
      */
     private function checkIfUserIsAdmin($user)
     {
-        // return ($user->is_admin == 1);
-        return true;
+         return ($user->is_admin == 1);
+//        return true;
     }
 
     /**
@@ -39,7 +39,7 @@ class CheckIfAdmin
      *
      * @return [type] [description]
      */
-    private function respondToUnauthorizedRequest($request)
+    private function  respondToUnauthorizedRequest($request)
     {
         if ($request->ajax() || $request->wantsJson()) {
             return response(trans('backpack::base.unauthorized'), 401);

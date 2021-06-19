@@ -5,9 +5,9 @@
 @endsection
 
 @section('content')
-
-    <p>Вфырищфкв</p>
-
+    <div class="container-xxl">
+        <p class="t-center py-5">Скоро все будет</p>Z
+    </div>
 @endsection
 
 
