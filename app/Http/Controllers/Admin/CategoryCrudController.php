@@ -39,6 +39,9 @@ class CategoryCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+
+        CRUD:: addButtonFromView('top', 'import', 'import', 'end');
+
 //        CRUD::setFromDb(); // columns
 
         CRUD::addColumn([
@@ -118,5 +121,10 @@ class CategoryCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function import()
+    {
+        // whatever you decide to do
     }
 }

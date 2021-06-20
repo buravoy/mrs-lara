@@ -39,7 +39,18 @@ class ProductsCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // columns
+//        CRUD::setFromDb(); // columns
+
+        CRUD::addColumn([
+            'name' => 'name',
+            'type' => 'text'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'category',
+            'type' => 'relationship',
+            'label' => 'Категория'
+        ]);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -58,7 +69,72 @@ class ProductsCrudController extends CrudController
     {
         CRUD::setValidation(ProductsRequest::class);
 
-        CRUD::setFromDb(); // fields
+        CRUD::addField([
+            'name' => 'name',
+            'label' => 'Название',
+            'type' => 'text',
+        ]);
+
+        CRUD::addField([
+            'name' => 'category_id',
+            'label' => 'Категория',
+            'type' => 'select2',
+            'entity' => 'category',
+        ]);
+
+        CRUD::addField([
+            'name' => 'description',
+            'label' => 'Описание',
+            'type' => 'text',
+        ]);
+
+        CRUD::addField([
+            'name' => 'price',
+            'label' => 'Цена',
+            'type' => 'text',
+        ]);
+
+        CRUD::addField([
+            'name' => 'old_price',
+            'label' => 'Старая цена',
+            'type' => 'text',
+        ]);
+
+        CRUD::addField([
+            'name' => 'discount',
+            'label' => 'Скидка',
+            'type' => 'text',
+        ]);
+
+        CRUD::addField([
+            'name' => 'brand',
+            'label' => 'Бренд',
+            'type' => 'text',
+        ]);
+
+        CRUD::addField([
+            'name' => 'size',
+            'label' => 'Размер',
+            'type' => 'text',
+        ]);
+
+        CRUD::addField([
+            'name' => 'color',
+            'label' => 'Цвет',
+            'type' => 'text',
+        ]);
+
+        CRUD::addField([
+            'name' => 'image',
+            'label' => 'Картинка',
+            'type' => 'text',
+        ]);
+
+        CRUD::addField([
+            'name' => 'sort',
+            'label' => 'Сортировака',
+            'type' => 'text',
+        ]);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
