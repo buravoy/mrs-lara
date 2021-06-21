@@ -1,6 +1,8 @@
+/.idea/
 /public/css/
 /public/images/
 /public/js/
 
 # Project exclude paths
 /public/dev/node_modules/
+/vendor/
