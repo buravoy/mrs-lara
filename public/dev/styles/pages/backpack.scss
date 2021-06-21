@@ -1,6 +1,15 @@
+.btn {
+    margin-bottom: 5px;
+}
+
+button:focus {
+    outline: none;
+}
+
 .dates {
     > p {
         margin: 0;
+        font-size: 0.7rem;
     }
 }
 

@@ -1,45 +1,40 @@
 @if ($crud->hasAccess('create'))
-    <a href="javascript:void(0)" onclick="importTransaction(this)" data-route="{{ url($crud->route.'/import') }}" class="btn btn-sm btn-link" data-button-type="import">
-        <span class="ladda-label"><i class="fa fa-plus"></i> Import {{ $crud->entity_name }}</span>
+    <a href="#" id='import-categories' class="btn btn-outline-primary" data-style="zoom-in">
+        <span class="ladda-label">
+            <i class="la la-plus-circle"></i> Импортировать {{ $crud->entity_name_plural}}</span>
     </a>
 @endif
 
+
 @push('after_scripts')
+    <div class="modal fade" id="import-categories-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form method="post" action="{{ route('file.upload.post') }}" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <input type="file" name="file" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
     <script>
-        if (typeof importTransaction != 'function') {
-            $("[data-button-type=import]").unbind('click');
-
-            function importTransaction(button) {
-                // ask for confirmation before deleting an item
-                // e.preventDefault();
-                var button = $(button);
-                var route = button.attr('data-route');
-
-                $.ajax({
-                    url: route,
-                    type: 'POST',
-                    success: function(result) {
-                        // Show an alert with the result
-                        console.log(result,route);
-                        new Noty({
-                            text: "Some Tx had been imported",
-                            type: "success"
-                        }).show();
-
-                        // Hide the modal, if any
-                        $('.modal').modal('hide');
-
-                        crud.table.ajax.reload();
-                    },
-                    error: function(result) {
-                        // Show an alert with the result
-                        new Noty({
-                            text: "The new entry could not be created. Please try again.",
-                            type: "warning"
-                        }).show();
-                    }
-                });
-            }
-        }
+        $('#import-categories').on('click', function () {
+            $('#import-categories-modal').modal('show')
+        })
     </script>
 @endpush

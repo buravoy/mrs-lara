@@ -18,6 +18,7 @@ class CategoryCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ReorderOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -28,7 +29,8 @@ class CategoryCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Category::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/category');
-        CRUD::setEntityNameStrings('категорию', 'Категории');
+        CRUD::setEntityNameStrings('категорию', 'категории');
+
     }
 
     /**
@@ -37,10 +39,20 @@ class CategoryCrudController extends CrudController
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
+    protected function setupReorderOperation()
+    {
+        // define which model attribute will be shown on draggable elements
+        CRUD::set('reorder.label', 'name');
+        // define how deep the admin is allowed to nest the items
+        // for infinite levels, set it to 0
+        CRUD::set('reorder.max_level', 0);
+    }
+
     protected function setupListOperation()
     {
 
-        CRUD:: addButtonFromView('top', 'import', 'import', 'end');
+
+        CRUD::addButtonFromView('top', 'import', 'import', 'end');
 
 //        CRUD::setFromDb(); // columns
 
@@ -52,7 +64,7 @@ class CategoryCrudController extends CrudController
         CRUD::addColumn([
             'name' => 'parent',
             'type' => 'relationship',
-            'label' => 'Parent'
+            'label' => 'Parent',
         ]);
 
         /**
@@ -83,8 +95,11 @@ class CategoryCrudController extends CrudController
         CRUD::addField([
             'name' => 'parent_id',
             'label' => 'Родительская категория',
-            'type' => 'select2',
+            'type' => 'select',
             'entity' => 'parent',
+            'attributes' => [
+                'disabled' => 'disabled'
+            ],
         ]);
 
         CRUD::addField([
@@ -102,7 +117,8 @@ class CategoryCrudController extends CrudController
         CRUD::addField([
             'name' => 'sort',
             'label' => 'Сортировка',
-            'type' => 'text',
+            'type' => 'number',
+            'value' => !empty($currentEntry->sort) ? $currentEntry->sort : 500
         ]);
 
         /**
