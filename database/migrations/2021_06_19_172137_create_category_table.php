@@ -20,6 +20,13 @@ class CreateCategoryTable extends Migration
             $table->text('description')->nullable();
             $table->text('image')->nullable();
             $table->integer('sort')->nullable();
+            $table->integer('parent_id')->default(0)->nullable()->change();
+            $table->integer('lft')->default(0);
+            $table->integer('rgt')->default(0);
+            $table->integer('depth')->default(0);
+            $table->bigInteger('xml_parent_id')->nullable();
+            $table->bigInteger('xml_id')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

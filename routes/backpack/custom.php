@@ -18,5 +18,3 @@ Route::group([
     Route::crud('products', 'ProductsCrudController');
     Route::crud('category', 'CategoryCrudController');
 }); // this should be the absolute last line of this file
-
-Route::get('category/import', 'CategoryCrudController@import');

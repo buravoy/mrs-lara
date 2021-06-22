@@ -26,6 +26,7 @@ class CreateProductsTable extends Migration
             $table->string('size')->nullable();
             $table->string('color')->nullable();
             $table->integer('sort')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

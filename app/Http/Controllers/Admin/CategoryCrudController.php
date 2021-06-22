@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Category;
+use Illuminate\Http\Request;
 use App\Http\Requests\CategoryRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -52,20 +54,36 @@ class CategoryCrudController extends CrudController
     {
 
 
-        CRUD::addButtonFromView('top', 'import', 'import', 'end');
+        CRUD::addButtonFromView('top', 'import', 'import-categories', 'end');
+
+        CRUD::addButtonFromView('top', 'clear', 'clear-categories', 'end');
 
 //        CRUD::setFromDb(); // columns
 
         CRUD::addColumn([
-            'name' => 'name',
+            'name' => 'id',
             'type' => 'text'
         ]);
 
         CRUD::addColumn([
-            'name' => 'parent',
-            'type' => 'relationship',
-            'label' => 'Parent',
+            'label' => 'Категория',
+            'type'  => 'view',
+            'view'  => 'vendor.backpack.base.columns.category-view',
         ]);
+
+        CRUD::addFilter(
+            [
+                'name' => 'id',
+                'type' => 'select2',
+                'label' => 'Родительская категория',
+            ],
+            function () {
+                return Category::pluck('name', 'id')->toArray();
+            },
+            function ($value) {
+                $this->crud->addClause('where', 'parent_id', $value);
+            }
+        );
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -139,8 +157,53 @@ class CategoryCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
-    public function import()
+
+    public function categoryXmlImport(Request $request)
     {
-        // whatever you decide to do
+
+        $filepath = base_path('uploads/xml/categories/') . $request->input('filename');
+        $file = simplexml_load_file($filepath);
+        $categories = $file->shop->categories->category;
+
+        $count = 1;
+
+        foreach ($categories as $category) {
+
+            $name = $category ? $category : 'Error';
+            $id = $category->attributes()->id ? $category->attributes()->id : null;
+            $parent = $category->attributes()->parentid ? $category->attributes()->parentid : null;
+
+            Category::query()->insert([
+                'name' => $name,
+                'xml_id' => $id,
+                'xml_parent_id' => $parent,
+            ]);
+
+//            if ($count > 50) break;
+            $count++;
+        }
+
+        $importedCategories = Category::whereNotNull('xml_parent_id')->get();
+
+        foreach ($importedCategories as $category) {
+
+            if ($category['xml_parent_id']) {
+
+                $parentId = Category::where('xml_id', $category['xml_parent_id'])->value('id');
+
+                Category::where('xml_id', $category['xml_id'])
+                    ->update([
+                        'parent_id' => $parentId
+                    ]);
+            }
+        }
+
+        return true;
+    }
+
+    public function deleteAllCategories()
+    {
+        Category::query()->delete();
+        return back();
     }
 }

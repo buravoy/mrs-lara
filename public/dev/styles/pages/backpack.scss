@@ -35,3 +35,22 @@ button:focus {
     }
 }
 
+
+.btn-outline-error:hover {
+    color: #fff !important;
+}
+
+.categories {
+    p {
+        margin: 0;
+        //&:first-child{
+        //
+        //}
+        //
+        &:last-child {
+            font-size: 0.8rem;
+        }
+
+
+    }
+}

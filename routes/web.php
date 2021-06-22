@@ -5,6 +5,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\Admin\CategoryCrudController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +20,14 @@ use App\Http\Controllers\FileUploadController;
 
 Route::get('/', [MainController::class, 'index']);
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
+
 Route::get('/category', [CategoryController::class, 'index']);
 
 Route::get('/product', [ProductController::class, 'index']);
 
-Route::post('/upload-categories', [FileUploadController::class, 'fileUploadPost'])->name('file.upload.post');
+Route::post('/upload-categories', [FileUploadController::class, 'categoryXmlPostUpload'])->name('xml-category-upload');
+Route::post('/import-categories', [CategoryCrudController::class, 'categoryXmlImport'])->name('xml-category-import');
+Route::post('/delete-categories', [CategoryCrudController::class, 'deleteAllCategories'])->name('delete-all-categories');

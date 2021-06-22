@@ -6,35 +6,15 @@ use Illuminate\Http\Request;
 
 class FileUploadController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function fileUpload()
+    public function categoryXmlPostUpload(Request $request)
     {
-        return view('fileUpload');
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function fileUploadPost(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|mimes:xml|max:2048',
-        ]);
-
+        $request->validate(['file' => 'required|mimes:xml']);
         $fileName = time() . '.' . $request->file->extension();
-        $request->file->move(public_path('uploads'), $fileName);
-
-
-
-        return back();
-//            ->with('success', 'You have successfully upload file.')
-//            ->with('file', $fileName);
-
+        $request->file->move(base_path('uploads/xml/categories'), $fileName);
+        return response()->json([
+            'message' => 'Categories XML file uploaded',
+            'filename' => $fileName,
+            'original' => $request->file->getClientOriginalName()
+        ]);
     }
 }
