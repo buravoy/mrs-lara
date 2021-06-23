@@ -67,8 +67,8 @@ class CategoryCrudController extends CrudController
 
         CRUD::addColumn([
             'label' => 'Категория',
-            'type'  => 'view',
-            'view'  => 'vendor.backpack.base.columns.category-view',
+            'type' => 'view',
+            'view' => 'vendor.backpack.base.columns.category-view',
         ]);
 
         CRUD::addFilter(
@@ -98,6 +98,37 @@ class CategoryCrudController extends CrudController
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
+
+    public function setupShowOperation()
+    {
+        CRUD::set('show.setFromDb', true);
+
+//        CRUD::addColumn([
+//            'name' => 'name',
+//            'label' => 'Название',
+//            'type' => 'text',
+//        ]);
+//
+//        CRUD::addColumn([
+//            'name' => 'short_name',
+//            'label' => 'Короткое название',
+//            'type' => 'text',
+//        ]);
+//
+//        CRUD::addColumn([
+//            'name'         => 'parent', // name of relationship method in the model
+//            'type'         => 'relationship',
+//            'label'        => 'Родительская',
+//        ]);
+//
+//        CRUD::addColumn([
+//            'name' => 'description',
+//            'label' => 'Короткое название',
+//            'type' => 'text',
+//        ]);
+
+
+    }
     protected function setupCreateOperation()
     {
         CRUD::setValidation(CategoryRequest::class);
@@ -113,23 +144,58 @@ class CategoryCrudController extends CrudController
         CRUD::addField([
             'name' => 'parent_id',
             'label' => 'Родительская категория',
-            'type' => 'select',
-            'entity' => 'parent',
-            'attributes' => [
-                'disabled' => 'disabled'
+            'type' => 'select2',
+            'entity' => 'parent'
+        ]);
+
+        CRUD::addField([
+            'name' => 'short_name',
+            'label' => 'Короткое название',
+            'type' => 'text',
+        ]);
+
+
+        CRUD::addField([
+            'name' => 'form',
+            'label' => 'Словоформа',
+            'type' => 'radio',
+            'options'     => [
+                'муж' => "Мужской",
+                'жен' => "Женский",
+                'сред' => "Средний",
+                'множ' => "Множественный",
             ],
+            'inline' => true
+        ]);
+
+        CRUD::addField([
+            'name' => 'short_description',
+            'label' => 'Короткое описание',
+            'type' => 'textarea',
         ]);
 
         CRUD::addField([
             'name' => 'description',
             'label' => 'Описание',
-            'type' => 'text',
+            'type' => 'textarea',
         ]);
 
         CRUD::addField([
             'name' => 'image',
             'label' => 'Картинка',
             'type' => 'text',
+        ]);
+
+        CRUD::addField([
+            'name' => 'meta_title',
+            'label' => 'META Title',
+            'type' => 'text',
+        ]);
+
+        CRUD::addField([
+            'name' => 'meta_description',
+            'label' => 'META Description',
+            'type' => 'textarea',
         ]);
 
         CRUD::addField([
@@ -165,36 +231,54 @@ class CategoryCrudController extends CrudController
         $file = simplexml_load_file($filepath);
         $categories = $file->shop->categories->category;
 
+        $tempCategories = [];
+
         $count = 1;
 
         foreach ($categories as $category) {
 
-            $name = $category ? $category : 'Error';
-            $id = $category->attributes()->id ? $category->attributes()->id : null;
-            $parent = $category->attributes()->parentid ? $category->attributes()->parentid : null;
+            $name = $category->name ? (string)$category->name : 'Error';
+            $short = $category->short ? (string)$category->short : null;
+            $form = $category->form ? (string)$category->form : null;
+            $xmlId = $category->attributes()->id ? (string)$category->attributes()->id : null;
+            $xmlParent = $category->attributes()->parent ? (string)$category->attributes()->parent : null;
 
-            Category::query()->insert([
+            if (Category::where('name', $name)->exists()) {
+                $id = Category::where('name', $name)->update([
+                    'short_name' => $short,
+                    'form' => $form,
+                ])['id'];
+            } else {
+                $id = Category::query()->insertGetId([
+                    'name' => $name,
+                    'short_name' => $short,
+                    'form' => $form,
+                ]);
+            }
+
+            $tempCategories[] = [
+                'id' => $id,
                 'name' => $name,
-                'xml_id' => $id,
-                'xml_parent_id' => $parent,
-            ]);
-
-//            if ($count > 50) break;
-            $count++;
+                'short_name' => $short,
+                'form' => $form,
+                'xml_id' => $xmlId,
+                'xml_parent_id' => $xmlParent,
+            ];
         }
 
-        $importedCategories = Category::whereNotNull('xml_parent_id')->get();
-
-        foreach ($importedCategories as $category) {
+        foreach ($tempCategories as $category) {
 
             if ($category['xml_parent_id']) {
+                foreach ($tempCategories as $item) {
+                    if ($category['xml_parent_id'] == $item['xml_id']) {
+                        $parentId = $item['id'];
+                        break;
+                    }
+                }
 
-                $parentId = Category::where('xml_id', $category['xml_parent_id'])->value('id');
-
-                Category::where('xml_id', $category['xml_id'])
-                    ->update([
-                        'parent_id' => $parentId
-                    ]);
+                Category::where('id', $category['id'])->update([
+                    'parent_id' => $parentId ? $parentId : null
+                ]);
             }
         }
 

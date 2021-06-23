@@ -22,10 +22,9 @@ class CreateProductsTable extends Migration
             $table->float('price')->nullable();
             $table->float('old_price')->nullable();
             $table->float('discount')->nullable();
-            $table->string('brand')->nullable();
-            $table->string('size')->nullable();
-            $table->string('color')->nullable();
-            $table->integer('sort')->nullable();
+            $table->json('attributes')->nullable();
+            $table->string('meta_title')->nullable();
+            $table->text('meta_description')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

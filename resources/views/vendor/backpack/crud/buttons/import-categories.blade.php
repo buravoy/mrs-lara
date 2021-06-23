@@ -7,7 +7,7 @@
 
 
 @push('after_scripts')
-    <div class="modal fade" id="import-categories-modal">
+    <div class="modal fade" id="import-categories-modal" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
