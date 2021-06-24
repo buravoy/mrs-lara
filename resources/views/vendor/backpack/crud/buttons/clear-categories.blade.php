@@ -1,5 +1,5 @@
 @if ($crud->hasAccess('create'))
-    <a href="#" id="clear-categories" class="btn btn-outline-error" data-style="zoom-in">
+    <a href="#" id="clear-categories" class="btn btn-sm btn-outline-error" data-style="zoom-in">
         <span class="ladda-label">
             <i class="la la-trash"></i>
         </span>

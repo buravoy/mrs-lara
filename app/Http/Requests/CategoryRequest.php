@@ -26,7 +26,16 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'name' => 'bail|required|string|max:255',
+            'short_name' => 'bail|nullable|string|max:255',
+            'description' => 'bail|nullable|string|max:65535',
+            'short_description' => 'bail|nullable|string|max:65535',
+            'form' => 'bail|nullable|string|max:10',
+            'image' => 'bail|nullable|string|max:65535',
+
+            'meta_title' => 'bail|nullable|string|max:255',
+            'meta_description' => 'bail|nullable|string|max:65535',
+            'sort' => 'bail|integer|max:99999',
         ];
     }
 

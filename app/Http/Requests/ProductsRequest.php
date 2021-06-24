@@ -26,7 +26,18 @@ class ProductsRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'name' => 'bail|required|string|max:255',
+            'category_id' => 'bail|nullable|integer|max:255',
+            'description' => 'bail|nullable|string|max:65535',
+            'price' => 'bail|nullable|integer|max:999999999',
+            'old_price' => 'bail|nullable|integer|max:999999999',
+            'discount' => 'bail|nullable|integer|max:100',
+            'attributes' => 'bail|nullable|string|max:65535',
+            'image' => 'bail|nullable|string|max:65535',
+
+            'meta_title' => 'bail|nullable|string|max:255',
+            'meta_description' => 'bail|nullable|string|max:65535',
+            'sort' => 'bail|integer|max:99999',
         ];
     }
 

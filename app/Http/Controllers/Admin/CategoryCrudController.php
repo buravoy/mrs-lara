@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Category;
+use Backpack\CRUD\app\Library\CrudPanel\Traits\Filters;
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoryRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use function PHPUnit\Framework\isEmpty;
 
 /**
  * Class CategoryCrudController
@@ -50,10 +52,37 @@ class CategoryCrudController extends CrudController
         CRUD::set('reorder.max_level', 0);
     }
 
+    public function reorder()
+    {
+        $this->crud->hasAccessOrFail('reorder');
+
+        if (! $this->crud->isReorderEnabled()) {
+            abort(403, 'Reorder is disabled.');
+        }
+
+//        $this->crud->addClause('where', 'parent_id', 39);
+
+//        dd($this->crud->getEntries());
+        // get all results for that entity
+
+        $this->data['entries'] = $this->crud->getEntries();
+        $this->data['crud'] = $this->crud;
+        $this->data['title'] = $this->crud->getTitle() ?? trans('backpack::crud.reorder').' '.$this->crud->entity_name;
+
+        // load the view from /resources/views/vendor/backpack/crud/ if it exists, otherwise load the one in the package
+        return view($this->crud->getReorderView(), $this->data);
+    }
+
+    /**
+     *  Reorder the items in the database using the Nested Set pattern.
+     *
+     *  Database columns needed: id, parent_id, lft, rgt, depth, name/title
+     *
+     *  @return Response
+     */
+
     protected function setupListOperation()
     {
-
-
         CRUD::addButtonFromView('top', 'import', 'import-categories', 'end');
 
         CRUD::addButtonFromView('top', 'clear', 'clear-categories', 'end');
@@ -70,6 +99,14 @@ class CategoryCrudController extends CrudController
             'type' => 'view',
             'view' => 'vendor.backpack.base.columns.category-view',
         ]);
+
+        CRUD::addColumn([
+            'label' => 'Дочерние 1 уровня',
+            'type' => 'view',
+            'view' => 'vendor.backpack.base.columns.childrens',
+        ]);
+
+
 
         CRUD::addFilter(
             [
@@ -133,6 +170,8 @@ class CategoryCrudController extends CrudController
     {
         CRUD::setValidation(CategoryRequest::class);
 
+        $entry = CRUD::getCurrentEntry();
+
 //        CRUD::setFromDb(); // fields
 
         CRUD::addField([
@@ -153,7 +192,6 @@ class CategoryCrudController extends CrudController
             'label' => 'Короткое название',
             'type' => 'text',
         ]);
-
 
         CRUD::addField([
             'name' => 'form',
@@ -202,7 +240,7 @@ class CategoryCrudController extends CrudController
             'name' => 'sort',
             'label' => 'Сортировка',
             'type' => 'number',
-            'value' => !empty($currentEntry->sort) ? $currentEntry->sort : 500
+            'value' => !empty($entry->sort) ? $entry->sort : 500
         ]);
 
         /**
@@ -232,8 +270,6 @@ class CategoryCrudController extends CrudController
         $categories = $file->shop->categories->category;
 
         $tempCategories = [];
-
-        $count = 1;
 
         foreach ($categories as $category) {
 

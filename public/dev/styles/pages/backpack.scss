@@ -43,14 +43,29 @@ button:focus {
 .categories {
     p {
         margin: 0;
-        //&:first-child{
-        //
-        //}
-        //
         &:last-child {
             font-size: 0.8rem;
         }
+    }
+}
 
+.category{
+    &-children-view {
+        li {
+            line-height: 14px;
+        }
+    }
 
+    &-list-toggle {
+        cursor: pointer;
+        > i {
+            transition: .2s;
+        }
+    }
+}
+
+.rotate {
+    &180{
+        transform: rotate(180deg);
     }
 }
