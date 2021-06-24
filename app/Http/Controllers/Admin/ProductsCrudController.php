@@ -69,6 +69,8 @@ class ProductsCrudController extends CrudController
     {
         CRUD::setValidation(ProductsRequest::class);
 
+        $entry = CRUD::getCurrentEntry();
+
         CRUD::addField([
             'name' => 'name',
             'label' => 'Название',
@@ -134,6 +136,7 @@ class ProductsCrudController extends CrudController
             'name' => 'sort',
             'label' => 'Сортировака',
             'type' => 'text',
+            'value' => !empty($entry->sort) ? $entry->sort : 500
         ]);
 
         /**
