@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryRequest extends FormRequest
+class CategoriesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -33,6 +33,7 @@ class CategoryRequest extends FormRequest
             'form' => 'bail|nullable|string|max:10',
             'image' => 'bail|nullable|string|max:65535',
 
+//            'slug' => 'bail|unique:categories|required|string|max:255',
             'meta_title' => 'bail|nullable|string|max:255',
             'meta_description' => 'bail|nullable|string|max:65535',
             'sort' => 'bail|integer|max:99999',

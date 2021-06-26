@@ -1,29 +1,23 @@
 <div class="categories">
-    <p>
-        <b>{{ $entry->name }}</b>
-        <span class="small ml-3">
-            Короткое:
-            @if($entry->short_name)
-                <b>{{ $entry->short_name }}</b>
-            @else
-                <b class="text-error">---</b>
-            @endif
-        </span>
-    </p>
 
-    <p class="small">
-        Родительская:
-        @if($entry->parent['name'])
-            <span class="mr-3"><b>{{ $entry->parent['name'] }}</b></span>
-        @else
-            <span class="mr-3 text-error"><b>---</b></span>
+
+    <div class="d-flex align-items-center">
+        <p class="font-weight-bold">{{ $entry->name }}</p>
+        @if($entry->parent)
+            <i class="las la-long-arrow-alt-left ml-3 mr-1"></i>
+            <p class="small">{{ $entry->parent->name ?? null }}</p>
         @endif
-        Словоформа:
-        @if($entry->form)
-            <span class="mr-3"><b>{{ $entry->form }}</b></span>
-        @else
-            <span class="text-error"><b>---</b></span>
-        @endif
-    </p>
+    </div>
+
+    <div class="d-flex align-items-center">
+        <p class="small mr-3">
+            Короткое:
+            <span class="font-weight-bold">{!! $entry->short_name ?? '<i class="las la-times-circle text-error"></i>' !!}</span>
+        </p>
+        <p class="small">
+            Словоформа:
+            <span class="font-weight-bold">{!! $entry->parent->form ?? '<i class="las la-times-circle text-error"></i>'!!}</span>
+        </p>
+    </div>
 </div>
 

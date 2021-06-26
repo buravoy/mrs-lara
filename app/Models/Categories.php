@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 
-class Category extends Model
+class Categories extends Model
 {
     use CrudTrait;
+    use Sluggable;
 
     /*
     |--------------------------------------------------------------------------
@@ -16,19 +18,33 @@ class Category extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'category';
+    protected $table = 'categories';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
+    protected $fillable = ['name'];
     // protected $hidden = [];
     // protected $dates = [];
+    protected $translatable = [];
 
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'name',
+            ]
+        ];
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -38,12 +54,17 @@ class Category extends Model
 
     public function parent()
     {
-        return $this->hasOne(self::class, 'id', 'parent_id');
+        return $this->belongsTo(self::class);
     }
 
     public function child()
     {
         return $this->hasMany(self::class, 'parent_id')->with('child');
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(Products::class);
     }
 
     /*
@@ -63,4 +84,5 @@ class Category extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
 }

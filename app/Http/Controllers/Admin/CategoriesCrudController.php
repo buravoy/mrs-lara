@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Category;
-use Backpack\CRUD\app\Library\CrudPanel\Traits\Filters;
+use App\Models\Categories;
 use Illuminate\Http\Request;
-use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\CategoriesRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use function PHPUnit\Framework\isEmpty;
+use Illuminate\Support\Str;
 
 /**
  * Class CategoryCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class CategoryCrudController extends CrudController
+class CategoriesCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -31,10 +30,12 @@ class CategoryCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Category::class);
+        CRUD::setModel(Categories::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/category');
-        CRUD::setEntityNameStrings('категорию', 'категории');
+        CRUD::setEntityNameStrings('категорию', 'Категории');
 
+//        dd($_GET['id']);
+//        dd($this->crud->getEntries());
     }
 
     /**
@@ -83,6 +84,7 @@ class CategoryCrudController extends CrudController
 
     protected function setupListOperation()
     {
+
         CRUD::addButtonFromView('top', 'import', 'import-categories', 'end');
 
         CRUD::addButtonFromView('top', 'clear', 'clear-categories', 'end');
@@ -106,8 +108,6 @@ class CategoryCrudController extends CrudController
             'view' => 'vendor.backpack.base.columns.childrens',
         ]);
 
-
-
         CRUD::addFilter(
             [
                 'name' => 'id',
@@ -115,7 +115,7 @@ class CategoryCrudController extends CrudController
                 'label' => 'Родительская категория',
             ],
             function () {
-                return Category::pluck('name', 'id')->toArray();
+                return Categories::pluck('name', 'id')->toArray();
             },
             function ($value) {
                 $this->crud->addClause('where', 'parent_id', $value);
@@ -166,9 +166,10 @@ class CategoryCrudController extends CrudController
 
 
     }
+
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(CategoryRequest::class);
+        CRUD::setValidation(CategoriesRequest::class);
 
         $entry = CRUD::getCurrentEntry();
 
@@ -181,10 +182,17 @@ class CategoryCrudController extends CrudController
         ]);
 
         CRUD::addField([
+            'name' => 'slug',
+            'label' => 'Символьный код',
+            'type'  => 'slug'
+        ]);
+
+        CRUD::addField([
             'name' => 'parent_id',
             'label' => 'Родительская категория',
             'type' => 'select2',
-            'entity' => 'parent'
+            'entity' => 'parent',
+
         ]);
 
         CRUD::addField([
@@ -279,14 +287,15 @@ class CategoryCrudController extends CrudController
             $xmlId = $category->attributes()->id ? (string)$category->attributes()->id : null;
             $xmlParent = $category->attributes()->parent ? (string)$category->attributes()->parent : null;
 
-            if (Category::where('name', $name)->exists()) {
-                $id = Category::where('name', $name)->update([
+            if (Categories::where('name', $name)->exists()) {
+                $id = Categories::where('name', $name)->update([
                     'short_name' => $short,
                     'form' => $form,
-                ])['id'];
+                ]);
             } else {
-                $id = Category::query()->insertGetId([
+                $id = Categories::query()->insertGetId([
                     'name' => $name,
+                    'slug' => Str::slug($name, '-'),
                     'short_name' => $short,
                     'form' => $form,
                 ]);
@@ -294,9 +303,9 @@ class CategoryCrudController extends CrudController
 
             $tempCategories[] = [
                 'id' => $id,
-                'name' => $name,
-                'short_name' => $short,
-                'form' => $form,
+//                'name' => $name,
+//                'short_name' => $short,
+//                'form' => $form,
                 'xml_id' => $xmlId,
                 'xml_parent_id' => $xmlParent,
             ];
@@ -312,7 +321,7 @@ class CategoryCrudController extends CrudController
                     }
                 }
 
-                Category::where('id', $category['id'])->update([
+                Categories::where('id', $category['id'])->update([
                     'parent_id' => $parentId ? $parentId : null
                 ]);
             }
@@ -323,7 +332,12 @@ class CategoryCrudController extends CrudController
 
     public function deleteAllCategories()
     {
-        Category::query()->delete();
+        Categories::query()->delete();
         return back();
+    }
+
+    public function createSlug(Request $request)
+    {
+        return Str::slug($request->name, '-');
     }
 }

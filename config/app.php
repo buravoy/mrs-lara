@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC+3',
+    'timezone' => 'Europe/Moscow',
 
     /*
     |--------------------------------------------------------------------------
@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+
 
         /*
          * Application Service Providers...

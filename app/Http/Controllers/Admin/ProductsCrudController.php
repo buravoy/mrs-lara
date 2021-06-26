@@ -46,11 +46,11 @@ class ProductsCrudController extends CrudController
             'type' => 'text'
         ]);
 
-        CRUD::addColumn([
-            'name' => 'category',
-            'type' => 'relationship',
-            'label' => 'Категория'
-        ]);
+//        CRUD::addColumn([
+//            'name' => 'category',
+//            'type' => 'relationship',
+//            'label' => 'Категория'
+//        ]);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -78,10 +78,16 @@ class ProductsCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'category_id',
+            'name' => 'slug',
+            'label' => 'Символьный код',
+            'type'  => 'slug'
+        ]);
+
+        CRUD::addField([
+            'name' => 'category',
             'label' => 'Категория',
-            'type' => 'select2',
-            'entity' => 'category',
+            'type' => 'select2_multiple',
+            'pivot'     => true,
         ]);
 
         CRUD::addField([
@@ -105,24 +111,6 @@ class ProductsCrudController extends CrudController
         CRUD::addField([
             'name' => 'discount',
             'label' => 'Скидка',
-            'type' => 'text',
-        ]);
-
-        CRUD::addField([
-            'name' => 'brand',
-            'label' => 'Бренд',
-            'type' => 'text',
-        ]);
-
-        CRUD::addField([
-            'name' => 'size',
-            'label' => 'Размер',
-            'type' => 'text',
-        ]);
-
-        CRUD::addField([
-            'name' => 'color',
-            'label' => 'Цвет',
             'type' => 'text',
         ]);
 
@@ -156,4 +144,6 @@ class ProductsCrudController extends CrudController
     {
         $this->setupCreateOperation();
     }
+
+
 }
