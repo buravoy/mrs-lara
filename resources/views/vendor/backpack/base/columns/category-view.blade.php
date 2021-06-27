@@ -12,11 +12,15 @@
     <div class="d-flex align-items-center">
         <p class="small mr-3">
             Короткое:
-            <span class="font-weight-bold">{!! $entry->short_name ?? '<i class="las la-times-circle text-error"></i>' !!}</span>
+            <span class="font-weight-bold">
+                {!! !empty($entry->short_name) ? $entry->short_name : '<i class="las la-times-circle text-error"></i>' !!}
+            </span>
         </p>
         <p class="small">
             Словоформа:
-            <span class="font-weight-bold">{!! $entry->parent->form ?? '<i class="las la-times-circle text-error"></i>'!!}</span>
+            <span class="font-weight-bold">
+                {!! !empty($entry->form) ? $entry->form : '<i class="las la-times-circle text-error"></i>' !!}
+            </span>
         </p>
     </div>
 </div>

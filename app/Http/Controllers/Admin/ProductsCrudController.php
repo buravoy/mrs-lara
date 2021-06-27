@@ -75,56 +75,94 @@ class ProductsCrudController extends CrudController
             'name' => 'name',
             'label' => 'Название',
             'type' => 'text',
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-6',
+            ],
         ]);
 
         CRUD::addField([
             'name' => 'slug',
             'label' => 'Символьный код',
-            'type'  => 'slug'
+            'type' => 'slug',
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-6',
+            ],
         ]);
 
         CRUD::addField([
             'name' => 'category',
-            'label' => 'Категория',
+            'label' => 'Категории',
             'type' => 'select2_multiple',
-            'pivot'     => true,
-        ]);
-
-        CRUD::addField([
-            'name' => 'description',
-            'label' => 'Описание',
-            'type' => 'text',
+            'pivot' => true,
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-12',
+            ],
         ]);
 
         CRUD::addField([
             'name' => 'price',
             'label' => 'Цена',
             'type' => 'text',
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-4',
+            ],
         ]);
 
         CRUD::addField([
             'name' => 'old_price',
             'label' => 'Старая цена',
             'type' => 'text',
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-4',
+            ],
         ]);
 
         CRUD::addField([
             'name' => 'discount',
             'label' => 'Скидка',
             'type' => 'text',
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-4',
+            ],
         ]);
+
+        CRUD::addField([
+            'name' => 'description',
+            'label' => 'Описание',
+            'type' => 'textarea',
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-12',
+            ],
+        ]);
+
+
 
         CRUD::addField([
             'name' => 'image',
             'label' => 'Картинка',
             'type' => 'text',
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-4',
+            ],
         ]);
 
         CRUD::addField([
             'name' => 'sort',
             'label' => 'Сортировака',
             'type' => 'text',
-            'value' => !empty($entry->sort) ? $entry->sort : 500
+            'value' => !empty($entry->sort) ? $entry->sort : 500,
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-2 ml-auto',
+            ],
         ]);
 
         /**
