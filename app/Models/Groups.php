@@ -5,7 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Attributes extends Model
+class Groups extends Model
 {
     use CrudTrait;
 
@@ -15,7 +15,7 @@ class Attributes extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'attributes';
+    protected $table = 'groups';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
@@ -34,9 +34,9 @@ class Attributes extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function group()
+    public function attributes()
     {
-        return $this->belongsTo(Groups::class, 'group_id');
+        return $this->hasMany(Attributes::class, 'group_id');
     }
     /*
     |--------------------------------------------------------------------------

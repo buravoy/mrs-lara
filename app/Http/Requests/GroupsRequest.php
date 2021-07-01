@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AttributesRequest extends FormRequest
+class GroupsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,8 +27,8 @@ class AttributesRequest extends FormRequest
     {
         return [
             'name' => 'bail|required|string|max:255',
-
 //            'slug' => 'bail|unique:categories|required|string|max:255',
+            'sort' => 'bail|integer|max:99999',
         ];
     }
 

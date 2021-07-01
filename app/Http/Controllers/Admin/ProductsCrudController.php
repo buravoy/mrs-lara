@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Attributes;
 use App\Http\Requests\ProductsRequest;
+use App\Models\Groups;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -70,6 +72,7 @@ class ProductsCrudController extends CrudController
         CRUD::setValidation(ProductsRequest::class);
 
         $entry = CRUD::getCurrentEntry();
+        $attributeGroups = Groups::with('attributes')->get();
 
         CRUD::addField([
             'name' => 'name',
@@ -142,8 +145,6 @@ class ProductsCrudController extends CrudController
             ],
         ]);
 
-
-
         CRUD::addField([
             'name' => 'image',
             'label' => 'Картинка',
@@ -165,6 +166,33 @@ class ProductsCrudController extends CrudController
             ],
         ]);
 
+        CRUD::addField([
+            'name' => 'attributes',
+            'label' => 'Атрибуты',
+            'type' => 'attributes',
+            'tab' => 'Атрибуты',
+            'data' => $attributeGroups
+        ]);
+
+        CRUD::addField([
+            'name' => 'meta_title',
+            'label' => 'МЕТА Title',
+            'type' => 'text',
+            'tab' => 'МЕТА',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-12',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'meta_description',
+            'label' => 'META Description',
+            'type' => 'textarea',
+            'tab' => 'МЕТА',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-12',
+            ],
+        ]);
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');

@@ -2,24 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\AttributesRequest;
-use App\Models\Groups;
+use App\Http\Requests\GroupsRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Illuminate\Support\Facades\Redirect;
-use phpDocumentor\Reflection\Location;
 
 /**
- * Class AttributesCrudController
+ * Class GroupsCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class AttributesCrudController extends CrudController
+class GroupsCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation {
-        create as traitCreate;
-    }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
@@ -31,26 +26,11 @@ class AttributesCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Attributes::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/attributes');
+        CRUD::setModel(\App\Models\Groups::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/groups');
+        CRUD::setEntityNameStrings('группу', 'Группы атрибутов');
 
 
-
-        CRUD::setEntityNameStrings('атрибут', 'Атрибуты');
-
-        CRUD::addFilter(
-            [
-                'name' => 'id',
-                'type' => 'select2',
-                'label' => 'Группа атрибутов',
-            ],
-            function () {
-                return Groups::pluck('name', 'id')->toArray();
-            },
-            function ($value) {
-                $this->crud->addClause('where', 'group_id', $value);
-            }
-        );
     }
 
     /**
@@ -78,17 +58,9 @@ class AttributesCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
-         */
+        CRUD::setValidation(GroupsRequest::class);
 
-        if (!Groups::exists()) {
-            \Alert::add('error', 'Сперва создайте группу атрибутов')->flash();
-        }
-
-        CRUD::setValidation(AttributesRequest::class);
+        $entry = CRUD::getCurrentEntry();
 
 //        CRUD::setFromDb(); // fields
 
@@ -99,28 +71,33 @@ class AttributesCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'type',
-            'label' => 'Тип',
+            'name' => 'slug',
+            'label' => 'Символьный код',
+            'type' => 'slug',
+        ]);
+
+        CRUD::addField([
+            'name' => 'title',
+            'label' => 'Публичное название',
             'type' => 'text',
-            'options' => [
-                'text' => 'Текст',
-                'img' => 'Картинка',
-                'color' => 'Цвет'
+        ]);
+
+        CRUD::addField([
+            'name' => 'sort',
+            'label' => 'Сортировака',
+            'type' => 'text',
+            'value' => !empty($entry->sort) ? $entry->sort : 500,
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-2 ml-auto',
             ],
         ]);
 
-        CRUD::addField([
-            'name' => 'slug',
-            'label' => 'Символьный код',
-            'type' => 'slug'
-        ]);
-
-        CRUD::addField([
-            'name' => 'group_id',
-            'label' => 'Группа',
-            'entity' => 'group',
-            'type' => 'select2',
-        ]);
+        /**
+         * Fields can be defined using the fluent syntax or array syntax:
+         * - CRUD::field('price')->type('number');
+         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
+         */
     }
 
     /**
@@ -133,5 +110,4 @@ class AttributesCrudController extends CrudController
     {
         $this->setupCreateOperation();
     }
-
 }
