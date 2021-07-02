@@ -179,12 +179,20 @@ class CategoriesCrudController extends CrudController
             'name' => 'name',
             'label' => 'Название',
             'type' => 'text',
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-6',
+            ],
         ]);
 
         CRUD::addField([
-            'name' => 'slug',
-            'label' => 'Символьный код',
-            'type'  => 'slug'
+            'name' => 'short_name',
+            'label' => 'Короткое название',
+            'type' => 'text',
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-6',
+            ],
         ]);
 
         CRUD::addField([
@@ -192,14 +200,12 @@ class CategoriesCrudController extends CrudController
             'label' => 'Родительская категория',
             'type' => 'select2',
             'entity' => 'parent',
-
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-6',
+            ],
         ]);
 
-        CRUD::addField([
-            'name' => 'short_name',
-            'label' => 'Короткое название',
-            'type' => 'text',
-        ]);
 
         CRUD::addField([
             'name' => 'form',
@@ -211,45 +217,70 @@ class CategoriesCrudController extends CrudController
                 'сред' => "Средний",
                 'множ' => "Множественный",
             ],
-            'inline' => true
+            'inline' => true,
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-6',
+            ],
         ]);
 
         CRUD::addField([
             'name' => 'short_description',
             'label' => 'Короткое описание',
             'type' => 'textarea',
+            'tab' => 'Информация',
         ]);
 
         CRUD::addField([
             'name' => 'description',
             'label' => 'Описание',
             'type' => 'textarea',
+            'tab' => 'Информация',
         ]);
 
         CRUD::addField([
             'name' => 'image',
             'label' => 'Картинка',
+            'type' => 'browse',
+            'tab' => 'Информация',
+        ]);
+
+        CRUD::addField([
+            'name' => 'slug',
+            'label' => 'Символьный код',
+            'type' => 'slug',
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-8',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'sort',
+            'label' => 'Сортировака',
             'type' => 'text',
+            'value' => !empty($entry->sort) ? $entry->sort : 500,
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-2 ml-auto',
+            ],
         ]);
 
         CRUD::addField([
             'name' => 'meta_title',
             'label' => 'META Title',
             'type' => 'text',
+            'tab' => 'META',
         ]);
 
         CRUD::addField([
             'name' => 'meta_description',
             'label' => 'META Description',
             'type' => 'textarea',
+            'tab' => 'META',
         ]);
 
-        CRUD::addField([
-            'name' => 'sort',
-            'label' => 'Сортировка',
-            'type' => 'number',
-            'value' => !empty($entry->sort) ? $entry->sort : 500
-        ]);
+
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

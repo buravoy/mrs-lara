@@ -27,6 +27,8 @@ class GroupsRequest extends FormRequest
     {
         return [
             'name' => 'bail|required|string|max:255',
+            'type' => 'bail|required|string|max:32',
+            'title' => 'bail|nullable|string|max:255',
 //            'slug' => 'bail|unique:categories|required|string|max:255',
             'sort' => 'bail|integer|max:99999',
         ];

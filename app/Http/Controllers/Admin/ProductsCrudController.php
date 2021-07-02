@@ -72,22 +72,12 @@ class ProductsCrudController extends CrudController
         CRUD::setValidation(ProductsRequest::class);
 
         $entry = CRUD::getCurrentEntry();
-        $attributeGroups = Groups::with('attributes')->get();
+        $attrArr = Groups::with('attributes')->get();
 
         CRUD::addField([
             'name' => 'name',
             'label' => 'Название',
             'type' => 'text',
-            'tab' => 'Информация',
-            'wrapperAttributes' => [
-                'class' => 'form-group col-md-6',
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'slug',
-            'label' => 'Символьный код',
-            'type' => 'slug',
             'tab' => 'Информация',
             'wrapperAttributes' => [
                 'class' => 'form-group col-md-6',
@@ -147,11 +137,22 @@ class ProductsCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'image',
-            'label' => 'Картинка',
-            'type' => 'text',
+            'label' => 'Картинки',
+            'type' => 'browse_multiple',
+            'multiple'   => true,
             'tab' => 'Информация',
             'wrapperAttributes' => [
-                'class' => 'form-group col-md-4',
+                'class' => 'form-group col-md-8',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'slug',
+            'label' => 'Символьный код',
+            'type' => 'slug',
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-8',
             ],
         ]);
 
@@ -169,9 +170,9 @@ class ProductsCrudController extends CrudController
         CRUD::addField([
             'name' => 'attributes',
             'label' => 'Атрибуты',
-            'type' => 'attributes',
+            'type' => 'attributes-select',
             'tab' => 'Атрибуты',
-            'data' => $attributeGroups
+            'attributes' => $attrArr
         ]);
 
         CRUD::addField([

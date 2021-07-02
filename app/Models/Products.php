@@ -19,9 +19,15 @@ class Products extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
+    protected $fillable = ['attributes'];
+    protected $fakeColumns = ['attributes'];
+
     // protected $hidden = [];
-    // protected $dates = [];
+//     protected $dates = [];
+    protected $casts = [
+        'image' => 'array',
+        'attributes' => 'array',
+    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -37,7 +43,7 @@ class Products extends Model
 
     public function category()
     {
-        return $this->belongsToMany(Categories::class,'category_product', 'product_id', 'category_id');
+        return $this->belongsToMany(Categories::class, 'category_product', 'product_id', 'category_id');
     }
 
     /*
@@ -57,4 +63,5 @@ class Products extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
 }

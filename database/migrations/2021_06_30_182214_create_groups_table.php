@@ -17,6 +17,7 @@ class CreateGroupsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('title')->nullable();
+            $table->char('type', 32)->nullable();
             $table->string('slug')->unique();
             $table->integer('sort')->nullable();
             $table->softDeletes();

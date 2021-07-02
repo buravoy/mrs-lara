@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\GroupsRequest;
+use App\Models\Groups;
+use Illuminate\Http\Request;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -41,7 +43,32 @@ class GroupsCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // columns
+//        CRUD::setFromDb(); // columns
+
+        CRUD::addColumn([
+            'name' => 'name',
+            'label' => 'Название',
+            'type' => 'text'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'title',
+            'label' => 'Публичное название',
+            'type' => 'text'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'type',
+            'label' => 'Тип',
+            'type' => 'radio',
+            'inline' => true,
+            'options' => [
+                'text' => 'Текст',
+                'img' => 'Картинка',
+                'color' => 'Цвет'
+            ],
+        ]);
+
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -71,9 +98,15 @@ class GroupsCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'slug',
-            'label' => 'Символьный код',
-            'type' => 'slug',
+            'name' => 'type',
+            'label' => 'Тип',
+            'type' => 'radio',
+            'inline' => true,
+            'options' => [
+                'text' => 'Текст',
+                'color' => 'Цвет'
+            ],
+            'default' => 'text'
         ]);
 
         CRUD::addField([
@@ -83,11 +116,19 @@ class GroupsCrudController extends CrudController
         ]);
 
         CRUD::addField([
+            'name' => 'slug',
+            'label' => 'Символьный код',
+            'type' => 'slug',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-8',
+            ],
+        ]);
+
+        CRUD::addField([
             'name' => 'sort',
             'label' => 'Сортировака',
             'type' => 'text',
             'value' => !empty($entry->sort) ? $entry->sort : 500,
-            'tab' => 'Информация',
             'wrapperAttributes' => [
                 'class' => 'form-group col-md-2 ml-auto',
             ],
@@ -109,5 +150,13 @@ class GroupsCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function getGroupType(Request $request)
+    {
+
+//        return $request->id;
+
+        return json_encode(Groups::where('id', $request->id)->select('type', 'name')->first());
     }
 }

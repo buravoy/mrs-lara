@@ -96,7 +96,7 @@
                         type: "error",
                         text: errors.errors.file[0],
                         timeout: false
-                    }).show(100);
+                    }).show();
             });
         })
 

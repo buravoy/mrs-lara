@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\Admin\CategoriesCrudController;
+use App\Http\Controllers\Admin\GroupsCrudController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,3 +33,5 @@ Route::post('/upload-categories', [FileUploadController::class, 'categoryXmlPost
 Route::post('/import-categories', [CategoriesCrudController::class, 'categoryXmlImport'])->name('xml-category-import');
 Route::post('/delete-categories', [CategoriesCrudController::class, 'deleteAllCategories'])->name('delete-all-categories');
 Route::post('/create-slug', [CategoriesCrudController::class, 'createSlug'])->name('create-slug');
+
+Route::post('/get-group-type', [GroupsCrudController::class, 'getGroupType'])->name('get-type');
