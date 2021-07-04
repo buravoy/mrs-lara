@@ -1,7 +1,9 @@
 <!-- This file is used to store sidebar items, starting with Backpack\Base 0.9.0 -->
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('dashboard') }}"><i class="la la-home nav-icon"></i>{{ trans('backpack::base.dashboard') }}</a></li>
 <li class="nav-title"></li>
-<li class="nav-title">Каталог</li>
+<li class="nav-title">Партнерки</li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('feeds') }}'><i class="las la-comments-dollar"></i> Парсеры</a></li>
+<li class="nav-title mt-3">Каталог</li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('category') }}'><i class='nav-icon la la-stream'></i> Категории</a></li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('products') }}'><i class='nav-icon la la-box'></i>Товары</a></li>
 <li class="nav-title mt-3">Атрибуты</li>

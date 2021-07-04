@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Attributes;
 use App\Http\Requests\ProductsRequest;
+use App\Models\Categories;
 use App\Models\Groups;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -31,6 +32,22 @@ class ProductsCrudController extends CrudController
         CRUD::setModel(\App\Models\Products::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/products');
         CRUD::setEntityNameStrings('товар', 'Товары');
+
+        CRUD::addFilter(
+            [
+                'name' => 'id',
+                'type' => 'select2',
+                'label' => 'Категория',
+            ],
+            function () {
+                return Categories::pluck('name', 'id')->toArray();
+            },
+            function ($value) {
+                $this->crud->query = $this->crud->query->whereHas('category', function ($query) use ($value) {
+                    $query->where('category_id', $value);
+                });
+            }
+        );
     }
 
     /**
@@ -48,11 +65,11 @@ class ProductsCrudController extends CrudController
             'type' => 'text'
         ]);
 
-//        CRUD::addColumn([
-//            'name' => 'category',
-//            'type' => 'relationship',
-//            'label' => 'Категория'
-//        ]);
+        CRUD::addColumn([
+            'name' => 'category',
+            'type' => 'relationship',
+            'label' => 'Категория'
+        ]);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
