@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->float('price')->nullable();
             $table->float('old_price')->nullable();
             $table->float('discount')->nullable();
+            $table->tinyInteger('rating')->nullable();
             $table->json('attributes')->nullable();
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();

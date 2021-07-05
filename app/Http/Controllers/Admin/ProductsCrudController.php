@@ -73,6 +73,30 @@ class ProductsCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
+            'name' => 'price',
+            'type' => 'text',
+            'label' => 'Цена'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'old_price',
+            'type' => 'text',
+            'label' => 'Старая цена'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'discount',
+            'type' => 'text',
+            'label' => 'Скидка'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'rating',
+            'type' => 'text',
+            'label' => 'Рейтинг'
+        ]);
+
+        CRUD::addColumn([
             'name' => 'slug',
             'type' => 'text',
             'label' => 'Символьный код'
@@ -125,7 +149,7 @@ class ProductsCrudController extends CrudController
             'type' => 'text',
             'tab' => 'Информация',
             'wrapperAttributes' => [
-                'class' => 'form-group col-md-4',
+                'class' => 'form-group col-md-3',
             ],
         ]);
 
@@ -135,17 +159,27 @@ class ProductsCrudController extends CrudController
             'type' => 'text',
             'tab' => 'Информация',
             'wrapperAttributes' => [
-                'class' => 'form-group col-md-4',
+                'class' => 'form-group col-md-3',
             ],
         ]);
 
         CRUD::addField([
             'name' => 'discount',
             'label' => 'Скидка',
+            'type' => 'discount',
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-3',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'rating',
+            'label' => 'Рейтинг',
             'type' => 'text',
             'tab' => 'Информация',
             'wrapperAttributes' => [
-                'class' => 'form-group col-md-4',
+                'class' => 'form-group col-md-3',
             ],
         ]);
 

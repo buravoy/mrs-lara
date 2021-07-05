@@ -45,8 +45,6 @@
 
             let attributes = $attributes.text();
 
-            console.log(attributes)
-
             if (attributes !== '') attributes = JSON.parse(attributes);
 
             $select.select2({theme: 'bootstrap'});

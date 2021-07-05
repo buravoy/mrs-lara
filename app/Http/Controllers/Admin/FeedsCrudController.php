@@ -39,7 +39,18 @@ class FeedsCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // columns
+//        CRUD::setFromDb(); // columns
+
+        CRUD::addColumn([
+            'name' => 'name',
+            'type' => 'text',
+            'label' => 'Название'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'xml_url',
+            'type' => 'text',
+        ]);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -59,6 +70,9 @@ class FeedsCrudController extends CrudController
         CRUD::setValidation(FeedsRequest::class);
 
         CRUD::setFromDb(); // fields
+
+
+
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
