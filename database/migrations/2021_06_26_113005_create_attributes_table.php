@@ -18,7 +18,7 @@ class CreateAttributesTable extends Migration
             $table->bigInteger('group_id');
             $table->string('name');
             $table->string('value')->nullable();
-            $table->string('slug')->unique();
+            $table->string('slug');
             $table->integer('sort')->nullable();
             $table->softDeletes();
             $table->timestamps();

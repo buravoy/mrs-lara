@@ -9,8 +9,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 
 class Categories extends Model
 {
-    use CrudTrait;
-    use Sluggable;
+    use CrudTrait, Sluggable;
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +21,7 @@ class Categories extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = ['name'];
+//    protected $fillable = ['name'];
     // protected $hidden = [];
     // protected $dates = [];
     protected $translatable = [];
@@ -39,11 +38,15 @@ class Categories extends Model
      */
     public function sluggable(): array
     {
-        return [
-            'slug' => [
-                'source' => 'name',
-            ]
-        ];
+        if(!$this->slug) {
+            return [
+                'slug' => [
+                    'source' => 'name'
+                ]
+            ];
+        }
+
+        return [];
     }
 
     /*

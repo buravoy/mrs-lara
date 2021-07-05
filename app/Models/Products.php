@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Products extends Model
 {
-    use CrudTrait;
+    use CrudTrait, Sluggable;
 
     /*
     |--------------------------------------------------------------------------
@@ -31,7 +32,18 @@ class Products extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    public function sluggable(): array
+    {
+        if(!$this->slug) {
+            return [
+                'slug' => [
+                    'source' => 'name'
+                ]
+            ];
+        }
 
+        return [];
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -60,5 +72,7 @@ class Products extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
+
 
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Categories;
+use Cviebrock\EloquentSluggable\Services\SlugService;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoriesRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -34,8 +36,19 @@ class CategoriesCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/category');
         CRUD::setEntityNameStrings('категорию', 'Категории');
 
-//        dd($_GET['id']);
-//        dd($this->crud->getEntries());
+        CRUD::addFilter(
+            [
+                'name' => 'id',
+                'type' => 'select2',
+                'label' => 'Родительская категория',
+            ],
+            function () {
+                return Categories::pluck('name', 'id')->toArray();
+            },
+            function ($value) {
+                $this->crud->addClause('where', 'parent_id', $value);
+            }
+        );
     }
 
     /**
@@ -108,19 +121,13 @@ class CategoriesCrudController extends CrudController
             'view' => 'vendor.backpack.base.columns.childrens',
         ]);
 
-        CRUD::addFilter(
-            [
-                'name' => 'id',
-                'type' => 'select2',
-                'label' => 'Родительская категория',
-            ],
-            function () {
-                return Categories::pluck('name', 'id')->toArray();
-            },
-            function ($value) {
-                $this->crud->addClause('where', 'parent_id', $value);
-            }
-        );
+        CRUD::addColumn([
+            'name' => 'slug',
+            'type' => 'text',
+            'label' => 'Символьный код'
+        ]);
+
+
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -135,37 +142,6 @@ class CategoriesCrudController extends CrudController
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
-
-    public function setupShowOperation()
-    {
-        CRUD::set('show.setFromDb', true);
-
-//        CRUD::addColumn([
-//            'name' => 'name',
-//            'label' => 'Название',
-//            'type' => 'text',
-//        ]);
-//
-//        CRUD::addColumn([
-//            'name' => 'short_name',
-//            'label' => 'Короткое название',
-//            'type' => 'text',
-//        ]);
-//
-//        CRUD::addColumn([
-//            'name'         => 'parent', // name of relationship method in the model
-//            'type'         => 'relationship',
-//            'label'        => 'Родительская',
-//        ]);
-//
-//        CRUD::addColumn([
-//            'name' => 'description',
-//            'label' => 'Короткое название',
-//            'type' => 'text',
-//        ]);
-
-
-    }
 
     protected function setupCreateOperation()
     {
@@ -206,7 +182,6 @@ class CategoriesCrudController extends CrudController
             ],
         ]);
 
-
         CRUD::addField([
             'name' => 'form',
             'label' => 'Словоформа',
@@ -246,27 +221,6 @@ class CategoriesCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'slug',
-            'label' => 'Символьный код',
-            'type' => 'slug',
-            'tab' => 'Информация',
-            'wrapperAttributes' => [
-                'class' => 'form-group col-md-8',
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'sort',
-            'label' => 'Сортировака',
-            'type' => 'text',
-            'value' => !empty($entry->sort) ? $entry->sort : 500,
-            'tab' => 'Информация',
-            'wrapperAttributes' => [
-                'class' => 'form-group col-md-2 ml-auto',
-            ],
-        ]);
-
-        CRUD::addField([
             'name' => 'meta_title',
             'label' => 'META Title',
             'type' => 'text',
@@ -280,7 +234,26 @@ class CategoriesCrudController extends CrudController
             'tab' => 'META',
         ]);
 
+        CRUD::addField([
+            'name' => 'slug',
+            'label' => 'Символьный код',
+            'type' => 'text',
+            'tab' => 'Дополнительно',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-8',
+            ],
+        ]);
 
+        CRUD::addField([
+            'name' => 'sort',
+            'label' => 'Сортировка',
+            'type' => 'text',
+            'value' => !empty($entry->sort) ? $entry->sort : 500,
+            'tab' => 'Дополнительно',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-2 ml-auto',
+            ],
+        ]);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
@@ -326,7 +299,7 @@ class CategoriesCrudController extends CrudController
             } else {
                 $id = Categories::query()->insertGetId([
                     'name' => $name,
-                    'slug' => Str::slug($name, '-'),
+                    'slug' => SlugService::createSlug(Categories::class, 'slug', $name),
                     'short_name' => $short,
                     'form' => $form,
                 ]);
@@ -334,9 +307,6 @@ class CategoriesCrudController extends CrudController
 
             $tempCategories[] = [
                 'id' => $id,
-//                'name' => $name,
-//                'short_name' => $short,
-//                'form' => $form,
                 'xml_id' => $xmlId,
                 'xml_parent_id' => $xmlParent,
             ];
@@ -365,10 +335,5 @@ class CategoriesCrudController extends CrudController
     {
         Categories::query()->delete();
         return back();
-    }
-
-    public function createSlug(Request $request)
-    {
-        return Str::slug($request->name, '-');
     }
 }

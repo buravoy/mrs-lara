@@ -29,7 +29,7 @@ class AttributesRequest extends FormRequest
             'name' => 'bail|required|string|max:255',
             'group_id' => 'bail|required|integer|max:999999999',
 
-//            'slug' => 'bail|unique:categories|required|string|max:255',
+            'slug' => 'bail|nullable|string|max:255|unique:attributes,slug,'.request()->id,
         ];
     }
 

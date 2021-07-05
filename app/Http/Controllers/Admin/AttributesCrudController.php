@@ -71,7 +71,7 @@ class AttributesCrudController extends CrudController
         CRUD::addColumn([
             'name' => 'group',
             'label' => 'Группа',
-            'type'         => 'relationship',
+            'type' => 'relationship',
         ]);
 
         CRUD::addColumn([
@@ -82,9 +82,15 @@ class AttributesCrudController extends CrudController
 
 
         CRUD::addColumn([
-            'label' => '',
+            'label' => 'Тип',
             'type' => 'view',
             'view' => 'vendor.backpack.base.columns.color',
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'slug',
+            'label' => 'Символьный код',
+            'type' => 'text',
         ]);
 
 
@@ -121,6 +127,7 @@ class AttributesCrudController extends CrudController
             'label' => 'Группа',
             'entity' => 'group',
             'type' => 'select2',
+            'tab' => 'Информация',
             'wrapperAttributes' => [
                 'class' => 'form-group col-md-6',
             ],
@@ -130,6 +137,7 @@ class AttributesCrudController extends CrudController
             'name' => 'name',
             'label' => 'Значение атрибута',
             'type' => 'text',
+            'tab' => 'Информация',
             'wrapperAttributes' => [
                 'class' => 'form-group col-md-4',
             ],
@@ -139,6 +147,7 @@ class AttributesCrudController extends CrudController
             'name' => 'value',
             'label' => 'Цвет',
             'type' => 'color_picker',
+            'tab' => 'Информация',
             'wrapperAttributes' => [
                 'class' => 'form-group col-md-2',
                 'id' => 'color'
@@ -150,24 +159,27 @@ class AttributesCrudController extends CrudController
             'label' => 'Дополнительно',
             'type' => 'attributes-create',
             'data' => $attributeGroups,
+            'tab' => 'Информация',
         ]);
 
         CRUD::addField([
             'name' => 'slug',
             'label' => 'Символьный код',
-            'type' => 'slug',
+            'type' => 'text',
+            'tab' => 'Дополнительно',
             'wrapperAttributes' => [
-                'class' => 'form-group col-md-8 mt-5',
+                'class' => 'form-group col-md-8',
             ],
         ]);
 
         CRUD::addField([
             'name' => 'sort',
-            'label' => 'Сортировака',
+            'label' => 'Сортировка',
             'type' => 'text',
             'value' => !empty($entry->sort) ? $entry->sort : 500,
+            'tab' => 'Дополнительно',
             'wrapperAttributes' => [
-                'class' => 'form-group col-md-2 ml-auto mt-5',
+                'class' => 'form-group col-md-2 ml-auto',
             ],
         ]);
 

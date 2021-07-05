@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
+use App\Models\Products;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductsRequest extends FormRequest
 {
@@ -34,6 +36,7 @@ class ProductsRequest extends FormRequest
             'attributes' => 'bail|nullable|string|max:65535',
             'image' => 'bail|nullable|string|max:65535',
 
+            'slug' => 'bail|nullable|string|max:255|unique:products,slug,'.request()->id,
             'meta_title' => 'bail|nullable|string|max:255',
             'meta_description' => 'bail|nullable|string|max:65535',
             'sort' => 'bail|integer|max:99999',

@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 
 class Attributes extends Model
 {
-    use CrudTrait;
+    use CrudTrait, Sluggable;
 
     /*
     |--------------------------------------------------------------------------
@@ -28,7 +29,18 @@ class Attributes extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    public function sluggable(): array
+    {
+        if(!$this->slug) {
+            return [
+                'slug' => [
+                    'source' => 'name'
+                ]
+            ];
+        }
 
+        return [];
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

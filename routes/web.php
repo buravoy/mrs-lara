@@ -32,6 +32,5 @@ Route::get('/product', [ProductsController::class, 'index']);
 Route::post('/upload-categories', [FileUploadController::class, 'categoryXmlPostUpload'])->name('xml-category-upload');
 Route::post('/import-categories', [CategoriesCrudController::class, 'categoryXmlImport'])->name('xml-category-import');
 Route::post('/delete-categories', [CategoriesCrudController::class, 'deleteAllCategories'])->name('delete-all-categories');
-Route::post('/create-slug', [CategoriesCrudController::class, 'createSlug'])->name('create-slug');
 
 Route::post('/get-group-type', [GroupsCrudController::class, 'getGroupType'])->name('get-type');

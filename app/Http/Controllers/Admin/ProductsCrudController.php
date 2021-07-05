@@ -62,13 +62,20 @@ class ProductsCrudController extends CrudController
 
         CRUD::addColumn([
             'name' => 'name',
-            'type' => 'text'
+            'type' => 'text',
+            'label' => 'Название',
         ]);
 
         CRUD::addColumn([
             'name' => 'category',
             'type' => 'relationship',
             'label' => 'Категория'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'slug',
+            'type' => 'text',
+            'label' => 'Символьный код'
         ]);
 
         /**
@@ -164,27 +171,6 @@ class ProductsCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'slug',
-            'label' => 'Символьный код',
-            'type' => 'slug',
-            'tab' => 'Информация',
-            'wrapperAttributes' => [
-                'class' => 'form-group col-md-8',
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'sort',
-            'label' => 'Сортировака',
-            'type' => 'text',
-            'value' => !empty($entry->sort) ? $entry->sort : 500,
-            'tab' => 'Информация',
-            'wrapperAttributes' => [
-                'class' => 'form-group col-md-2 ml-auto',
-            ],
-        ]);
-
-        CRUD::addField([
             'name' => 'attributes',
             'label' => 'Атрибуты',
             'type' => 'attributes-select',
@@ -211,11 +197,33 @@ class ProductsCrudController extends CrudController
                 'class' => 'form-group col-md-12',
             ],
         ]);
+
+        CRUD::addField([
+            'name' => 'slug',
+            'label' => 'Символьный код',
+            'type' => 'text',
+            'tab' => 'Дополнительно',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-8',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'sort',
+            'label' => 'Сортировака',
+            'type' => 'text',
+            'value' => !empty($entry->sort) ? $entry->sort : 500,
+            'tab' => 'Дополнительно',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-2 ml-auto',
+            ],
+        ]);
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
          * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
+
     }
 
     /**
