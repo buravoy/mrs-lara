@@ -32,5 +32,6 @@ Route::group([
     Route::post('get-group-type', [GroupsCrudController::class, 'getGroupType'])->name('get-type');
 
     Route::post('download-feed', [Parser::class, 'downloadXml'])->name('download-feed');
+    Route::post('get-size', [Parser::class, 'getSize'])->name('get-size');
 
 }); // this should be the absolute last line of this file

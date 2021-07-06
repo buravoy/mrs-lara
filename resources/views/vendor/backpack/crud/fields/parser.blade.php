@@ -4,49 +4,53 @@
 
 @include('crud::fields.inc.wrapper_start')
 
-<button class="download-xml" type="button" data-url="{{ $field['data']->xml_url }}" data-name="{{ $field['data']->slug }}">Download</button>
+<button class="download-xml"
+        type="button"
+        data-url="{{ $field['data']->xml_url }}"
+        data-name="{{ $field['data']->slug }}">
+    Download
+</button>
 
-<div class="-4">
 
-    @endif
-</div>
+<p>Size: <span id="filesize"></span></p>
+
+@endif
+
+
 @include('crud::fields.inc.wrapper_end')
 
 
+@push('crud_fields_scripts')
+    <script>
+        const $downloadBtn = $('.download-xml')
 
-@if ($crud->fieldTypeNotLoaded($field))
-    @php
-        $crud->markFieldTypeAsLoaded($field);
-    @endphp
+        $downloadBtn.on('click', function (){
+            const
+                $t = $(this),
+                link = $t.data('url'),
+                name = $t.data('name');
 
-    @push('crud_fields_scripts')
-        <script>
-            const $downloadBtn = $('.download-xml')
+            $.ajax({
+                async: true,
+                type: "POST",
+                dataType: "json",
+                url: '{{ route('download-feed') }}',
+                data: { link: link, name: name },
+                success: () => { clearInterval(loadingInterval) }
+            })
 
-            $downloadBtn.on('click', function (){
-                const
-                    $t = $(this),
-                    link = $t.data('url'),
-                    name = $t.data('name');
-
+            const loadingInterval = setInterval(() => {
                 $.ajax({
                     async: true,
                     type: "POST",
                     dataType: "json",
-                    url: '{{ route('download-feed') }}',
-                    data: {
-                        link: link,
-                        name: name
-                    },
+                    url: '{{ route('get-size') }}',
+                    data: { link: link, name: name },
                     success: function (response) {
-
+                        $('#filesize').text(response.localSize + ' Mb')
                     }
                 })
-                    .catch(function (error) {
-
-                    });
-
-            })
-        </script>
-    @endpush
-@endif
+            }, 100);
+        })
+    </script>
+@endpush

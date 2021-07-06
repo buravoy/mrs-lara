@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\FeedsRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use function PHPUnit\Framework\objectEquals;
 
 /**
  * Class FeedsCrudController
@@ -71,6 +72,16 @@ class FeedsCrudController extends CrudController
 
         $entry = CRUD::getCurrentEntry();
 
+        $file = base_path('uploads/xml/feeds/').$entry->slug.'.xml';
+
+        if (file_exists($file)) {
+            $fileInfo = [
+                'name' => basename($file),
+                'size' => number_format((filesize($file)/1024/1024), 2, ',', ' '),
+                'upd' => date ("F d Y H:i:s.", filemtime($file))
+            ];
+        }
+
 //        CRUD::setFromDb(); // fields
 
         CRUD::addField([
@@ -129,7 +140,8 @@ class FeedsCrudController extends CrudController
             'name' => 'parser',
             'type' => 'parser',
             'tab' => 'Настройки парсера',
-            'data' => $entry
+            'data' => $entry,
+            'file_info' => $fileInfo ?? null
         ]);
 
         /**
