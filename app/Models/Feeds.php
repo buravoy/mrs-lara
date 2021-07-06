@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
+
 
 class Feeds extends Model
 {
-    use CrudTrait;
+    use CrudTrait, Sluggable;
 
     /*
     |--------------------------------------------------------------------------
@@ -52,4 +54,16 @@ class Feeds extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+    public function sluggable(): array
+    {
+        if(!$this->slug) {
+            return [
+                'slug' => [
+                    'source' => 'name'
+                ]
+            ];
+        }
+
+        return [];
+    }
 }

@@ -69,10 +69,68 @@ class FeedsCrudController extends CrudController
     {
         CRUD::setValidation(FeedsRequest::class);
 
-        CRUD::setFromDb(); // fields
+        $entry = CRUD::getCurrentEntry();
 
+//        CRUD::setFromDb(); // fields
 
+        CRUD::addField([
+            'name' => 'name',
+            'label' => 'Название',
+            'type' => 'text',
+            'tab' => 'Информация',
+            'wrapper'   => [
+                'class'      => 'form-group col-md-6'
+            ],
+        ]);
 
+        CRUD::addField([
+            'name' => 'xml_url',
+            'label' => 'Ссылка на XML',
+            'type' => 'text',
+            'tab' => 'Информация',
+
+        ]);
+
+        CRUD::addField([
+            'name' => 'schedule',
+            'label' => 'Расписание',
+            'type' => 'text',
+            'tab' => 'Информация',
+            'attributes' => [
+                'class' => 'form-control col-md-4'
+            ],
+            'wrapper'   => [
+                'class'      => 'form-group col-12'
+            ]
+        ]);
+
+        CRUD::addField([
+            'name' => 'slug',
+            'label' => 'Символьный код',
+            'type' => 'text',
+            'tab' => 'Информация',
+            'wrapper' => [
+                'class' => 'form-group mt-5 col-md-8',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'sort',
+            'label' => 'Сортировка',
+            'type' => 'text',
+            'value' => !empty($entry->sort) ? $entry->sort : 500,
+            'tab' => 'Информация',
+            'wrapper' => [
+                'class' => 'form-group col-md-2 mt-5 ml-auto',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'parser',
+            'type' => 'parser',
+            'tab' => 'Настройки парсера',
+            'data' => $entry
+        ]);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

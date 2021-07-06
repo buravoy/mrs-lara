@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\Admin\CategoriesCrudController;
+use App\Http\Controllers\Admin\GroupsCrudController;
+use App\Modules\Parser;
+
 // --------------------------
 // Custom Backpack Routes
 // --------------------------
@@ -20,4 +25,12 @@ Route::group([
     Route::crud('attributes', 'AttributesCrudController');
     Route::crud('groups', 'GroupsCrudController');
     Route::crud('feeds', 'FeedsCrudController');
+
+    Route::post('upload-categories', [FileUploadController::class, 'categoryXmlPostUpload'])->name('xml-category-upload');
+    Route::post('import-categories', [CategoriesCrudController::class, 'categoryXmlImport'])->name('xml-category-import');
+    Route::post('delete-categories', [CategoriesCrudController::class, 'deleteAllCategories'])->name('delete-all-categories');
+    Route::post('get-group-type', [GroupsCrudController::class, 'getGroupType'])->name('get-type');
+
+    Route::post('download-feed', [Parser::class, 'downloadXml'])->name('download-feed');
+
 }); // this should be the absolute last line of this file

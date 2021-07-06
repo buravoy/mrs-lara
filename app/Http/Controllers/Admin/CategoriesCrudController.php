@@ -273,11 +273,10 @@ class CategoriesCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
-
     public function categoryXmlImport(Request $request)
     {
 
-        $filepath = base_path('uploads/xml/categories/') . $request->input('filename');
+        $filepath = base_path('uploads/xml/feeds/') . $request->input('filename');
         $file = simplexml_load_file($filepath);
         $categories = $file->shop->categories->category;
 

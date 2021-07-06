@@ -6,3 +6,4 @@
 # Project exclude paths
 /public/dev/node_modules/
 /vendor/
+/node_modules/
