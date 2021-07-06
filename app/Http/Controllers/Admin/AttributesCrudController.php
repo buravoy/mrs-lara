@@ -33,7 +33,6 @@ class AttributesCrudController extends CrudController
     public function setup()
     {
 
-
         CRUD::setModel(\App\Models\Attributes::class);
 
         CRUD::setRoute(config('backpack.base.route_prefix') . '/attributes');
