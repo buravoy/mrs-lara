@@ -72,14 +72,16 @@ class FeedsCrudController extends CrudController
 
         $entry = CRUD::getCurrentEntry();
 
-        $file = base_path('uploads/xml/feeds/').$entry->slug.'.xml';
+        if (isset($entry->slug)) {
+            $file = base_path('uploads/xml/feeds/').$entry->slug.'.xml';
 
-        if (file_exists($file)) {
-            $fileInfo = [
-                'name' => basename($file),
-                'size' => number_format((filesize($file)/1024/1024), 2, ',', ' '),
-                'upd' => date ("F d Y H:i:s.", filemtime($file))
-            ];
+            if (file_exists($file)) {
+                $fileInfo = [
+                    'name' => basename($file),
+                    'size' => number_format((filesize($file)/1024/1024), 2, ',', ' '),
+                    'upd' => date ("d F Y - H:i:s.", filemtime($file))
+                ];
+            }
         }
 
 //        CRUD::setFromDb(); // fields
@@ -103,6 +105,14 @@ class FeedsCrudController extends CrudController
         ]);
 
         CRUD::addField([
+            'name' => 'xml',
+            'type' => 'xml-feed-upload',
+            'tab' => 'Информация',
+            'data' => $entry,
+            'file_info' => $fileInfo ?? null
+        ]);
+
+        CRUD::addField([
             'name' => 'schedule',
             'label' => 'Расписание',
             'type' => 'text',
@@ -114,6 +124,8 @@ class FeedsCrudController extends CrudController
                 'class'      => 'form-group col-12'
             ]
         ]);
+
+
 
         CRUD::addField([
             'name' => 'slug',
@@ -138,7 +150,7 @@ class FeedsCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'parser',
-            'type' => 'parser',
+            'type' => 'parser-config',
             'tab' => 'Настройки парсера',
             'data' => $entry,
             'file_info' => $fileInfo ?? null

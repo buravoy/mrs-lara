@@ -26,7 +26,18 @@ class FeedsRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'name' => 'bail|required|string|max:255',
+            'xml_url' => 'bail|required|string|max:max:65535',
+
+            'parser' => 'bail|nullable|string|max:max:65535',
+            'rules' => 'bail|nullable|string|max:max:65535',
+            'schedule' => 'bail|nullable|string|max:max:65535',
+            'last_update' => 'bail|nullable|string|max:max:65535',
+
+            'slug' => 'bail|nullable|string|max:255|unique:products,slug,'.request()->id,
+            'meta_title' => 'bail|nullable|string|max:255',
+            'meta_description' => 'bail|nullable|string|max:65535',
+            'sort' => 'bail|integer|max:99999',
         ];
     }
 
