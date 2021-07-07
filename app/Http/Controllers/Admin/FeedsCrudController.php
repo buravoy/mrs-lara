@@ -125,29 +125,6 @@ class FeedsCrudController extends CrudController
             ]
         ]);
 
-
-
-        CRUD::addField([
-            'name' => 'slug',
-            'label' => 'Символьный код',
-            'type' => 'text',
-            'tab' => 'Информация',
-            'wrapper' => [
-                'class' => 'form-group mt-5 col-md-8',
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'sort',
-            'label' => 'Сортировка',
-            'type' => 'text',
-            'value' => !empty($entry->sort) ? $entry->sort : 500,
-            'tab' => 'Информация',
-            'wrapper' => [
-                'class' => 'form-group col-md-2 mt-5 ml-auto',
-            ],
-        ]);
-
         CRUD::addField([
             'name' => 'parser',
             'type' => 'parser-config',
@@ -156,6 +133,26 @@ class FeedsCrudController extends CrudController
             'file_info' => $fileInfo ?? null
         ]);
 
+        CRUD::addField([
+            'name' => 'slug',
+            'label' => 'Символьный код',
+            'type' => 'text',
+            'tab' => 'Дополнительо',
+            'wrapper' => [
+                'class' => 'form-group col-md-8',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'sort',
+            'label' => 'Сортировка',
+            'type' => 'text',
+            'value' => !empty($entry->sort) ? $entry->sort : 500,
+            'tab' => 'Дополнительо',
+            'wrapper' => [
+                'class' => 'form-group col-md-2 ml-auto',
+            ],
+        ]);
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
