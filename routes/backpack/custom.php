@@ -3,6 +3,7 @@
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\Admin\CategoriesCrudController;
 use App\Http\Controllers\Admin\GroupsCrudController;
+use App\Modules\Parser;
 
 // --------------------------
 // Custom Backpack Routes
@@ -33,5 +34,7 @@ Route::group([
 
     Route::post('download-feed', [FileUploadController::class, 'downloadXml'])->name('download-feed');
     Route::post('get-size', [FileUploadController::class, 'getSize'])->name('get-size');
+
+    Route::post('handle-offers', [Parser::class, 'handleOffers'])->name('handle-offers');
 
 }); // this should be the absolute last line of this file

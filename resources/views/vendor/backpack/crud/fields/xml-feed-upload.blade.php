@@ -25,7 +25,7 @@
         </div>
 
         <div id="uploading-complete" class="row align-items-center ml-5" style="display: none !important;">
-            <p class="mb-0">XML Загружен, обновите страницу (не обязательно)</p>
+            <p class="mb-0">XML Загружен, обновите страницу</p>
             <i class="ml-2 las la-check-circle text-success font-xl"></i>
         </div>
     </div>

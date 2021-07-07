@@ -27,12 +27,12 @@ class FeedsRequest extends FormRequest
     {
         return [
             'name' => 'bail|required|string|max:255',
-            'xml_url' => 'bail|required|string|max:max:65535',
+            'xml_url' => 'bail|required|string|max:65535',
 
-            'parser' => 'bail|nullable|string|max:max:65535',
-            'rules' => 'bail|nullable|string|max:max:65535',
-            'schedule' => 'bail|nullable|string|max:max:65535',
-            'last_update' => 'bail|nullable|string|max:max:65535',
+            'parser' => 'bail|nullable|string|max:65535',
+            'rules' => 'bail|nullable|string|max:65535',
+            'schedule' => 'bail|nullable|string|max:65535',
+            'last_update' => 'bail|nullable|string|max:65535',
 
             'slug' => 'bail|nullable|string|max:255|unique:products,slug,'.request()->id,
             'meta_title' => 'bail|nullable|string|max:255',

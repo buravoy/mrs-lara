@@ -18,7 +18,9 @@
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.0",
         "spatie/laravel-translatable": "^4.6",
-        "symfony/dom-crawler": "^5.3"
+        "symfony/dom-crawler": "^5.3",
+        "ext-simplexml": "*",
+        "ext-json": "*"
     },
     "require-dev": {
         "backpack/generators": "^3.1",
