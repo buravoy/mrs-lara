@@ -36,5 +36,5 @@ Route::group([
     Route::post('get-size', [FileUploadController::class, 'getSize'])->name('get-size');
 
     Route::post('handle-offers', [Parser::class, 'handleOffers'])->name('handle-offers');
-
+    Route::post('parse-xml', [Parser::class, 'parseXml'])->name('parse-xml');
 }); // this should be the absolute last line of this file

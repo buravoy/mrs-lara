@@ -1,8 +1,8 @@
 <div class="categories">
-
-
     <div class="d-flex align-items-center">
-        <p class="font-weight-bold">{{ $entry->name }}</p>
+        <a href="{{ backpack_url('category') }}?id={{ $entry->id }}">
+            <p class="font-weight-bold">{{ $entry->name }}</p>
+        </a>
         @if($entry->parent)
             <i class="las la-long-arrow-alt-left ml-3 mr-1"></i>
             <p class="small">{{ $entry->parent->name ?? null }}</p>

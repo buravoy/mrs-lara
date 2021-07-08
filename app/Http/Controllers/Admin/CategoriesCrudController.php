@@ -156,7 +156,7 @@ class CategoriesCrudController extends CrudController
             'label' => 'Название',
             'type' => 'text',
             'tab' => 'Информация',
-            'wrapperAttributes' => [
+            'wrapper' => [
                 'class' => 'form-group col-md-6',
             ],
         ]);
@@ -166,8 +166,21 @@ class CategoriesCrudController extends CrudController
             'label' => 'Короткое название',
             'type' => 'text',
             'tab' => 'Информация',
-            'wrapperAttributes' => [
-                'class' => 'form-group col-md-6',
+            'wrapper' => [
+                'class' => 'form-group col-md-4',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'xml_id',
+            'label' => 'ID из XML файла',
+            'type' => 'text',
+            'tab' => 'Информация',
+            'wrapper' => [
+                'class' => 'form-group col-md-2',
+            ],
+            'attributes' => [
+                'readonly'    => 'readonly',
             ],
         ]);
 
@@ -198,6 +211,8 @@ class CategoriesCrudController extends CrudController
                 'class' => 'form-group col-md-6',
             ],
         ]);
+
+
 
         CRUD::addField([
             'name' => 'short_description',
@@ -290,14 +305,19 @@ class CategoriesCrudController extends CrudController
             $xmlId = $category->attributes()->id ? (string)$category->attributes()->id : null;
             $xmlParent = $category->attributes()->parent ? (string)$category->attributes()->parent : null;
 
-            if (Categories::where('name', $name)->exists()) {
-                $id = Categories::where('name', $name)->update([
+
+
+            if (Categories::where('xml_id', $xmlId)->exists()) {
+                $id = Categories::where('xml_id', $xmlId)->update([
+                    'name' => $name,
                     'short_name' => $short,
                     'form' => $form,
+                    'slug' => SlugService::createSlug(Categories::class, 'slug', $name),
                 ]);
             } else {
                 $id = Categories::query()->insertGetId([
                     'name' => $name,
+                    'xml_id' => $xmlId,
                     'slug' => SlugService::createSlug(Categories::class, 'slug', $name),
                     'short_name' => $short,
                     'form' => $form,

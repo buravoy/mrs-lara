@@ -9,8 +9,6 @@
                     <li>
                         <a class="small" href="{{ backpack_url('category') }}?id={{ $child->id }}">{{ $child->name }}</a>
                     </li>
-
-
                 @else
                     @if($loop->iteration == 3)
 
@@ -26,7 +24,7 @@
             @endforeach
         </ul>
         @if($entry->child->count() > 3)
-            <button class="btn btn-sm btn-outline-primary category-list-toggle" onclick="$(this).parent().find('.list').slideToggle();$(this).find('i').toggleClass('rotate180')">
+            <button class="btn btn-sm font-lg outline-none shadow-none text-primary category-list-toggle" onclick="$(this).parent().find('.list').slideToggle();$(this).find('i').toggleClass('rotate180')">
                 <i class="small la la-chevron-down"></i>
             </button>
         @endif
