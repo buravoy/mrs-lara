@@ -18,8 +18,8 @@ class CreateFeedsTable extends Migration
             $table->string('name');
             $table->text('xml_url')->nullable();
             $table->string('slug');
-            $table->text('parser')->nullable();
-            $table->text('rules')->nullable();
+            $table->jsonb('parser')->nullable();
+            $table->jsonb('rules')->nullable();
 
             $table->string('schedule')->nullable();
             $table->string('last_update')->nullable();

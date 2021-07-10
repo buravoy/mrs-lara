@@ -17,7 +17,8 @@ class CreateAttributesTable extends Migration
             $table->increments('id');
             $table->bigInteger('group_id');
             $table->string('name');
-            $table->string('value')->nullable();
+            $table->boolean('show')->default(0);
+            $table->jsonb('form')->nullable();
             $table->string('slug');
             $table->integer('sort')->nullable();
             $table->softDeletes();

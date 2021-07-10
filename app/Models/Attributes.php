@@ -20,7 +20,8 @@ class Attributes extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
+    protected $fakeColumns = ['form'];
+
     // protected $hidden = [];
     // protected $dates = [];
 

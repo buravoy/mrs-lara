@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Categories;
 use Cviebrock\EloquentSluggable\Services\SlugService;
-use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoriesRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Illuminate\Support\Str;
 
 /**
  * Class CategoryCrudController

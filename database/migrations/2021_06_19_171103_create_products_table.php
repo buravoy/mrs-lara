@@ -19,11 +19,13 @@ class CreateProductsTable extends Migration
             $table->string('slug');
             $table->text('description')->nullable();
             $table->text('image')->nullable();
+            $table->text('href')->nullable();
+            $table->string('uniq_id')->nullable();
             $table->float('price')->nullable();
             $table->float('old_price')->nullable();
             $table->float('discount')->nullable();
             $table->tinyInteger('rating')->nullable();
-            $table->json('attributes')->nullable();
+            $table->jsonb('attributes')->nullable();
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
             $table->softDeletes();

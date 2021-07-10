@@ -8,7 +8,7 @@
 
 @include('crud::fields.inc.wrapper_start')
 
-<textarea class="form-control" name="{{ $field['name'] }}" hidden>{{ old(square_brackets_to_dots($field['name'])) ?? $field['value'] ?? $field['default'] ?? '' }}</textarea>
+<textarea name="{{ $field['name'] }}" hidden>{{ old(square_brackets_to_dots($field['name'])) ?? $field['value'] ?? $field['default'] ?? '' }}</textarea>
 
 @foreach($field['attributes'] as $group)
     <div class="form-group col-md-12">

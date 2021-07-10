@@ -52,19 +52,18 @@ class GroupsCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
-            'name' => 'type',
-            'label' => 'Тип',
-            'type' => 'radio',
-            'options' => [
-                'text' => 'Текст',
-                'color' => 'Цвет'
-            ],
-        ]);
-
-        CRUD::addColumn([
             'name' => 'title',
             'label' => 'Публичное название',
             'type' => 'text'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'show',
+            'label' => 'Показывать при выборе',
+            'type' => 'check',
+            'wrapper' => [
+                'class' => 'font-xl',
+            ],
         ]);
 
         CRUD::addColumn([
@@ -107,29 +106,23 @@ class GroupsCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'type',
-            'label' => 'Тип',
-            'type' => 'radio',
-            'inline' => true,
-            'options' => [
-                'text' => 'Текст',
-                'color' => 'Цвет'
-            ],
-            'default' => 'text',
-            'tab' => 'Информация',
-            'wrapperAttributes' => [
-                'class' => 'form-group col-md-6',
-            ],
-
-        ]);
-
-        CRUD::addField([
             'name' => 'title',
             'label' => 'Публичное название',
             'type' => 'text',
             'tab' => 'Информация',
             'wrapperAttributes' => [
                 'class' => 'form-group col-md-6',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'show',
+            'label' => 'Показывать при выборе',
+            'type' => 'checkbox',
+            'tab' => 'Информация',
+            'default' => 1,
+            'wrapper' => [
+                'class' => 'form-group col-md-12',
             ],
         ]);
 
@@ -174,9 +167,6 @@ class GroupsCrudController extends CrudController
 
     public function getGroupType(Request $request)
     {
-
-//        return $request->id;
-
         return json_encode(Groups::where('id', $request->id)->select('type', 'name')->first());
     }
 }

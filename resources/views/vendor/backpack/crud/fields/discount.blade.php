@@ -14,8 +14,6 @@
     @if(isset($field['suffix'])) <div class="input-group-append"><span class="input-group-text">{!! $field['suffix'] !!}</span></div> @endif
     @if(isset($field['prefix']) || isset($field['suffix'])) </div> @endif
 
-{{-- HINT --}}
-
 @include('crud::fields.inc.wrapper_end')
 
 @push('crud_fields_scripts')
@@ -24,8 +22,6 @@
             $price = $('[name=price]'),
             $oldPrice = $('[name=old_price]'),
             $discount = $('[name=discount]');
-
-        $discount.val(calcDiscount($price.val(), $oldPrice.val()));
 
         $price.on('input', function () {
             $discount.val(calcDiscount($price.val(), $oldPrice.val()));
@@ -36,6 +32,7 @@
         })
 
         function calcDiscount(newPrice, oldPrice) {
+            if (!newPrice || !oldPrice) return;
             return Math.round((oldPrice - newPrice)/oldPrice*100);
         }
 

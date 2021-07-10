@@ -79,11 +79,19 @@ class AttributesCrudController extends CrudController
             'type' => 'text',
         ]);
 
+        CRUD::addColumn([
+            'label' => 'Словоформы',
+            'type' => 'view',
+            'view' => 'vendor.backpack.base.columns.form',
+        ]);
 
         CRUD::addColumn([
-            'label' => 'Тип',
-            'type' => 'view',
-            'view' => 'vendor.backpack.base.columns.color',
+            'name' => 'show',
+            'label' => 'Отображать',
+            'type' => 'check',
+            'wrapper' => [
+                'class' => 'font-xl',
+            ],
         ]);
 
         CRUD::addColumn([
@@ -117,7 +125,7 @@ class AttributesCrudController extends CrudController
         CRUD::setValidation(AttributesRequest::class);
 
         $entry = CRUD::getCurrentEntry();
-        $attributeGroups = Groups::select('name', 'type')->get();
+        $attributeGroups = Groups::select('name')->get();
 
 //        CRUD::setFromDb(); // fields
 
@@ -142,24 +150,61 @@ class AttributesCrudController extends CrudController
             ],
         ]);
 
-        CRUD::addField([
-            'name' => 'value',
-            'label' => 'Цвет',
-            'type' => 'color_picker',
-            'tab' => 'Информация',
-            'wrapperAttributes' => [
-                'class' => 'form-group col-md-2',
-                'id' => 'color'
+        CRUD::addFields([
+            [
+                'name'     => 'form_many',
+                'label'    => 'Множественный',
+                'fake'     => true,
+                'store_in' => 'form',
+                'tab' => 'Информация',
+                'wrapper' => [
+                    'class' => 'form-group col-md-3',
+                ],
             ],
+            [
+                'name'     => 'form_male',
+                'label'    => 'Мужской',
+                'fake'     => true,
+                'store_in' => 'form',
+                'tab' => 'Информация',
+                'wrapper' => [
+                    'class' => 'form-group col-md-3',
+                ],
+            ],
+            [
+                'name'     => 'form_female',
+                'label'    => 'Женский',
+                'fake'     => true,
+                'store_in' => 'form',
+                'tab' => 'Информация',
+                'wrapper' => [
+                    'class' => 'form-group col-md-3',
+                ],
+            ],
+            [
+                'name'     => 'form_neutral',
+                'label'    => 'Средний',
+                'fake'     => true,
+                'store_in' => 'form',
+                'tab' => 'Информация',
+                'wrapper' => [
+                    'class' => 'form-group col-md-3',
+                ],
+            ],
+
         ]);
 
         CRUD::addField([
-            'name' => 'attributes',
-            'label' => 'Дополнительно',
-            'type' => 'attributes-create',
-            'data' => $attributeGroups,
+            'name' => 'show',
+            'label' => 'Отображать',
+            'type' => 'checkbox',
             'tab' => 'Информация',
+            'default' => 1,
+            'wrapper' => [
+                'class' => 'form-group col-md-12',
+            ],
         ]);
+
 
         CRUD::addField([
             'name' => 'slug',
