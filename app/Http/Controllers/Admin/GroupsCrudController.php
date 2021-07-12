@@ -52,8 +52,14 @@ class GroupsCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
-            'name' => 'title',
-            'label' => 'Публичное название',
+            'name' => 'filter_name',
+            'label' => 'Название в фильтре',
+            'type' => 'text'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'description_name',
+            'label' => 'Название в описании',
             'type' => 'text'
         ]);
 
@@ -101,17 +107,27 @@ class GroupsCrudController extends CrudController
             'type' => 'text',
             'tab' => 'Информация',
             'wrapperAttributes' => [
-                'class' => 'form-group col-md-6',
+                'class' => 'form-group col-md-4',
             ],
         ]);
 
         CRUD::addField([
-            'name' => 'title',
-            'label' => 'Публичное название',
+            'name' => 'filter_name',
+            'label' => 'Название в фильтре',
             'type' => 'text',
             'tab' => 'Информация',
             'wrapperAttributes' => [
-                'class' => 'form-group col-md-6',
+                'class' => 'form-group col-md-4',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'description_name',
+            'label' => 'Название в описании',
+            'type' => 'text',
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-4',
             ],
         ]);
 

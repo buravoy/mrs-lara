@@ -184,8 +184,18 @@ class ProductsCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'description',
-            'label' => 'Описание',
+            'name' => 'description_1',
+            'label' => 'Описание 1',
+            'type' => 'textarea',
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-12',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'description_2',
+            'label' => 'Описание 2',
             'type' => 'textarea',
             'tab' => 'Информация',
             'wrapperAttributes' => [

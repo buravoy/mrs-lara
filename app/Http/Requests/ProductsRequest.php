@@ -29,7 +29,8 @@ class ProductsRequest extends FormRequest
     {
         return [
             'name' => 'bail|required|string|max:255',
-            'description' => 'bail|nullable|string|max:65535',
+            'description_1' => 'bail|nullable|string|max:65535',
+            'description_2' => 'bail|nullable|string|max:65535',
             'price' => 'bail|nullable|integer|max:999999999',
             'old_price' => 'bail|nullable|integer|max:999999999',
             'discount' => 'bail|nullable|integer|max:100',

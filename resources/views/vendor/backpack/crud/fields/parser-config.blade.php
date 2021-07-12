@@ -1,5 +1,4 @@
 @if ($field['file_info'])
-
     <div class="form-group col-md-8">
         <button type="button"
                 class="btn btn-primary"
@@ -24,7 +23,7 @@
 
     </div>
 
-    <div id="parser-fields" class="col-md-3">
+    <div id="parser-fields" class="col-md-8">
         <label class="mb-3">Теги из офера:</label>
         <div class="form-group w-100 d-flex">
             <label class="mr-3">Название:</label>
@@ -63,7 +62,7 @@
 
     </div>
 
-    <div id="offer-info" class="col-md-9" style="display: none">
+    <div id="offer-info" class="col-md-4" style="display: none">
         <div class="d-flex align-items-center mb-2">
             <button type="button" class="btn btn-sm btn-outline-primary mb-0" onclick="renderXML(-1)">prev</button>
             <input type="text" name="current" class="w-auto form-control form-control-sm mx-2 font-weight-bold text-center border-0" readonly>
@@ -73,7 +72,7 @@
         <pre id="xml" class="w-100 border rounded p-2 font-sm"></pre>
     </div>
 
-    <textarea hidden name="{{ $field['name'] }}">{{ old(square_brackets_to_dots($field['name'])) ?? $field['value'] ?? $field['default'] ?? '' }}</textarea>
+    <textarea name="{{ $field['name'] }}">{{ old(square_brackets_to_dots($field['name'])) ?? $field['value'] ?? $field['default'] ?? '' }}</textarea>
 
 @else
     <div class="form-group col-12">
