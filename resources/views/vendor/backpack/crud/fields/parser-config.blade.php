@@ -35,8 +35,13 @@
         </div>
 
         <div class="form-group w-100 d-flex">
-            <label class="mr-3">Описание:</label>
-            <input name="offer_desc" type="text" class="form-control">
+            <label class="mr-3">Описание&nbsp;1:</label>
+            <input name="offer_desc_1" type="text" class="form-control">
+        </div>
+
+        <div class="form-group w-100 d-flex">
+            <label class="mr-3">Описание&nbsp;2:</label>
+            <input name="offer_desc_2" type="text" class="form-control">
         </div>
 
         <div class="form-group w-100 d-flex">

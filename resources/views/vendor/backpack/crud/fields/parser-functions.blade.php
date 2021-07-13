@@ -25,6 +25,14 @@
     <script src="{{ asset('codemirror/mode/clike/clike.js') }}"></script>
     <script src="{{ asset('codemirror/mode/php/php.js') }}"></script>
 
+    <script src="{{ asset('codemirror/addon/fold/brace-fold.js') }}"></script>
+    <script src="{{ asset('codemirror/addon/fold/comment-fold.js') }}"></script>
+    <script src="{{ asset('codemirror/addon/fold/foldcode.js') }}"></script>
+    <script src="{{ asset('codemirror/addon/fold/foldgutter.js') }}"></script>
+    <script src="{{ asset('codemirror/addon/fold/indent-fold.js') }}"></script>
+    <script src="{{ asset('codemirror/addon/fold/markdown-fold.js') }}"></script>
+    <script src="{{ asset('codemirror/addon/fold/xml-fold.js') }}"></script>
+
     <script>
         const
             editor = { area: null, isInit: false },
@@ -46,6 +54,9 @@
                 scrollbarStyle: 'simple',
                 coverGutterNextToScrollbar: true,
                 styleActiveLine: true,
+                autoCloseBrackets: true,
+                foldGutter: true,
+                gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
             })
 
             editor.area.on('change', function (){
@@ -67,4 +78,5 @@
     <link rel="stylesheet" href="{{ asset('codemirror/lib/codemirror.css') }}">
     <link rel="stylesheet" href="{{ asset('codemirror/theme/liquibyte.css') }}">
     <link rel="stylesheet" href="{{ asset('codemirror/addon/scroll/simplescrollbars.css') }}">
+    <link rel="stylesheet" href="{{ asset('codemirror/addon/fold/foldgutter.css') }}">
 @endpush
