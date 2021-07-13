@@ -5,26 +5,26 @@
         <categories>
             <category id="1">
                 <name>Без категории</name>
-                <short></short>
-                <form></form>
+                <short>Short name</short>
+                <form>муж</form>
             </category>
 
             <category id="2">
                 <name>Одежда</name>
                 <short></short>
-                <form></form>
+                <form>жен</form>
             </category>
 
             <category id="3" parent="2">
                 <name>Верхняя одежда</name>
                 <short></short>
-                <form></form>
+                <form>сред</form>
             </category>
 
             <category id="4" parent="2">
                 <name>Нижняя одежда</name>
                 <short></short>
-                <form></form>
+                <form>множ</form>
             </category>
 
             <category id="5">
