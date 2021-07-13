@@ -132,4 +132,9 @@ class Parser
 //        return $productList;
 //    }
 
+    public function saveFunction (Request $request) {
+        $content = $request->value;
+        $filenamePHP = $request->filename;
+        file_put_contents( base_path('uploads/functions/').$filenamePHP, $content);
+    }
 }

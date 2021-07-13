@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
-class FileUploadController extends Controller
+class FileUploadController
 {
     public function categoryXmlPostUpload(Request $request)
     {
@@ -29,13 +29,16 @@ class FileUploadController extends Controller
 
     public function downloadXml(Request $request)
     {
-        $filename = $request->name . '.xml';
+        $filenameXML = $request->name . '.xml';
+        $filenamePHP = $request->name . '.php';
         $link = $request->link;
-        file_put_contents( base_path('uploads/xml/feeds/').$filename, fopen($link, 'r'));
 
-        return response()->json([
-            'message' => 'XML feed uploaded',
-        ]);
+        file_put_contents( base_path('uploads/xml/feeds/').$filenameXML, fopen($link, 'r'));
+
+        if (!file_exists(base_path('uploads/functions/').$filenamePHP)) {
+            file_put_contents( base_path('uploads/functions/').$filenamePHP, '<?php');
+        }
+
+        return true;
     }
-
 }

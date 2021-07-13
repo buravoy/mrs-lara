@@ -1,15 +1,14 @@
 @if ($field['file_info'])
-    <div class="form-group col-md-8">
+    <div class="form-group col-md-8 d-flex mb-4 align-items-center flex-wrap">
         <button type="button"
-                class="btn btn-primary"
+                class="btn btn-primary mr-3"
                 id="handle-offers"
                 data-name="{{ $field['file_info']['name'] }}">Получить офферы из XML
         </button>
 
-        <div class="form-group d-flex align-items-center">
+        <div class="form-group d-flex align-items-center mb-0">
             <label class="mb-0 mr-2">Загрузить первые:</label>
             <input type="text" name="count" class="w-auto form-control form-control-sm" value="100">
-
         </div>
     </div>
 
@@ -24,7 +23,12 @@
     </div>
 
     <div id="parser-fields" class="col-md-8">
-        <label class="mb-3">Теги из офера:</label>
+        <label class="mb-3">Имя функции для полей:</label>
+
+        <div class="form-group w-100">
+            <label class="mr-3">Уникальный ID товара:</label>
+            <input name="offer_uniq" type="text" class="form-control">
+        </div>
         <div class="form-group w-100 d-flex">
             <label class="mr-3">Название:</label>
             <input name="offer_name" type="text" class="form-control">
@@ -55,11 +59,6 @@
             <input name="offer_href" type="text" class="form-control">
         </div>
 
-        <div class="form-group w-100">
-            <label class="mr-3">Уникальный ID товара:</label>
-            <input name="offer_uniq" type="text" class="form-control">
-        </div>
-
     </div>
 
     <div id="offer-info" class="col-md-4" style="display: none">
@@ -72,7 +71,7 @@
         <pre id="xml" class="w-100 border rounded p-2 font-sm"></pre>
     </div>
 
-    <textarea name="{{ $field['name'] }}">{{ old(square_brackets_to_dots($field['name'])) ?? $field['value'] ?? $field['default'] ?? '' }}</textarea>
+    <textarea hidden name="{{ $field['name'] }}">{{ old(square_brackets_to_dots($field['name'])) ?? $field['value'] ?? $field['default'] ?? '' }}</textarea>
 
 @else
     <div class="form-group col-12">
@@ -81,9 +80,9 @@
 @endif
 
 @push('crud_fields_scripts')
-    <script src="{{ asset('js-beautify/beautify.js') }}"></script>
-    <script src="{{ asset('js-beautify/beautify-css.js') }}"></script>
-    <script src="{{ asset('js-beautify/beautify-html.js') }}"></script>
+    <script src="{{ asset('beautify/beautify.js') }}"></script>
+    <script src="{{ asset('beautify/beautify-css.js') }}"></script>
+    <script src="{{ asset('beautify/beautify-html.js') }}"></script>
     <script>
         const
             $handleOffers = $('#handle-offers'),

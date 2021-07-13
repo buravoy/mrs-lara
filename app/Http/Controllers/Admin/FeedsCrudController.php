@@ -74,12 +74,20 @@ class FeedsCrudController extends CrudController
 
         if (isset($entry->slug)) {
             $file = base_path('uploads/xml/feeds/').$entry->slug.'.xml';
+            $fileFunctions = base_path('uploads/functions/').$entry->slug.'.php';
 
             if (file_exists($file)) {
                 $fileInfo = [
                     'name' => basename($file),
                     'size' => number_format((filesize($file)/1024/1024), 2, ',', ' '),
                     'upd' => date ("d F Y - H:i:s.", filemtime($file))
+                ];
+            }
+
+            if (file_exists($fileFunctions)) {
+                $fileFunctionsInfo = [
+                    'name' => basename($fileFunctions),
+                    'content' => file_get_contents($fileFunctions)
                 ];
             }
         }
@@ -134,10 +142,19 @@ class FeedsCrudController extends CrudController
         ]);
 
         CRUD::addField([
+            'name' => '',
+            'type' => 'parser-functions',
+            'tab' => 'Функции парсера',
+            'data' => $entry,
+            'file_functions' => $fileFunctionsInfo ?? null
+        ]);
+
+        CRUD::addField([
             'name' => 'slug',
             'label' => 'Символьный код',
             'type' => 'text',
             'tab' => 'Дополнительо',
+            'attributes'=>[ 'readonly' => true ],
             'wrapper' => [
                 'class' => 'form-group col-md-8',
             ],

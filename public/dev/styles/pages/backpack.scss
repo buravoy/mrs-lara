@@ -66,3 +66,20 @@ button:focus {
         transform: rotate(180deg);
     }
 }
+
+#offer-info {
+    > pre {
+        background-color: #f8f9fa;
+    }
+}
+
+.CodeMirror {
+    width: 100%;
+    height: auto !important;
+    min-height: 400px;
+    border-radius: 4px;
+
+    &-gutter-filler {
+        background-color: #151515 !important;
+    }
+}
