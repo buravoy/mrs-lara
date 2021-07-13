@@ -22,7 +22,7 @@
 
     </div>
 
-    <div id="parser-fields" class="col-md-8">
+    <div id="parser-fields" class="col-md-6">
         <label class="mb-3">Имя функции для полей:</label>
 
         <div class="form-group w-100">
@@ -66,7 +66,7 @@
 
     </div>
 
-    <div id="offer-info" class="col-md-4" style="display: none">
+    <div id="offer-info" class="col-md-6" style="display: none">
         <div class="d-flex align-items-center mb-2">
             <button type="button" class="btn btn-sm btn-outline-primary mb-0" onclick="renderXML(-1)">prev</button>
             <input type="text" name="current" class="w-auto form-control form-control-sm mx-2 font-weight-bold text-center border-0" readonly>
