@@ -16,13 +16,16 @@ class Parser
         $offers = $xml->shop->offers->offer;
 
         $countIteration = 1;
-        $countLimit = $request->count;
+        $countFrom = $request->count_from;
+        $countTo = $request->count_to;
 
         foreach ($offers as $offer) {
             $offerXML = $offer->asXML();
 
             foreach ($offer->param as $param) $offer->addChild('params', $param->attributes());
-            if ($countIteration++ > $countLimit) break;
+            $countIteration++;
+            if ($countIteration < $countFrom) continue;
+            if ($countIteration >= $countTo) break;
 
             $selectedOffers[] = $offer;
             $selectedOffersXML[] = $offerXML;

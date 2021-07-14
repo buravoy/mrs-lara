@@ -1,6 +1,17 @@
 @if ($field['file_functions'])
-    <div class="w-100 d-flex mx-3">
+    <div class="col-md-8 d-flex">
         <textarea id="code" name="code" rows="50" hidden>{{ $field['file_functions']['content'] }}</textarea>
+    </div>
+
+    <div class="col-md-4 offer-info" style="display: none">
+        <div class="d-flex align-items-center mb-2">
+            <button type="button" class="btn btn-sm btn-outline-primary mb-0" onclick="renderXML(-1)">prev</button>
+            <input type="text" name="current" class="w-auto form-control form-control-sm mx-2 font-weight-bold text-center border-0" readonly>
+            <button type="button" class="btn btn-sm btn-outline-primary mb-0" onclick="renderXML(1)">next</button>
+        </div>
+        <div class="d-flex json-wrapper font-xs">
+            <textarea id="json" class="json-view w-100"></textarea>
+        </div>
     </div>
 @else
     <div class="form-group col-12">
@@ -36,13 +47,18 @@
     <script>
         const
             editor = { area: null, isInit: false },
+            json = { area: null, isInit: false },
             $code = $('#code'),
+            $json = $('.json-view'),
             $tab = $code.closest('.tab-pane'),
             $tabName = $tab.attr('id'),
             $thisTabLink = $("a[href^='#"+$tabName+"']")
 
         if (!editor.isInit && $tab.hasClass('active')) setTimeout( ()=>{ initCode() }, 100);
-        $thisTabLink.on('click', function (){ if (!editor.isInit) setTimeout( ()=>{ initCode() }, 100) })
+        $thisTabLink.on('click', function (){
+            if (!editor.isInit) setTimeout( ()=>{ initCode() }, 100)
+            setTimeout( ()=>{ initJson() }, 100)
+        })
 
         function initCode() {
             editor.isInit = true;
@@ -70,6 +86,25 @@
                     data: { value: content, filename: '{{ $field['file_functions']['name'] }}' },
                 })
             })
+        }
+
+        function initJson() {
+            $('.json-wrapper').find('.CodeMirror').remove();
+
+            json.isInit = true;
+            json.area = CodeMirror.fromTextArea(document.getElementById("json"), {
+                // theme: 'zenburn',
+                lineNumbers: true,
+                matchBrackets: true,
+                mode: "application/ld+json",
+                scrollbarStyle: 'simple',
+                coverGutterNextToScrollbar: true,
+                styleActiveLine: true,
+                autoCloseBrackets: true,
+                foldGutter: true,
+                gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+            })
+
         }
     </script>
 @endpush

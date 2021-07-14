@@ -7,8 +7,10 @@
         </button>
 
         <div class="form-group d-flex align-items-center mb-0">
-            <label class="mb-0 mr-2">Загрузить первые:</label>
-            <input type="text" name="count" class="w-auto form-control form-control-sm" value="100">
+            <label class="mb-0 mr-2">Загрузить офферы c</label>
+            <input type="text" name="count_from" class="text-center font-weight-bold form-control px-1" style="max-width: 70px" value="1">
+            <label class="mb-0 mx-2">по</label>
+            <input type="text" name="count" class="text-center font-weight-bold form-control px-1" style="max-width: 70px" value="100">
         </div>
     </div>
 
@@ -66,14 +68,14 @@
 
     </div>
 
-    <div id="offer-info" class="col-md-6" style="display: none">
+    <div class="offer-info col-md-6" style="display: none">
         <div class="d-flex align-items-center mb-2">
             <button type="button" class="btn btn-sm btn-outline-primary mb-0" onclick="renderXML(-1)">prev</button>
             <input type="text" name="current" class="w-auto form-control form-control-sm mx-2 font-weight-bold text-center border-0" readonly>
             <button type="button" class="btn btn-sm btn-outline-primary mb-0" onclick="renderXML(1)">next</button>
         </div>
 
-        <pre id="xml" class="w-100 border rounded p-2 font-sm"></pre>
+        <pre class="xml-view w-100 border rounded p-2 font-sm"></pre>
     </div>
 
     <textarea hidden name="{{ $field['name'] }}">{{ old(square_brackets_to_dots($field['name'])) ?? $field['value'] ?? $field['default'] ?? '' }}</textarea>
@@ -92,11 +94,13 @@
         const
             $handleOffers = $('#handle-offers'),
             $parseXml = $('#parse-xml'),
-            $xmlView = $('#xml'),
+            $xmlView = $('.xml-view'),
+            $jsonView = $('.json-view'),
             $xmlCounter = $('[name=current]'),
             $parser = $('[name={{ $field['name'] }}]'),
             $parserFields = $('#parser-fields'),
-            $count = $('[name=count]');
+            $count = $('[name=count]'),
+            $countFrom = $('[name=count_from]');
 
         let parserData = {json:[], xml:[]},
             parser = $parser.text();
@@ -126,20 +130,19 @@
         $handleOffers.on('click', function (){
             const
                 $t= $(this),
-                name = $t.data('name'),
-                count = $count.val();
+                name = $t.data('name');
 
             $.ajax({
                 async: true,
                 type: "POST",
                 dataType: "json",
                 url: '{{ route('handle-offers') }}',
-                data: { name: name, count: count },
+                data: { name: name, count_from: $countFrom.val(), count_to: $count.val()},
                 success: (response) => {
                     parserData = response
-                    const beautifyString = html_beautify(parserData.xml[0],{ indent_size: 2, space_in_empty_paren: true });
-                    $('#offer-info').fadeIn(200);
-                    $xmlView.text(beautifyString);
+                    renderXML();
+                    $('.offer-info').fadeIn(200);
+                    $('json-wrapper').fadeIn(200);
                     $xmlCounter.val(0)
                 }
             })
@@ -162,15 +165,20 @@
         })
 
 
-        function renderXML(direction) {
+        function renderXML(direction = 0) {
             const
                 currant = +$xmlCounter.val(),
                 currentView = currant + direction;
-            if (currentView < 0 || currentView > (+$count.val() - 1)) return;
+            if (currentView < 0 || currentView > (+$count.val() - (+$countFrom.val() + 1))) return;
 
-            const beautifyString = html_beautify(parserData.xml[currentView],{ indent_size: 2, space_in_empty_paren: true })
+            const
+                beautifyString = html_beautify(parserData.xml[currentView],{ indent_size: 2, space_in_empty_paren: true }),
+                jsonString = JSON.stringify(parserData.json[currentView], null, "\t")
+
             $xmlView.text(beautifyString);
+            $jsonView.text(jsonString);
             $xmlCounter.val(currentView);
+            initJson();
         }
     </script>
 @endpush

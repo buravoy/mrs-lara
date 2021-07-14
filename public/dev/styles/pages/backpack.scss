@@ -83,3 +83,13 @@ button:focus {
         background-color: #151515 !important;
     }
 }
+
+.json-wrapper {
+    .CodeMirror {
+        border: 1px solid #b1b1b1;
+
+        &-linenumber {
+            display: none;
+        }
+    }
+}
