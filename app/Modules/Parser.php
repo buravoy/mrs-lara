@@ -22,24 +22,13 @@ class Parser
         foreach ($offers as $offer) {
             $offerXML = $offer->asXML();
 
-            foreach ($offer->param as $param) $offer->addChild('params', $param->attributes());
             $countIteration++;
             if ($countIteration < $countFrom) continue;
             if ($countIteration >= $countTo) break;
 
-            $selectedOffers[] = $offer;
+            $selectedOffers[] = self::offerToObject($offer);
             $selectedOffersXML[] = $offerXML;
         }
-
-        $selectedOffers = json_decode(json_encode($selectedOffers), true);
-
-        $selectedOffers = array_map(function ($offer) {
-            $offer['attributes'] = $offer['@attributes'];
-            $offer['param'] = array_combine($offer['params'], $offer['param']);
-            unset($offer['@attributes'], $offer['params']);
-
-            return $offer;
-        }, $selectedOffers);
 
         return [
             'json' => $selectedOffers,
@@ -64,6 +53,7 @@ class Parser
         $productList = [];
 
         foreach ($offers as $offer) {
+            $offerObj = self::offerToObject($offer);
 
             $functions = [
                 'name' => $fields->offer_name,
@@ -76,53 +66,44 @@ class Parser
                 'uniq_id' => $fields->offer_uniq
             ];
 
-            $offerName = $functions['name']($offer);
-            $slug = SlugService::createSlug(Products::class, 'slug', $offerName);
-            $uniqId = $functions['uniq_id']($offer);
+            $offerName = $functions['name']($offerObj);
+            $uniqId = $functions['uniq_id']($offerObj);
+
 
             $product = [
                 'name' => $offerName,
-                'slug' => $slug,
                 'uniq_id' => $uniqId,
-                'description_1' => $functions['desc_1']($offer),
-                'description_2' => $functions['desc_2']($offer),
-                'price' => $functions['price']($offer),
-                'old_price' => $functions['old_price']($offer),
-                'image' => $functions['image']($offer),
-                'href' => $functions['href']($offer),
+                'description_1' => $functions['desc_1']($offerObj),
+                'description_2' => $functions['desc_2']($offerObj),
+                'price' => $functions['price']($offerObj),
+                'old_price' => $functions['old_price']($offerObj),
+                'image' => $functions['image']($offerObj),
+                'href' => $functions['href']($offerObj),
             ];
 
-//            if (Products::where('uniq_id', $uniqId)->exists()) {
-//                Products::where('uniq_id', $uniqId)->update($product);
-//            } else {
-//                Products::insert($product);
-//            }
+            if (Products::where('uniq_id', $uniqId)->exists()) {
+                Products::where('uniq_id', $uniqId)->update($product);
+            } else {
+                $product['slug'] = SlugService::createSlug(Products::class, 'slug', $offerName);
+                Products::insert($product);
+            }
 
             $productList[] = $product;
             if ($count++ > 20) break;
         }
 
-
         return $productList;
     }
 
+    function offerToObject($offer){
+        foreach ($offer->param as $param) $offer->addChild('params', $param->attributes());
+        $offerObj = json_decode(json_encode($offer), true);
+        $offerObj['attributes'] = $offerObj['@attributes'];
+        $offerObj['param'] = array_combine($offerObj['params'], $offerObj['param']);
+        unset($offerObj['@attributes'], $offerObj['params']);
 
-//    public function parseXml(Request $request)
-//    {
-//        $slug = $request->name;
-//        $filename = $slug.'.xml';
-//        $xml = simplexml_load_file( base_path('uploads/xml/feeds/').$filename );
-//        $offers = $xml->shop->offers->offer;
-//
-//        $parserFields = Feeds::where('slug', $slug)->select('parser')->first();
-//
-//        $fields = json_decode($parserFields->parser);
-//
-//        $uniq = explode(';', $fields->offer_uniq);
-//
-//
-//        return $productList;
-//    }
+        return $offerObj;
+    }
 
     public function saveFunction(Request $request)
     {

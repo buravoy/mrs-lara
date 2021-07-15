@@ -28,6 +28,7 @@ class CreateProductsTable extends Migration
             $table->float('rating')->nullable();
             $table->jsonb('attributes')->nullable();
             $table->string('meta_title')->nullable();
+            $table->string('parser_slug')->default('self');
             $table->text('meta_description')->nullable();
             $table->softDeletes();
             $table->timestamps();

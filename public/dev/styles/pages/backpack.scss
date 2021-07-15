@@ -91,5 +91,9 @@ button:focus {
         &-linenumber {
             display: none;
         }
+
+        &-gutter-filler {
+            background-color: #f7f7f7 !important;
+        }
     }
 }

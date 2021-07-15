@@ -1,10 +1,19 @@
 @if ($field['file_functions'])
-    <div class="col-md-8 d-flex">
+    <div class="form-group col-md-12">
+        <button type="button"
+                class="btn btn-success ml-auto d-block parse-xml"
+                data-id="{{ $field['data']['id'] }}"
+                data-name="{{ $field['data']['slug'] }}">Запустить парсер
+        </button>
+
+    </div>
+
+    <div class="col-md-8 d-flex font-sm">
         <textarea id="code" name="code" rows="50" hidden>{{ $field['file_functions']['content'] }}</textarea>
     </div>
 
     <div class="col-md-4 offer-info" style="display: none">
-        <div class="d-flex align-items-center mb-2">
+        <div class="d-flex align-items-center justify-content-center mb-2">
             <button type="button" class="btn btn-sm btn-outline-primary mb-0" onclick="renderXML(-1)">prev</button>
             <input type="text" name="current" class="w-auto form-control form-control-sm mx-2 font-weight-bold text-center border-0" readonly>
             <button type="button" class="btn btn-sm btn-outline-primary mb-0" onclick="renderXML(1)">next</button>
@@ -93,7 +102,6 @@
 
             json.isInit = true;
             json.area = CodeMirror.fromTextArea(document.getElementById("json"), {
-                // theme: 'zenburn',
                 lineNumbers: true,
                 matchBrackets: true,
                 mode: "application/ld+json",
@@ -102,6 +110,7 @@
                 styleActiveLine: true,
                 autoCloseBrackets: true,
                 foldGutter: true,
+                readOnly: true,
                 gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
             })
 

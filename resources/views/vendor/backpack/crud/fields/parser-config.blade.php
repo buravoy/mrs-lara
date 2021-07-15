@@ -16,8 +16,7 @@
 
     <div class="form-group col-md-4">
         <button type="button"
-                class="btn btn-success ml-auto d-block"
-                id="parse-xml"
+                class="btn btn-success ml-auto d-block parse-xml"
                 data-id="{{ $field['data']['id'] }}"
                 data-name="{{ $field['data']['slug'] }}">Запустить парсер
         </button>
@@ -69,7 +68,7 @@
     </div>
 
     <div class="offer-info col-md-6" style="display: none">
-        <div class="d-flex align-items-center mb-2">
+        <div class="d-flex align-items-center justify-content-center mb-2">
             <button type="button" class="btn btn-sm btn-outline-primary mb-0" onclick="renderXML(-1)">prev</button>
             <input type="text" name="current" class="w-auto form-control form-control-sm mx-2 font-weight-bold text-center border-0" readonly>
             <button type="button" class="btn btn-sm btn-outline-primary mb-0" onclick="renderXML(1)">next</button>
@@ -93,7 +92,7 @@
     <script>
         const
             $handleOffers = $('#handle-offers'),
-            $parseXml = $('#parse-xml'),
+            $parseXml = $('.parse-xml'),
             $xmlView = $('.xml-view'),
             $jsonView = $('.json-view'),
             $xmlCounter = $('[name=current]'),
