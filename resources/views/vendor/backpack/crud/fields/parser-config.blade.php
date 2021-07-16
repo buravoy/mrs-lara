@@ -33,41 +33,41 @@
 
         <div class="form-group w-100">
             <label class="mr-3">Уникальный ID товара:</label>
-            <input name="offer_uniq" type="text" class="form-control" value="uniq">
+            <input name="offer_uniq" type="text" class="form-control">
         </div>
         <div class="form-group w-100 d-flex">
             <label class="mr-3">Название:</label>
-            <input name="offer_name" type="text" class="form-control" value="name">
+            <input name="offer_name" type="text" class="form-control">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3">Описание&nbsp;1:</label>
-            <input name="offer_desc_1" type="text" class="form-control" value="descFirst">
+            <input name="offer_desc_1" type="text" class="form-control">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3">Описание&nbsp;2:</label>
-            <input name="offer_desc_2" type="text" class="form-control" value="descSecond">
+            <input name="offer_desc_2" type="text" class="form-control">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3">Цена:</label>
-            <input name="offer_price" type="text" class="form-control" value="price">
+            <input name="offer_price" type="text" class="form-control">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3">Старая&nbsp;цена:</label>
-            <input name="offer_old" type="text" class="form-control" value="oldprice">
+            <input name="offer_old" type="text" class="form-control">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3">Картинки:</label>
-            <input name="offer_img" type="text" class="form-control" value="image">
+            <input name="offer_img" type="text" class="form-control">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3">Ссылка:</label>
-            <input name="offer_href" type="text" class="form-control" value="href">
+            <input name="offer_href" type="text" class="form-control">
         </div>
 
     </div>
@@ -81,14 +81,13 @@
 
         <pre class="xml-view w-100 border rounded p-2 font-sm"></pre>
     </div>
-
-    <textarea hidden name="{{ $field['name'] }}">{{ old(square_brackets_to_dots($field['name'])) ?? $field['value'] ?? $field['default'] ?? '' }}</textarea>
-
 @else
     <div class="form-group col-12">
         <p class="d-inline-block py-2 px-3 text-center bg-danger text-white rounded">Сперва загрузите XML на сервер</p>
     </div>
 @endif
+<textarea name="{{ $field['name'] }}">{{ old(square_brackets_to_dots($field['name'])) ?? $field['value'] ?? $field['default'] ?? '' }}</textarea>
+
 
 @push('crud_fields_scripts')
     <script src="{{ asset('beautify/beautify.js') }}"></script>
@@ -162,9 +161,18 @@
                 dataType: "json",
                 url: '{{ route('parse-xml') }}',
                 data: { name: name },
-                success: (response) => {
-                    console.log(response)
-                }
+                success: (response) => { console.log(response) }
+            })
+                .done(function (){
+
+                })
+                .catch(function (error){
+                    new Noty({
+                        type: "error",
+                        text: error.responseJSON.exception+'<br>'+error.responseJSON.message,
+                        timeout:false
+                    }).show();
+                console.log(error.responseJSON)
             })
         })
 

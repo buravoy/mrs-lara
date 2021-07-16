@@ -37,7 +37,6 @@ class Parser
         ];
     }
 
-
     public function parseXml(Request $request)
     {
         set_time_limit(0);
@@ -50,10 +49,6 @@ class Parser
         $fields = json_decode($parserFields->parser);
 
         require_once base_path('uploads/functions/') . $slug . '.php';
-
-        $count = 0;
-
-        $productList = [];
 
         foreach ($offers as $offer) {
             $offerObj = self::offerToObject($offer);
@@ -74,9 +69,9 @@ class Parser
             $offerImg = $functions['image']($offerObj);
 
             if (is_string($offerImg)) {
-                $imagesArr = [];
                 $imagesArr[] = $offerImg;
                 $offerImg = $imagesArr;
+                unset($imagesArr);
             }
 
             $product = [
@@ -86,7 +81,7 @@ class Parser
                 'description_2' => $functions['desc_2']($offerObj),
                 'price' => $functions['price']($offerObj),
                 'old_price' => $functions['old_price']($offerObj),
-                'image' => json_encode($offerImg),
+                'image' => $offerImg,
                 'href' => $functions['href']($offerObj),
                 'parser_slug' => $slug,
             ];
@@ -97,23 +92,9 @@ class Parser
                 $product['slug'] = SlugService::createSlug(Products::class, 'slug', $offerName);
                 Products::create($product);
             }
-
-            $productList[] = $product;
         }
 
         set_time_limit(300);
-
-        return $productList;
-    }
-
-    function offerToObject($offer){
-        foreach ($offer->param as $param) $offer->addChild('params', $param->attributes());
-        $offerObj = json_decode(json_encode($offer), true);
-        $offerObj['attributes'] = $offerObj['@attributes'];
-        $offerObj['param'] = array_combine($offerObj['params'], $offerObj['param']);
-        unset($offerObj['@attributes'], $offerObj['params']);
-
-        return $offerObj;
     }
 
     public function saveFunction(Request $request)
@@ -127,5 +108,15 @@ class Parser
     {
         $slug = $request->slug;
         Products::where('parser_slug', $slug)->forceDelete();
+    }
+
+    function offerToObject($offer){
+        foreach ($offer->param as $param) $offer->addChild('params', $param->attributes());
+        $offerObj = json_decode(json_encode($offer), true);
+        $offerObj['attributes'] = $offerObj['@attributes'];
+        $offerObj['param'] = array_combine($offerObj['params'], $offerObj['param']);
+        unset($offerObj['@attributes'], $offerObj['params']);
+
+        return $offerObj;
     }
 }
