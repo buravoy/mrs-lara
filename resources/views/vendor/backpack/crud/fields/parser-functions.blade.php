@@ -92,7 +92,7 @@
                     type: "POST",
                     dataType: "json",
                     url: '{{ route('save-function') }}',
-                    data: { value: content, filename: '{{ $field['file_functions']['name'] }}' },
+                    data: { value: content, filename: '{{ $field['file_functions']['name'] ?? null }}' },
                 })
             })
         }

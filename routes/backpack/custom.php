@@ -39,4 +39,5 @@ Route::group([
     Route::post('handle-offers', [Parser::class, 'handleOffers'])->name('handle-offers');
     Route::post('parse-xml', [Parser::class, 'parseXml'])->name('parse-xml');
     Route::post('save-function', [Parser::class, 'saveFunction'])->name('save-function');
+    Route::post('delete-all-goods', [Parser::class, 'deleteAllGoods'])->name('delete-all-goods');
 }); // this should be the absolute last line of this file

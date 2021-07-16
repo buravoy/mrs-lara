@@ -137,6 +137,7 @@ class FeedsCrudController extends CrudController
             'name' => 'parser',
             'type' => 'parser-config',
             'tab' => 'Настройки парсера',
+            'default' => '{"offer_img":"image","offer_old":"oldprice","offer_href":"href","offer_name":"name","offer_uniq":"uniq","offer_price":"price","offer_desc_1":"descFirst","offer_desc_2":"descSecond"}',
             'data' => $entry,
             'file_info' => $fileInfo ?? null
         ]);

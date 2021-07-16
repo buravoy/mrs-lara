@@ -15,12 +15,17 @@
     </div>
 
     <div class="form-group col-md-4">
+        <button id="action-delete-goods"
+                type="button"
+                class="btn btn-error text-white"
+                data-slug="{{ $field['data']['slug'] }}">Удалить товары
+        </button>
+
         <button type="button"
-                class="btn btn-success ml-auto d-block parse-xml"
+                class="btn btn-success ml-auto float-right parse-xml"
                 data-id="{{ $field['data']['id'] }}"
                 data-name="{{ $field['data']['slug'] }}">Запустить парсер
         </button>
-
     </div>
 
     <div id="parser-fields" class="col-md-6">
@@ -28,41 +33,41 @@
 
         <div class="form-group w-100">
             <label class="mr-3">Уникальный ID товара:</label>
-            <input name="offer_uniq" type="text" class="form-control">
+            <input name="offer_uniq" type="text" class="form-control" value="uniq">
         </div>
         <div class="form-group w-100 d-flex">
             <label class="mr-3">Название:</label>
-            <input name="offer_name" type="text" class="form-control">
+            <input name="offer_name" type="text" class="form-control" value="name">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3">Описание&nbsp;1:</label>
-            <input name="offer_desc_1" type="text" class="form-control">
+            <input name="offer_desc_1" type="text" class="form-control" value="descFirst">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3">Описание&nbsp;2:</label>
-            <input name="offer_desc_2" type="text" class="form-control">
+            <input name="offer_desc_2" type="text" class="form-control" value="descSecond">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3">Цена:</label>
-            <input name="offer_price" type="text" class="form-control">
+            <input name="offer_price" type="text" class="form-control" value="price">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3">Старая&nbsp;цена:</label>
-            <input name="offer_old" type="text" class="form-control">
+            <input name="offer_old" type="text" class="form-control" value="oldprice">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3">Картинки:</label>
-            <input name="offer_img" type="text" class="form-control">
+            <input name="offer_img" type="text" class="form-control" value="image">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3">Ссылка:</label>
-            <input name="offer_href" type="text" class="form-control">
+            <input name="offer_href" type="text" class="form-control" value="href">
         </div>
 
     </div>
@@ -179,5 +184,67 @@
             $xmlCounter.val(currentView);
             initJson();
         }
+    </script>
+@endpush
+
+@push('after_scripts')
+    <div class="modal fade" id="delete-goods">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Удалить все товары этого партнера?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="mb-3 font-11 font-weight-bold">Все товары будут удалены</p>
+                    <p>Это действие нельзя отменить!</p>
+                    <div class="form-check">
+                        <input id="delete-check" type="checkbox" name="save" class="form-check-input">
+                        <label class="form-check-label pointer" for="delete-check">Подтвердить удаление</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button"
+                            class="btn btn-error text-white ml-auto d-block delete-all"
+                            data-slug="{{ $field['data']['slug'] ?? null }}" disabled>Удалить товары</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function (){
+            const
+                $clearModal = $('#delete-goods'),
+                $deleteAll = $('.delete-all');
+
+            $clearModal.on('show.bs.modal', function (e) {
+                $deleteAll.prop('disabled', true);
+                $('#delete-check').prop('checked', false);
+            });
+
+            $('#action-delete-goods').on('click', function () {
+                $clearModal.modal('show')
+            });
+
+            $('#delete-check').on('change', function () {
+                $deleteAll.prop('disabled', !this.checked);
+            });
+
+            $deleteAll.on('click', function () {
+                $clearModal.modal('hide')
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    dataType: "json",
+                    url: '{{ route('delete-all-goods') }}',
+                    data: { slug: $(this).data('slug') },
+                })
+            });
+        })
     </script>
 @endpush

@@ -36,7 +36,8 @@ class FileUploadController
         file_put_contents( base_path('uploads/xml/feeds/').$filenameXML, fopen($link, 'r'));
 
         if (!file_exists(base_path('uploads/functions/').$filenamePHP)) {
-            file_put_contents( base_path('uploads/functions/').$filenamePHP, '<?php');
+            $base = file_get_contents(base_path('uploads/functions/sample.php'));
+            file_put_contents( base_path('uploads/functions/').$filenamePHP, $base);
         }
 
         return true;
