@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\FeedsRequest;
+use App\Models\Groups;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use function PHPUnit\Framework\objectEquals;
 
 /**
  * Class FeedsCrudController
@@ -72,6 +72,22 @@ class FeedsCrudController extends CrudController
 
         $entry = CRUD::getCurrentEntry();
 
+        $attrGroups = Groups::all();
+
+        $defaultFunctions = [
+            'offer_img' => 'image',
+            'offer_old' => 'oldprice',
+            'offer_href' => 'href',
+            'offer_name' => 'name',
+            'offer_uniq' => 'uniq',
+            'offer_price' => 'price',
+            'offer_desc_1' => 'descFirst',
+            'offer_desc_2' => 'descSecond',
+            'offer_category' => 'category'
+        ];
+
+        foreach ($attrGroups as $group) $defaultFunctions['offer_'.$group['slug']] = $group['slug'];
+
         if (isset($entry->slug)) {
             $file = base_path('uploads/xml/feeds/').$entry->slug.'.xml';
             $fileFunctions = base_path('uploads/functions/').$entry->slug.'.php';
@@ -91,8 +107,6 @@ class FeedsCrudController extends CrudController
                 ];
             }
         }
-
-//        CRUD::setFromDb(); // fields
 
         CRUD::addField([
             'name' => 'name',
@@ -137,18 +151,10 @@ class FeedsCrudController extends CrudController
             'name' => 'parser',
             'type' => 'parser-config',
             'tab' => 'Настройки парсера',
-            'default' => '{
-                "offer_img":"image",
-                "offer_old":"oldprice",
-                "offer_href":"href",
-                "offer_name":"name",
-                "offer_uniq":"uniq",
-                "offer_price":"price",
-                "offer_desc_1":"descFirst",
-                "offer_desc_2":"descSecond"
-            }',
+            'default' => json_encode($defaultFunctions),
             'data' => $entry,
-            'file_info' => $fileInfo ?? null
+            'file_info' => $fileInfo ?? null,
+            'attr_groups' => $attrGroups
         ]);
 
         CRUD::addField([
@@ -156,7 +162,8 @@ class FeedsCrudController extends CrudController
             'type' => 'parser-functions',
             'tab' => 'Функции парсера',
             'data' => $entry,
-            'file_functions' => $fileFunctionsInfo ?? null
+            'file_functions' => $fileFunctionsInfo ?? null,
+            'file_info' => $fileInfo ?? null
         ]);
 
         CRUD::addField([

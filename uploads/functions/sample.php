@@ -1,5 +1,9 @@
 <?php
 
+function category($offer) {
+    return [1];
+}
+
 function uniq($offer) {
     return $offer['typePrefix'] . $offer['param']['gender'] . $offer['name'];
 }
