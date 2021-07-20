@@ -150,6 +150,9 @@ class GroupsCrudController extends CrudController
             'wrapperAttributes' => [
                 'class' => 'form-group col-md-8',
             ],
+            'attributes' => [
+                'readonly'    => 'readonly',
+            ],
         ]);
 
         CRUD::addField([

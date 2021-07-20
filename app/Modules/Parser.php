@@ -3,12 +3,13 @@
 namespace App\Modules;
 
 use App\Models\Attributes;
+use App\Models\Categories;
 use App\Models\Feeds;
 use App\Models\Groups;
 use App\Models\Products;
 use Cviebrock\EloquentSluggable\Services\SlugService;
-use http\Exception\RuntimeException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Parser
 {
@@ -58,7 +59,8 @@ class Parser
             'old_price' => $fields->offer_old,
             'image' => $fields->offer_img,
             'href' => $fields->offer_href,
-            'uniq_id' => $fields->offer_uniq
+            'uniq_id' => $fields->offer_uniq,
+            'category' => $fields->offer_category
         ];
 
         $functionsAttributes = [];
@@ -72,7 +74,7 @@ class Parser
             ];
         }
 
-//        dump($functionsAttributes);
+
 
         require_once base_path('uploads/functions/') . $slug . '.php';
 
@@ -82,25 +84,13 @@ class Parser
             $offerName = $functions['name']($offerObj);
             $uniqId = $functions['uniq_id']($offerObj);
             $offerImg = $functions['image']($offerObj);
-
+            $offerPrice = $functions['price']($offerObj);
+            $offerOldPrice = $functions['old_price']($offerObj);
+            $offerDiscount = $offerOldPrice ? ceil(($offerOldPrice - $offerPrice) / $offerOldPrice * 100) : null;
+            $productXmlCats = $functions['category']($offerObj);
             $productAttributes = [];
 
-
-
-            foreach ($functionsAttributes as $function) {
-                $attributeReturnedValue = $function['function']($offerObj);
-
-                $attributeInBase = Attributes::with('group')->where('name', $attributeReturnedValue)->first();
-
-//                if(!empty($attributeInBase))
-                dump($attributeInBase);
-
-
-
-                $productAttributes[$function['slug']] = $function['function']($offerObj);
-            }
-
-
+//            dump($productCategories);
 
             if (is_string($offerImg)) {
                 $imagesArr[] = $offerImg;
@@ -108,28 +98,60 @@ class Parser
                 unset($imagesArr);
             }
 
+            foreach ($functionsAttributes as $function) {
+                $attributeReturnedValue = $function['function']($offerObj);
+                $groupId = Groups::where('slug', $function['slug'])->first()->id;
+                $attributeInBase = Attributes::where('group_id', $groupId)
+                    ->where('name', $attributeReturnedValue)
+                    ->pluck('id')->first();
+
+                if(empty($attributeInBase)) {
+                    $attributeInBase = Attributes::insertGetId(['group_id' => $groupId,
+                        'name' => $attributeReturnedValue,
+                        'slug' => SlugService::createSlug(Attributes::class, 'slug', $attributeReturnedValue),
+                    ]);
+                }
+
+                $productAttributes[$function['slug']][] = $attributeInBase;
+            }
+
             $product = [
                 'name' => $offerName,
                 'uniq_id' => $uniqId,
                 'description_1' => $functions['desc_1']($offerObj),
                 'description_2' => $functions['desc_2']($offerObj),
-                'price' => $functions['price']($offerObj),
-                'old_price' => $functions['old_price']($offerObj),
+                'price' => $offerPrice,
+                'old_price' => $offerOldPrice,
                 'image' => $offerImg,
                 'href' => $functions['href']($offerObj),
                 'parser_slug' => $slug,
-                'attributes' => ''
+                'rating' => rand(40, 50) / 10,
+                'discount' => $offerDiscount
             ];
 
-            dump($product);
+            if (Products::where('uniq_id', $uniqId)->exists()) {
+                $productExistAttributes = json_decode(Products::where('uniq_id', $uniqId)->pluck('attributes')->first());
+                $productMergedAttributes = array_merge_recursive((array)$productExistAttributes, (array)$productAttributes);
+                $productMergedAttributes = array_map('array_unique', $productMergedAttributes);
+                $product['attributes'] = json_encode($productMergedAttributes);
+                $updatedProduct = Products::where('uniq_id', $uniqId)->first();
+                $updatedProduct->update($product);
+            } else {
+                $product['slug'] = SlugService::createSlug(Products::class, 'slug', $offerName);
+                $product['attributes'] = json_encode($productAttributes);
+                $createdProduct = Products::create($product);
+
+                foreach ($productXmlCats as $productXmlCat)
+                {
+                    $catId = Categories::where('xml_id', $productXmlCat)->first()->id;
+                    DB::table('category_product')->insert([
+                        'category_id' => $catId,
+                        'product_id' => $createdProduct->id,
+                    ]);
+                }
+            }
 
             break;
-//            if (Products::where('uniq_id', $uniqId)->exists()) {
-//                Products::where('uniq_id', $uniqId)->update($product);
-//            } else {
-//                $product['slug'] = SlugService::createSlug(Products::class, 'slug', $offerName);
-//                Products::create($product);
-//            }
         }
     }
 

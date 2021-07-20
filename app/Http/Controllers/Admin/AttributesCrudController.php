@@ -98,6 +98,9 @@ class AttributesCrudController extends CrudController
             'name' => 'slug',
             'label' => 'Символьный код',
             'type' => 'text',
+            'attributes' => [
+                'readonly'    => 'readonly',
+            ],
         ]);
 
 

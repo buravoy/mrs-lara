@@ -104,7 +104,14 @@ class CategoriesCrudController extends CrudController
 
         CRUD::addColumn([
             'name' => 'id',
-            'type' => 'text'
+            'type' => 'text',
+            'label' => 'ID'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'xml_id',
+            'type' => 'text',
+            'label' => 'Xml ID'
         ]);
 
         CRUD::addColumn([

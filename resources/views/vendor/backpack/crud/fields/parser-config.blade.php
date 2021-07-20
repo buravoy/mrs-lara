@@ -65,7 +65,7 @@
         <label class="mb-3">Функция категорий:</label>
 
         <div class="form-group w-100">
-            <input name="cat_function" type="text" class="form-control" value="category">
+            <input name="offer_category" type="text" class="form-control" value="category">
         </div>
 
         <p class="border rounded-md p-3">
@@ -86,7 +86,8 @@
     </div>
 @endif
 
-<textarea hidden
+<textarea
+        hidden
         class="w-100"
         name="{{ $field['name'] }}">{{ old(square_brackets_to_dots($field['name'])) ?? $field['value'] ?? $field['default'] ?? '' }}</textarea>
 
@@ -118,6 +119,9 @@
             parser ? Object.assign(parser, newParserObj) : parser = newParserObj;
             $parser.text(JSON.stringify(parser))
         })
+
+        $parserFields.find('input').trigger('input');
+
     </script>
 @endpush
 

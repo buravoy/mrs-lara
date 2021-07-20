@@ -36,7 +36,7 @@ class ProductsRequest extends FormRequest
             'discount' => 'bail|nullable|integer|max:100',
             'attributes' => 'bail|nullable|string|max:65535',
             'image' => 'bail|nullable|string|max:65535',
-            'rating' => 'bail|nullable|integer|max:50',
+            'rating' => 'bail|nullable|numeric|max:5',
 
             'slug' => 'bail|nullable|string|max:255|unique:products,slug,'.request()->id,
             'meta_title' => 'bail|nullable|string|max:255',

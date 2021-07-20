@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\FileUploadController;
 use App\Http\Controllers\Admin\CategoriesCrudController;
 use App\Http\Controllers\Admin\GroupsCrudController;
+use App\Http\Controllers\Admin\ProductsCrudController;
 use App\Modules\Parser;
 
 // --------------------------
@@ -10,6 +11,9 @@ use App\Modules\Parser;
 // --------------------------
 // This route file is loaded automatically by Backpack\Base.
 // Routes you generate using Backpack\Generators will be placed here.
+Route::get('admin/products/restore/{id}', [ProductsCrudController::class, 'restore']);
+Route::get('admin/products/disable/{id}', [ProductsCrudController::class, 'disable']);
+Route::get('admin/products/delete/{id}', [ProductsCrudController::class, 'delete']);
 
 Route::group([
     'prefix'     => config('backpack.base.route_prefix', 'admin'),
@@ -24,6 +28,7 @@ Route::group([
     Route::crud('category', 'CategoriesCrudController');
     Route::crud('attributes', 'AttributesCrudController');
     Route::crud('groups', 'GroupsCrudController');
+    Route::crud('feeds', 'FeedsCrudController');
     Route::crud('feeds', 'FeedsCrudController');
 
     Route::post('upload-categories', [FileUploadController::class, 'categoryXmlPostUpload'])->name('xml-category-upload');

@@ -5,17 +5,17 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Products extends Model
 {
-    use CrudTrait, Sluggable;
+    use CrudTrait, Sluggable, SoftDeletes;
 
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
     |--------------------------------------------------------------------------
     */
-
     protected $table = 'products';
     // protected $primaryKey = 'id';
     // public $timestamps = false;

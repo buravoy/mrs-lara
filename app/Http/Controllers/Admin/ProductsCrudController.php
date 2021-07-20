@@ -6,6 +6,7 @@ use App\Models\Attributes;
 use App\Http\Requests\ProductsRequest;
 use App\Models\Categories;
 use App\Models\Groups;
+use App\Models\Products;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -32,6 +33,8 @@ class ProductsCrudController extends CrudController
         CRUD::setModel(\App\Models\Products::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/products');
         CRUD::setEntityNameStrings('товар', 'Товары');
+        CRUD::addClause('withTrashed');
+        CRUD::set('softdelete', true);
 
         CRUD::addFilter(
             [
@@ -59,6 +62,12 @@ class ProductsCrudController extends CrudController
     protected function setupListOperation()
     {
 //        CRUD::setFromDb(); // columns
+
+        CRUD::addColumn([
+            'name' => 'id',
+            'type' => 'text',
+            'label' => 'ID',
+        ]);
 
         CRUD::addColumn([
             'name' => 'name',
@@ -207,7 +216,7 @@ class ProductsCrudController extends CrudController
             'name' => 'image',
             'label' => 'Картинки',
             'type' => 'browse_multiple',
-            'multiple'   => true,
+//            'multiple'   => true,
             'tab' => 'Информация',
             'wrapperAttributes' => [
                 'class' => 'form-group col-md-8',
@@ -281,5 +290,22 @@ class ProductsCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
+    public function restore($id)
+    {
+        Products::withTrashed()->find($id)->restore();
+        return back();
+    }
+
+    public function disable($id)
+    {
+        Products::where('id', $id)->delete();
+        return back();
+    }
+
+    public function delete($id)
+    {
+        Products::withTrashed()->find($id)->forceDelete();
+        return back();
+    }
 
 }
