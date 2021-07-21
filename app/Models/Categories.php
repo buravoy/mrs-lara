@@ -49,6 +49,20 @@ class Categories extends Model
         return [];
     }
 
+//    public function getParents()
+//    {
+//        $parents = collect([]);
+//
+//        $parent = $this->parent;
+//
+//        while (!is_null($parent)) {
+//            $parents->push($parent);
+//            $parent = $parent->parent;
+//        }
+//
+//        return $parents;
+//    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -67,7 +81,7 @@ class Categories extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Products::class);
+        return $this->belongsToMany(Products::class, 'category_product', 'category_id', 'product_id');
     }
 
     /*

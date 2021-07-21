@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="container-xxl">
-        <p class="t-center py-5">Скоро все будет</p>Z
+        <p class="t-center py-5">Скоро все будет</p>
     </div>
 @endsection
 

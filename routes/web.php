@@ -19,11 +19,9 @@ use App\Http\Controllers\ProductsController;
 
 Route::get('/', [MainController::class, 'index']);
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::middleware(['auth:sanctum', 'verified'])->get('/favorites', function () {
+    return view('favorites');
+})->name('favorites');
 
-Route::get('/category', [CategoriesController::class, 'index']);
-
-Route::get('/product', [ProductsController::class, 'index']);
-
+Route::get('category', [CategoriesController::class, 'index']);
+Route::get('product', [ProductsController::class, 'index']);

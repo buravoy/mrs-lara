@@ -1,7 +1,9 @@
-<div class="d-flex align-items-center ms-5 w-100">
-    <a href="{{ url('/dashboard') }}">Dashboard</a>
+<div class="d-flex align-items-center ms-5 w-100 justify-content-end ">
+    <div>
+        <a href="{{ url('/favorites') }}" class="me-3">Избранное</a>
+    </div>
 
-    <div class="user-menu ms-auto">
+    <div class="user-menu">
         <div class="user-menu-toggle around">
             <i class="las la-user"></i>
         </div>

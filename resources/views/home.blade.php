@@ -10,6 +10,12 @@
 
 @section('content')
     <div class="container-xxl">
-        <h1>Hello!</h1>
+        <ul>
+            @foreach ($categories as $category)
+                @if($category->parent_id == null )
+                    @include('sections.categories', $category)
+                @endif
+            @endforeach
+        </ul>
     </div>
 @endsection

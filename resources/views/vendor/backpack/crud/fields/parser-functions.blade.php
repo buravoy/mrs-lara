@@ -19,6 +19,12 @@
                 data-name="{{ $field['data']['slug'] }}">Запустить парсер
         </button>
 
+        <div class="form-group d-flex align-items-center mb-2 ml-3">
+            <input id="mode" type="checkbox" name="mode" class="" value="test" checked>
+            <label for="mode" class="mb-0 ml-2">Тестовый режим</label>
+        </div>
+
+
         <div class="d-flex align-items-center justify-content-center ml-auto">
             <button type="button" class="btn btn-sm btn-outline-primary mb-0 pb-0" onclick="renderXML(-1)"><i class="la la-angle-double-left"></i></button>
             <input type="text" name="current" class="w-auto form-control form-control-sm mx-2 font-weight-bold text-center border-0" readonly>
@@ -106,7 +112,12 @@
                 type: "POST",
                 dataType: "json",
                 url: '{{ route('parse-xml') }}',
-                data: {name: name},
+                data: {
+                    name: name,
+                    count_from: $countFrom.val(),
+                    count_to: $count.val(),
+                    mode: !!$('input[name=mode]').prop("checked")
+                },
                 success: (response) => {  console.log(response) }
             })
                 .done(function () {

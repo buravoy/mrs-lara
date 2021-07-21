@@ -42,6 +42,12 @@ class Parser
 
     public function parseXml(Request $request)
     {
+        $countIteration = 1;
+        $countFrom = $request->count_from;
+        $countTo = $request->count_to;
+        $mode = $request->mode;
+
+
         $slug = $request->name;
         $xml = simplexml_load_file(base_path('uploads/xml/feeds/') . $slug . '.xml');
         $offers = $xml->shop->offers->offer;
@@ -73,8 +79,6 @@ class Parser
                 'function' => $fields->$groupFunction
             ];
         }
-
-
 
         require_once base_path('uploads/functions/') . $slug . '.php';
 
@@ -151,7 +155,13 @@ class Parser
                 }
             }
 
-            break;
+//            break;
+
+            if ($mode) {
+                $countIteration++;
+                if ($countIteration < $countFrom) continue;
+                if ($countIteration >= $countTo) break;
+            }
         }
     }
 
