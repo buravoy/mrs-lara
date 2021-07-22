@@ -12,7 +12,7 @@
 
 @if(isset($crud->settings()['softdelete']))
     @if ($entry->deleted_at)
-        <button data-id="{{ $entry->id }}" class="btn btn-sm btn-outline-danger pb-0 delete"><i class="la la-trash"></i></button>
+        <button id="delete-{{ $entry->id }}" data-id="{{ $entry->id }}" class="btn btn-sm btn-outline-danger pb-0 delete"><i class="la la-trash"></i></button>
     @else
         <a href="{{ url($crud->route.'/disable/'.$entry->id) }}" class="btn btn-sm btn-success pb-0"><i class="la la-eye"></i></a>
     @endif
@@ -25,14 +25,13 @@
 {{-- Button Javascript --}}
 {{-- - used right away in AJAX operations (ex: List) --}}
 {{-- - pushed to the end of the page, after jQuery is loaded, for non-AJAX operations (ex: Show) --}}
-@push('after_scripts') @if (request()->ajax()) @endpush @endif
+@if(isset($crud->settings()['softdelete']))
 <script>
-
     $('.delete').on('click', function (){
         const id = $(this).data('id');
 
         swal({
-            title: "{!! trans('backpack::base.warning') !!}",
+            title: "{{ $entry->name }}",
             text: "{!! trans('backpack::crud.delete_confirm') !!}",
             icon: "warning",
             buttons: ["{!! trans('backpack::crud.cancel') !!}", "{!! trans('backpack::crud.delete') !!}"],
@@ -44,7 +43,11 @@
             }
         });
     })
+</script>
+@endif
 
+@push('after_scripts') @if (request()->ajax()) @endpush @endif
+<script>
     if (typeof deleteEntry != 'function') {
         $("[data-button-type=delete]").unbind('click');
 

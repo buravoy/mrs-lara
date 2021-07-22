@@ -17,6 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->increments('id');
             $table->integer('parent_id')->nullable();
             $table->string('xml_id')->nullable();
+            $table->boolean('show')->default(0);
             $table->string('name');
             $table->string('slug');
             $table->string('short_name')->nullable();

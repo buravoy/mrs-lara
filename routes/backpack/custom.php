@@ -15,6 +15,10 @@ Route::get('admin/products/restore/{id}', [ProductsCrudController::class, 'resto
 Route::get('admin/products/disable/{id}', [ProductsCrudController::class, 'disable']);
 Route::get('admin/products/delete/{id}', [ProductsCrudController::class, 'delete']);
 
+Route::get('admin/category/restore/{id}', [CategoriesCrudController::class, 'restore']);
+Route::get('admin/category/disable/{id}', [CategoriesCrudController::class, 'disable']);
+Route::get('admin/category/delete/{id}', [CategoriesCrudController::class, 'delete']);
+
 Route::group([
     'prefix'     => config('backpack.base.route_prefix', 'admin'),
     'middleware' => array_merge(

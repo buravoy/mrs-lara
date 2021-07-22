@@ -33,6 +33,8 @@ class CategoriesCrudController extends CrudController
         CRUD::setModel(Categories::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/category');
         CRUD::setEntityNameStrings('категорию', 'Категории');
+        CRUD::addClause('withTrashed');
+        CRUD::set('softdelete', true);
 
         CRUD::addFilter(
             [
@@ -127,6 +129,18 @@ class CategoriesCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
+            'name' => 'show',
+            'type' => 'check',
+            'label' => 'В меню'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'name',
+            'type' => 'text',
+            'label' => 'Название',
+        ]);
+
+        CRUD::addColumn([
             'name' => 'slug',
             'type' => 'text',
             'label' => 'Символьный код'
@@ -217,7 +231,16 @@ class CategoriesCrudController extends CrudController
             ],
         ]);
 
-
+        CRUD::addField([
+            'name' => 'show',
+            'label' => 'Показывать в главном меню',
+            'type' => 'checkbox',
+            'tab' => 'Информация',
+            'inline' => true,
+            'wrapper' => [
+                'class' => 'form-group col-md-6',
+            ],
+        ]);
 
         CRUD::addField([
             'name' => 'short_description',
@@ -357,7 +380,25 @@ class CategoriesCrudController extends CrudController
 
     public function deleteAllCategories()
     {
-        Categories::query()->delete();
+        Categories::query()->forceDelete();
+        return back();
+    }
+
+    public function restore($id)
+    {
+        Categories::withTrashed()->find($id)->restore();
+        return back();
+    }
+
+    public function disable($id)
+    {
+        Categories::where('id', $id)->delete();
+        return back();
+    }
+
+    public function delete($id)
+    {
+        Categories::withTrashed()->find($id)->forceDelete();
         return back();
     }
 }

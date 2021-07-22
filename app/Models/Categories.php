@@ -5,11 +5,12 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class Categories extends Model
 {
-    use CrudTrait, Sluggable;
+    use CrudTrait, Sluggable, SoftDeletes;
 
     /*
     |--------------------------------------------------------------------------
@@ -22,9 +23,10 @@ class Categories extends Model
     // public $timestamps = false;
     protected $guarded = ['id'];
 //    protected $fillable = ['name'];
-    // protected $hidden = [];
+//     protected $hidden = ['name'];
     // protected $dates = [];
     protected $translatable = [];
+
 
     /*
     |--------------------------------------------------------------------------
@@ -76,7 +78,13 @@ class Categories extends Model
 
     public function child()
     {
-        return $this->hasMany(self::class, 'parent_id')->with('child');
+        return $this->hasMany(self::class, 'parent_id');
+    }
+
+    public function menuChild()
+    {
+        return $this->hasMany(self::class, 'parent_id')
+            ->orderBy('sort', 'desc');
     }
 
     public function products()

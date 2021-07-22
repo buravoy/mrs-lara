@@ -12,9 +12,9 @@ class MainController extends Controller
     {
         $categoriesController = new CategoriesController();
 
-        $categories = Categories::where('parent_id', null)->get();
-
-
+        $categories = Categories::where('show', true)
+            ->orderBy('sort', 'asc')
+            ->get();
 
         return view('home', [
             'categories' => $categories
