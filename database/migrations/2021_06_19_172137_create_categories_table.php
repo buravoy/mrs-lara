@@ -25,7 +25,7 @@ class CreateCategoriesTable extends Migration
             $table->text('short_description')->nullable();
             $table->string('form')->nullable();
             $table->text('image')->nullable();
-            $table->integer('sort')->nullable();
+            $table->integer('sort')->default(500);
             $table->integer('lft')->default(0);
             $table->integer('rgt')->default(0);
             $table->integer('depth')->default(0);

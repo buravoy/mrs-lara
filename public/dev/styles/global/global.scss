@@ -33,6 +33,7 @@ header, footer {
 a {
   color: $black;
   display: inline-block;
+  text-decoration: none;
 
   &:hover {
     text-decoration: none;

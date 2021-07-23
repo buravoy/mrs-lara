@@ -84,7 +84,7 @@ class Categories extends Model
     public function menuChild()
     {
         return $this->hasMany(self::class, 'parent_id')
-            ->orderBy('sort', 'desc');
+            ->orderBy('sort', 'asc');
     }
 
     public function products()

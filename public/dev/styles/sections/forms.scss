@@ -11,7 +11,7 @@ form.base {
     label {
       position: absolute;
       font-size: .8rem;
-      font-weight: 900;
+      font-weight: 500;
       font-family: $condensed;
       top: 0;
       left: 3px;
@@ -30,7 +30,7 @@ form.base {
       transition: .2s;
       font-size: 1rem;
       padding: 15px 5px 0 5px;
-      font-weight: 600;
+      font-weight: 500;
       color: $black;
 
       &:active,

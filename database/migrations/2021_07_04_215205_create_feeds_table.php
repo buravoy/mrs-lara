@@ -20,10 +20,8 @@ class CreateFeedsTable extends Migration
             $table->string('slug');
             $table->jsonb('parser')->nullable();
             $table->jsonb('rules')->nullable();
-
             $table->string('schedule')->nullable();
             $table->string('last_update')->nullable();
-            $table->integer('sort')->nullable();
             $table->timestamps();
         });
     }

@@ -25,6 +25,7 @@
       margin-top: 10px;
       background-color: $white;
       padding-top: 10px;
+      z-index: 999;
 
       &:before {
         content: "";

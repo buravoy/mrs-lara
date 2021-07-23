@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center ms-5 w-100 justify-content-end ">
     <div>
-        <a href="{{ url('/favorites') }}" class="me-3">Избранное</a>
+        <a href="{{ url('/favorites') }}" class="me-3 uppercase condensed">Избранное</a>
     </div>
 
     <div class="user-menu">

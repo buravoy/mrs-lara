@@ -20,7 +20,7 @@ class CreateAttributesTable extends Migration
             $table->boolean('show')->default(0);
             $table->jsonb('form')->nullable();
             $table->string('slug');
-            $table->integer('sort')->nullable();
+            $table->integer('sort')->default(500);
             $table->softDeletes();
             $table->timestamps();
         });

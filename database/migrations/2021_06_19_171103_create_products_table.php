@@ -30,6 +30,7 @@ class CreateProductsTable extends Migration
             $table->string('meta_title')->nullable();
             $table->string('parser_slug')->default('self');
             $table->text('meta_description')->nullable();
+            $table->integer('sort')->default(500);
             $table->softDeletes();
             $table->timestamps();
         });

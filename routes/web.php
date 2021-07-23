@@ -23,5 +23,5 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/favorites', function () {
     return view('favorites');
 })->name('favorites');
 
-Route::get('category', [CategoriesController::class, 'index']);
+Route::get('category', [CategoriesController::class, 'index'])->name('category');
 Route::get('product', [ProductsController::class, 'index']);

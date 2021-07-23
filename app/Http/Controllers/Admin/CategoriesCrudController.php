@@ -117,7 +117,13 @@ class CategoriesCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
-            'label' => 'Категория',
+            'name' => 'name',
+            'type' => 'text',
+            'label' => 'Название',
+        ]);
+
+        CRUD::addColumn([
+            'label' => 'Информация',
             'type' => 'view',
             'view' => 'vendor.backpack.base.columns.category-view',
         ]);
@@ -132,12 +138,6 @@ class CategoriesCrudController extends CrudController
             'name' => 'show',
             'type' => 'check',
             'label' => 'В меню'
-        ]);
-
-        CRUD::addColumn([
-            'name' => 'name',
-            'type' => 'text',
-            'label' => 'Название',
         ]);
 
         CRUD::addColumn([

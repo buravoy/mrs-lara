@@ -1,5 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:ital,wght@0,300;0,700;1,300&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap');
+//@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+//@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 .font-06 { font-size: .6rem }
 .font-07 { font-size: .7rem }
@@ -24,7 +25,19 @@
 .t-right { text-align: right }
 
 .f-w-1 { font-weight: 100}
+.f-w-2 { font-weight: 200}
+.f-w-3 { font-weight: 300}
 .f-w-4 { font-weight: 400}
+.f-w-5 { font-weight: 500}
 .f-w-6 { font-weight: 600}
 .f-w-7 { font-weight: 700}
 .f-w-8 { font-weight: 800}
+.f-w-9 { font-weight: 900}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.condensed {
+  font-family: $condensed;
+}

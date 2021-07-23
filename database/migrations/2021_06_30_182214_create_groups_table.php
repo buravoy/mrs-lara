@@ -20,7 +20,7 @@ class CreateGroupsTable extends Migration
             $table->string('description_name')->nullable();
             $table->boolean('show')->default(1);
             $table->string('slug');
-            $table->integer('sort')->nullable();
+            $table->integer('sort')->default(500);
             $table->softDeletes();
             $table->timestamps();
         });
