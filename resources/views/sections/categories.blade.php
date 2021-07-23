@@ -1,11 +1,11 @@
-<nav class="row relative">
+<nav class="row relative mt-3">
     @foreach($categories as $category)
-        <div class="col-md-3 px-0">
-            <div class="category-menu-toggle">
-                <p class="t-center py-3 title">
-                    {{ $category->name }}
+        <div class="col-sm-6 col-lg-3 col-12 px-3 px-sm-0">
+            <div class="category-menu-toggle h-100">
+                <div class="px-3 title d-flex h-100 align-items-center justify-content-sm-center justify-content-between">
+                    <span>{{ $category->name }}</span>
                     <i class="las la-angle-down ms-3"></i>
-                </p>
+                </div>
             </div>
 
             @if($category->menuChild)
@@ -24,16 +24,16 @@
                         @endphp
 
                         @foreach($cols as $col)
-                            <div class="col-3">
+                            <div class="col-lg-3 col-md-6 col-12">
                                 @foreach($col as $firstChild)
                                     <div class="sector mb-3">
-                                        <a href="{{ route('category').'/'.$firstChild->slug }}" class="f-w-6 child-title d-block uppercase condensed px-3 py-1">
+                                        <a href="{{ route('category').'/'.$firstChild->slug }}" class="f-w-6 child-title d-block uppercase condensed px-3 py-1 mb-1">
                                             {{ $firstChild->name }}
                                         </a>
 
                                         @if($firstChild->menuChild)
                                             @foreach($firstChild->menuChild as $secondChild)
-                                                <a href="{{ route('category').'/'.$secondChild->slug }}" class="child-element d-block font-09 ps-4 pe-2 f-w-5 uppercase condensed">
+                                                <a href="{{ route('category').'/'.$secondChild->slug }}" class="child-element d-block font-09 ps-4 pe-2 f-w-4 uppercase condensed">
                                                     {{ $secondChild->name }}
                                                 </a>
                                             @endforeach

@@ -14,7 +14,7 @@ $(function(){
         $t.find('i').toggleClass('rotate');
 
 
-        $('.drop-categories-wrapper').not($thisWrapper).slideUp(200);
-        $thisWrapper.slideToggle(200)
+        $('.drop-categories-wrapper').not($thisWrapper).fadeOut(200);
+        $thisWrapper.fadeToggle(200)
     })
 })
