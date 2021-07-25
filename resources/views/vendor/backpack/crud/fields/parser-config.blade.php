@@ -69,12 +69,12 @@
         </div>
 
         <p class="border rounded-md p-3">
-            Должна возвращать массив <br> <span class="font-weight-bold"><i>ID категории из XML файла категорий</i></span><br>  конечных категорий.
+            Должна возвращать массив <br> <span class="font-weight-bold"><i>НАЗВАНИЙ</i></span><br> конечных категорий.
             <br>
             <br>
             Например:
             <br>
-            <span class="font-weight-bold">[234, 765, 89975]</span>
+            <span class="font-weight-bold">['Женские брюки', 'Спортивные брюки']</span>
         </p>
 
     </div>

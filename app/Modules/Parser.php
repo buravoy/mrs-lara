@@ -91,10 +91,8 @@ class Parser
             $offerPrice = $functions['price']($offerObj);
             $offerOldPrice = $functions['old_price']($offerObj);
             $offerDiscount = $offerOldPrice ? ceil(($offerOldPrice - $offerPrice) / $offerOldPrice * 100) : null;
-            $productXmlCats = $functions['category']($offerObj);
+            $productCatsArr = $functions['category']($offerObj);
             $productAttributes = [];
-
-//            dump($productCategories);
 
             if (is_string($offerImg)) {
                 $imagesArr[] = $offerImg;
@@ -109,7 +107,7 @@ class Parser
                     ->where('name', $attributeReturnedValue)
                     ->pluck('id')->first();
 
-                if(empty($attributeInBase)) {
+                if(empty($attributeInBase) && $attributeReturnedValue != null) {
                     $attributeInBase = Attributes::insertGetId(['group_id' => $groupId,
                         'name' => $attributeReturnedValue,
                         'slug' => SlugService::createSlug(Attributes::class, 'slug', $attributeReturnedValue),
@@ -145,9 +143,9 @@ class Parser
                 $product['attributes'] = json_encode($productAttributes);
                 $createdProduct = Products::create($product);
 
-                foreach ($productXmlCats as $productXmlCat)
+                foreach ($productCatsArr as $productCatEntry)
                 {
-                    $catId = Categories::where('xml_id', $productXmlCat)->first()->id;
+                    $catId = Categories::where('name', $productCatEntry)->first()->id;
                     DB::table('category_product')->insert([
                         'category_id' => $catId,
                         'product_id' => $createdProduct->id,
@@ -155,7 +153,6 @@ class Parser
                 }
             }
 
-//            break;
 
             if ($mode) {
                 $countIteration++;
