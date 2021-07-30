@@ -6,6 +6,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 
 class Categories extends Model
@@ -79,6 +80,11 @@ class Categories extends Model
     public function child()
     {
         return $this->hasMany(self::class, 'parent_id');
+    }
+
+    public function count()
+    {
+        return DB::table('category_product')->where('category_id', $this->id)->count();
     }
 
     public function menuChild()

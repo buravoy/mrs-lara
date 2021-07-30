@@ -101,20 +101,28 @@ class Parser
             }
 
             foreach ($functionsAttributes as $function) {
-                $attributeReturnedValue = $function['function']($offerObj);
+                $attributeReturnedArray = $function['function']($offerObj);
                 $groupId = Groups::where('slug', $function['slug'])->first()->id;
-                $attributeInBase = Attributes::where('group_id', $groupId)
-                    ->where('name', $attributeReturnedValue)
-                    ->pluck('id')->first();
 
-                if(empty($attributeInBase) && $attributeReturnedValue != null) {
-                    $attributeInBase = Attributes::insertGetId(['group_id' => $groupId,
-                        'name' => $attributeReturnedValue,
-                        'slug' => SlugService::createSlug(Attributes::class, 'slug', $attributeReturnedValue),
-                    ]);
+
+
+                if (!is_array($attributeReturnedArray)) $attributeReturnedArray = [$attributeReturnedArray];
+
+
+                foreach ($attributeReturnedArray as $attributeReturnedValue) {
+                    $attributeInBase = Attributes::where('group_id', $groupId)
+                        ->where('name', $attributeReturnedValue)
+                        ->pluck('id')->first();
+
+                    if (empty($attributeInBase) && $attributeReturnedValue != null) {
+                        $attributeInBase = Attributes::insertGetId(['group_id' => $groupId,
+                            'name' => $attributeReturnedValue,
+                            'slug' => SlugService::createSlug(Attributes::class, 'slug', $attributeReturnedValue),
+                        ]);
+                    }
+
+                    $productAttributes[$function['slug']][] = $attributeInBase;
                 }
-
-                $productAttributes[$function['slug']][] = $attributeInBase;
             }
 
             $product = [

@@ -19,6 +19,9 @@
                 {!! !empty($entry->form) ? $entry->form : '<i class="las la-times-circle text-error"></i>' !!}
             </span>
         </p>
+
+
     </div>
+    <p>Товары: <b>{{ $entry->count() }}</b></p>
 </div>
 

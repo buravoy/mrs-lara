@@ -6,19 +6,18 @@
         <ul class="list-unstyled category-children-view">
             @foreach($entry->child as $child)
                 @if($loop->iteration < 3)
-                    <li class="small">
-                        {{ $child->name }}
+                    <li>
+                        <a class="small" href="{{ backpack_url('category') }}?id={{ $child->id }}">{{ $child->name }}</a>
                     </li>
                 @else
-                    @if($loop->iteration == 3)
-
-                        <div class="list" style="display: none">@endif
-
-                            <li class="small">
-                                {{ $child->name }}
+                    @if($loop->iteration == 4)
+                        <div class="list" style="display: none">
+                            @endif
+                            <li>
+                                <a class="small" href="{{ backpack_url('category') }}?id={{ $child->id }}">{{ $child->name }}</a>
                             </li>
-                            @if($loop->last)</div>
-
+                            @if($loop->last)
+                        </div>
                     @endif
                 @endif
             @endforeach
@@ -28,11 +27,6 @@
                 <i class="small la la-chevron-down"></i>
             </button>
         @endif
-
-
     </div>
-
-
-
 @endif
 

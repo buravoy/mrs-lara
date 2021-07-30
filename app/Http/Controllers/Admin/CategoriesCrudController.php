@@ -111,12 +111,6 @@ class CategoriesCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
-            'name' => 'xml_id',
-            'type' => 'text',
-            'label' => 'Xml ID'
-        ]);
-
-        CRUD::addColumn([
             'name' => 'name',
             'type' => 'text',
             'label' => 'Название',
@@ -340,7 +334,6 @@ class CategoriesCrudController extends CrudController
                     'name' => $name,
                     'short_name' => $short,
                     'form' => $form,
-                    'slug' => SlugService::createSlug(Categories::class, 'slug', $name),
                 ]);
             } else {
                 $id = Categories::query()->insertGetId([
@@ -357,10 +350,10 @@ class CategoriesCrudController extends CrudController
                 'xml_id' => $xmlId,
                 'xml_parent_id' => $xmlParent,
             ];
+
         }
 
         foreach ($tempCategories as $category) {
-
             if ($category['xml_parent_id']) {
                 foreach ($tempCategories as $item) {
                     if ($category['xml_parent_id'] == $item['xml_id']) {
