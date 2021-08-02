@@ -35,6 +35,7 @@ class ProductsCrudController extends CrudController
         CRUD::setEntityNameStrings('товар', 'Товары');
         CRUD::addClause('withTrashed');
         CRUD::set('softdelete', true);
+        CRUD::orderBy('id');
 
         CRUD::addFilter(
             [

@@ -5,7 +5,13 @@
             <span>2021. Mr.Shopper</span>
         </div>
 
-
+        <div class="ms-auto">
+            @auth
+                {{ Auth::user()->name }}
+            @else
+                @include('layouts.menu.auth-menu')
+            @endauth
+        </div>
     </div>
 </div>
 

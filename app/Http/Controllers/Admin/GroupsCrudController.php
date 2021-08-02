@@ -31,8 +31,7 @@ class GroupsCrudController extends CrudController
         CRUD::setModel(\App\Models\Groups::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/groups');
         CRUD::setEntityNameStrings('группу', 'Группы атрибутов');
-
-
+        CRUD::orderBy('id');
     }
 
     /**

@@ -1,19 +1,16 @@
 <nav class="row relative mt-3">
     @foreach($categories as $category)
-        <div class="col-sm-6 col-lg-3 col-12 px-3 px-sm-0">
+        <div class="col-sm-6 col-md-3 col-12 px-3 px-sm-0">
             <div class="category-menu-toggle h-100">
                 <div class="px-3 title d-flex h-100 align-items-center justify-content-sm-center justify-content-between">
-                    <span>{{ $category->name }}</span>
+                    <span>{{ $category->short_name ?? $category->name }}</span>
                     <i class="las la-angle-down ms-3"></i>
                 </div>
             </div>
-
             @if($category->menuChild)
                 <div class="drop-categories-wrapper" style="display: none">
-                    <div class="w-100 h-100 row p-0 m-0 wrapper-bg" style="background-image: url('{{ asset($category->image) }}')">
-                        <div class="parent mt-3 mb-3">
-                            <a class="btn btn-cyan-outline f-w-6" href="{{ route('category').'/'.$category->slug }}" >{{ $category->name }}</a>
-                        </div>
+                    <div class="w-100 h-100 row pt-3 pb-0 px-0 m-0 wrapper-bg" style="background-image: url('{{ asset($category->image) }}')">
+
                         @php
                             $firstChildren = $category->menuChild;
                             $cols = []; $key = 0;
@@ -27,16 +24,19 @@
                             <div class="col-lg-3 col-md-6 col-12">
                                 @foreach($col as $firstChild)
                                     <div class="sector mb-3">
-                                        <a href="{{ route('category').'/'.$firstChild->slug }}" class="f-w-6 child-title d-block uppercase condensed px-3 py-1 mb-1">
-                                            {{ $firstChild->name }}
+                                        <a href="{{ route('category').'/'.$firstChild->slug }}" class="f-w-6 child-title d-flex align-items-center justify-content-between uppercase condensed px-3 py-1 mb-1">
+                                            {{ $firstChild->short_name ?? $firstChild->name }}
+                                            <i class="las la-angle-double-right"></i>
                                         </a>
 
                                         @if($firstChild->menuChild)
-                                            @foreach($firstChild->menuChild as $secondChild)
-                                                <a href="{{ route('category').'/'.$secondChild->slug }}" class="child-element d-block font-09 ps-4 pe-2 f-w-4 uppercase condensed">
-                                                    {{ $secondChild->name }}
-                                                </a>
-                                            @endforeach
+                                            <div class="d-flex flex-column">
+                                                @foreach($firstChild->menuChild as $secondChild)
+                                                    <a href="{{ route('category').'/'.$secondChild->slug }}" class="child-element d-flex align-items-center justify-content-between font-09 px-4 mb-1 f-w-4 uppercase condensed">
+                                                        {{ $secondChild->short_name ?? $secondChild->name }}
+                                                    </a>
+                                                @endforeach
+                                            </div>
                                         @endif
                                     </div>
 

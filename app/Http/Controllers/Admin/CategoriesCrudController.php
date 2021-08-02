@@ -35,6 +35,7 @@ class CategoriesCrudController extends CrudController
         CRUD::setEntityNameStrings('категорию', 'Категории');
         CRUD::addClause('withTrashed');
         CRUD::set('softdelete', true);
+        CRUD::orderBy('id');
 
         CRUD::addFilter(
             [

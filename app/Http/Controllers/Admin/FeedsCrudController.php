@@ -30,6 +30,9 @@ class FeedsCrudController extends CrudController
         CRUD::setModel(\App\Models\Feeds::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/feeds');
         CRUD::setEntityNameStrings('парсер', 'Парсеры');
+        CRUD::orderBy('id');
+
+
     }
 
     /**

@@ -26,13 +26,19 @@ class Parser
         foreach ($offers as $offer) {
             $offerXML = $offer->asXML();
 
+//            var_dump($offer->param->attributes());
+
             $countIteration++;
             if ($countIteration < $countFrom) continue;
             if ($countIteration >= $countTo) break;
 
             $selectedOffers[] = self::offerToObject($offer);
             $selectedOffersXML[] = $offerXML;
+
+//            dd($offerXML);
         }
+
+
 
         return [
             'json' => $selectedOffers,
@@ -184,12 +190,19 @@ class Parser
     }
 
     function offerToObject($offer){
-        foreach ($offer->param as $param) $offer->addChild('params', $param->attributes());
-        $offerObj = json_decode(json_encode($offer), true);
-        $offerObj['attributes'] = $offerObj['@attributes'];
-        $offerObj['param'] = array_combine($offerObj['params'], $offerObj['param']);
-        unset($offerObj['@attributes'], $offerObj['params']);
+        $offerArr = json_decode(json_encode($offer), true);
+        $offerArr['attributes'] = $offerArr['@attributes'];
+        unset($offerArr['@attributes'], $offerArr['param']);
 
-        return $offerObj;
+        $paramsObj = [];
+
+        foreach ($offer->param as $singleParam) {
+            $singleParam = json_decode(json_encode($singleParam), true);
+            $paramsObj[$singleParam['@attributes']['name']] = $singleParam['@attributes'];
+            $paramsObj[$singleParam['@attributes']['name']]['val_'] = $singleParam[0];
+            $offerArr['params'] = $paramsObj;
+        }
+
+        return $offerArr;
     }
 }

@@ -33,6 +33,10 @@
     .child-element{
       padding: 3px 0;
       position: relative;
+
+      i {
+        opacity: .4;
+      }
     }
 
     .child-title {

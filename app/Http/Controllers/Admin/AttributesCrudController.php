@@ -34,7 +34,7 @@ class AttributesCrudController extends CrudController
     {
 
         CRUD::setModel(\App\Models\Attributes::class);
-
+        CRUD::orderBy('id');
         CRUD::setRoute(config('backpack.base.route_prefix') . '/attributes');
 
         if (!Groups::exists()) {
