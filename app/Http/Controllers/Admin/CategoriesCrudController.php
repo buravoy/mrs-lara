@@ -50,6 +50,30 @@ class CategoriesCrudController extends CrudController
                 $this->crud->addClause('where', 'parent_id', $value);
             }
         );
+
+        CRUD::addFilter(
+            [
+                'name' => 'no_parent',
+                'type' => 'simple',
+                'label' => 'БЕЗ родительской',
+            ],
+            false,
+            function () {
+                $this->crud->addClause('where', 'parent_id', null);
+            }
+        );
+
+        CRUD::addFilter(
+            [
+                'name' => 'in_menut',
+                'type' => 'simple',
+                'label' => 'В верхнем меню',
+            ],
+            false,
+            function () {
+                $this->crud->addClause('where', 'show', true);
+            }
+        );
     }
 
     /**

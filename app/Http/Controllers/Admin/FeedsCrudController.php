@@ -77,18 +77,6 @@ class FeedsCrudController extends CrudController
 
         $attrGroups = Groups::all();
 
-        $defaultFunctions = [
-            'offer_img' => 'image',
-            'offer_old' => 'oldprice',
-            'offer_href' => 'href',
-            'offer_name' => 'name',
-            'offer_uniq' => 'uniq',
-            'offer_price' => 'price',
-            'offer_desc_1' => 'descFirst',
-            'offer_desc_2' => 'descSecond',
-            'offer_category' => 'category'
-        ];
-
         foreach ($attrGroups as $group) $defaultFunctions['offer_'.$group['slug']] = $group['slug'];
 
         if (isset($entry->slug)) {
@@ -154,7 +142,6 @@ class FeedsCrudController extends CrudController
             'name' => 'parser',
             'type' => 'parser-config',
             'tab' => 'Настройки парсера',
-            'default' => json_encode($defaultFunctions),
             'data' => $entry,
             'file_info' => $fileInfo ?? null,
             'attr_groups' => $attrGroups

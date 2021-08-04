@@ -23,5 +23,14 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/favorites', function () {
     return view('favorites');
 })->name('favorites');
 
-Route::get('category', [CategoriesController::class, 'index'])->name('category');
+
+//Route::name('category')->namespace('category')->prefix('category')->group(function () {
+//    Route::get('/', [CategoriesController::class, 'index'])->name('index');
+//    Route::get('{reviewSlug}', [Front\NewsResearch\ReviewController::class, 'show'])->name('show');
+//});
+
+Route::get('category/{slug?}', [CategoriesController::class, 'index'])->name('category');
+
+
+
 Route::get('product', [ProductsController::class, 'index']);

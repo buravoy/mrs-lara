@@ -33,6 +33,12 @@ button:focus {
             }
         }
     }
+
+    &-filters {
+        .dropdown-menu {
+            min-width: 300px;
+        }
+    }
 }
 
 
@@ -95,4 +101,10 @@ button:focus {
             background-color: #f7f7f7 !important;
         }
     }
+}
+
+.attr_label {
+    margin-bottom: 0;
+    line-height: 14px;
+    font-size: 14px;
 }

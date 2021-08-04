@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Attributes;
 use App\Http\Requests\ProductsRequest;
 use App\Models\Categories;
+use App\Models\Feeds;
 use App\Models\Groups;
 use App\Models\Products;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -50,6 +51,20 @@ class ProductsCrudController extends CrudController
                 $this->crud->query = $this->crud->query->whereHas('category', function ($query) use ($value) {
                     $query->where('category_id', $value);
                 });
+            }
+        );
+
+        CRUD::addFilter(
+            [
+                'name' => 'partner',
+                'type' => 'select2',
+                'label' => 'Партнер',
+            ],
+            function () {
+                return Feeds::pluck('name', 'slug')->toArray();
+            },
+            function ($value) {
+                $this->crud->addClause('where', 'parser_slug', $value);
             }
         );
     }

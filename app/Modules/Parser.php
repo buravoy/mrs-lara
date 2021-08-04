@@ -26,16 +26,12 @@ class Parser
         foreach ($offers as $offer) {
             $offerXML = $offer->asXML();
 
-//            var_dump($offer->param->attributes());
-
             $countIteration++;
             if ($countIteration < $countFrom) continue;
             if ($countIteration >= $countTo) break;
 
             $selectedOffers[] = self::offerToObject($offer);
             $selectedOffersXML[] = $offerXML;
-
-//            dd($offerXML);
         }
 
 
@@ -49,10 +45,9 @@ class Parser
     public function parseXml(Request $request)
     {
         $countIteration = 1;
-        $countFrom = $request->count_from;
+        $countFrom = $request->count_from ?? null;
         $countTo = $request->count_to;
         $mode = $request->mode;
-
 
         $slug = $request->name;
         $xml = simplexml_load_file(base_path('uploads/xml/feeds/') . $slug . '.xml');
@@ -61,29 +56,31 @@ class Parser
         $parserFields = Feeds::where('slug', $slug)->select('parser')->first();
         $attributesGroups = Groups::all();
 
-        $fields = json_decode($parserFields->parser);
+        $fields = (array)json_decode($parserFields->parser);
 
         $functions = [
-            'name' => $fields->offer_name,
-            'desc_1' => $fields->offer_desc_1,
-            'desc_2' => $fields->offer_desc_2,
-            'price' => $fields->offer_price,
-            'old_price' => $fields->offer_old,
-            'image' => $fields->offer_img,
-            'href' => $fields->offer_href,
-            'uniq_id' => $fields->offer_uniq,
-            'category' => $fields->offer_category
+            'name' => $fields['offer_name'],
+            'desc_1' => $fields['offer_desc_1'],
+            'desc_2' => $fields['offer_desc_2'],
+            'price' => $fields['offer_price'],
+            'old_price' => $fields['offer_old'],
+            'image' => $fields['offer_img'],
+            'href' => $fields['offer_href'],
+            'uniq_id' => $fields['offer_uniq'],
+            'category' => $fields['offer_category']
         ];
 
         $functionsAttributes = [];
 
-        foreach ($attributesGroups as $group) {
-            $groupSlug = $group->slug;
-            $groupFunction = 'offer_'.$group->slug;
-            $functionsAttributes[$groupFunction] = [
-                'slug' => $groupSlug,
-                'function' => $fields->$groupFunction
-            ];
+        foreach ($attributesGroups as $attributeGroup) {
+            if(isset( $fields['offer_'.$attributeGroup->slug] )) {
+
+                $functionsAttributes['offer_'.$attributeGroup->slug] = [
+                    'slug' => $attributeGroup->slug,
+                    'function' => $fields['offer_'.$attributeGroup->slug]
+                ];
+
+            }
         }
 
         require_once base_path('uploads/functions/') . $slug . '.php';
@@ -110,10 +107,7 @@ class Parser
                 $attributeReturnedArray = $function['function']($offerObj);
                 $groupId = Groups::where('slug', $function['slug'])->first()->id;
 
-
-
                 if (!is_array($attributeReturnedArray)) $attributeReturnedArray = [$attributeReturnedArray];
-
 
                 foreach ($attributeReturnedArray as $attributeReturnedValue) {
                     $attributeInBase = Attributes::where('group_id', $groupId)
@@ -121,7 +115,8 @@ class Parser
                         ->pluck('id')->first();
 
                     if (empty($attributeInBase) && $attributeReturnedValue != null) {
-                        $attributeInBase = Attributes::insertGetId(['group_id' => $groupId,
+                        $attributeInBase = Attributes::insertGetId([
+                            'group_id' => $groupId,
                             'name' => $attributeReturnedValue,
                             'slug' => SlugService::createSlug(Attributes::class, 'slug', $attributeReturnedValue),
                         ]);
@@ -159,21 +154,30 @@ class Parser
 
                 foreach ($productCatsArr as $productCatEntry)
                 {
-                    $catId = Categories::where('name', $productCatEntry)->first()->id;
-                    DB::table('category_product')->insert([
-                        'category_id' => $catId,
-                        'product_id' => $createdProduct->id,
-                    ]);
+                    $catId = Categories::where('name', $productCatEntry)->first()->id ?? false;
+
+                    if($catId) {
+                        DB::table('category_product')->insert([
+                            'category_id' => $catId,
+                            'product_id' => $createdProduct->id,
+                        ]);
+                    } else {
+                        Categories::insertGetId([
+                            'name' => $productCatEntry,
+                            'slug' => SlugService::createSlug(Categories::class, 'slug', $productCatEntry),
+                        ]);
+                    }
+
                 }
             }
 
-
-            if ($mode) {
+            if ($mode == 'true') {
                 $countIteration++;
-                if ($countIteration < $countFrom) continue;
-                if ($countIteration >= $countTo) break;
+                if ($countIteration <= $countFrom) continue;
+                if ($countIteration > $countTo) break;
             }
         }
+
     }
 
     public function saveFunction(Request $request)

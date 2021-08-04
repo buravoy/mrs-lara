@@ -8,14 +8,6 @@ class MainController extends Controller
 {
     public function index()
     {
-        $categories = Categories::where('show', true)
-            ->orderBy('sort', 'asc')
-            ->get();
-
-
-
-        return view('home', [
-            'categories' => $categories
-        ]);
+        return view('home');
     }
 }

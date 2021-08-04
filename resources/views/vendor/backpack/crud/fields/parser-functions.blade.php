@@ -20,7 +20,7 @@
         </button>
 
         <div class="form-group d-flex align-items-center mb-2 ml-3">
-            <input id="mode" type="checkbox" name="mode" class="" value="test" checked>
+            <input id="mode" type="checkbox" name="mode" class="" value="test">
             <label for="mode" class="mb-0 ml-2">Тестовый режим</label>
         </div>
 
@@ -82,6 +82,7 @@
 
     <script>
         const
+
             editor = {area: null, isInit: false},
             json = {area: null, isInit: false},
             $code = $('#code'),

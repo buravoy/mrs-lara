@@ -12,41 +12,41 @@
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3 font-sm">Уникальный ID товара:</label>
-            <input name="offer_uniq" type="text" class="form-control">
+            <input name="offer_uniq" type="text" class="form-control funk">
         </div>
         <div class="form-group w-100 d-flex">
             <label class="mr-3 font-sm">Название:</label>
-            <input name="offer_name" type="text" class="form-control">
+            <input name="offer_name" type="text" class="form-control funk">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3 font-sm">Описание&nbsp;1:</label>
-            <input name="offer_desc_1" type="text" class="form-control">
+            <input name="offer_desc_1" type="text" class="form-control funk">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3 font-sm">Описание&nbsp;2:</label>
-            <input name="offer_desc_2" type="text" class="form-control">
+            <input name="offer_desc_2" type="text" class="form-control funk">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3 font-sm">Цена:</label>
-            <input name="offer_price" type="text" class="form-control">
+            <input name="offer_price" type="text" class="form-control funk">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3 font-sm">Старая&nbsp;цена:</label>
-            <input name="offer_old" type="text" class="form-control">
+            <input name="offer_old" type="text" class="form-control funk">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3 font-sm">Картинки:</label>
-            <input name="offer_img" type="text" class="form-control">
+            <input name="offer_img" type="text" class="form-control funk">
         </div>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3 font-sm">Ссылка:</label>
-            <input name="offer_href" type="text" class="form-control">
+            <input name="offer_href" type="text" class="form-control funk">
         </div>
 
     </div>
@@ -54,9 +54,9 @@
     <div class="col-md-4 parser-fields add_functions">
         <label class="mb-3">Функции аттрибутов:</label>
         @foreach($field['attr_groups'] as $attr)
-            <div class="form-group w-100 d-flex">
-                <label class="mr-3 font-sm">{{ $attr->name }}:</label>
-                <input name="offer_{{ $attr->slug }}" type="text" class="form-control" value="{{ $attr->slug }}">
+            <div class="attr_group d-flex align-items-center mb-3">
+                <label class="ml-2 mr-3 attr_label">{{ $attr->name }}</label>
+                <input name="offer_{{ $attr->slug }}" type="text" class="form-control funk">
             </div>
         @endforeach
     </div>
@@ -65,7 +65,7 @@
         <label class="mb-3">Функция категорий:</label>
 
         <div class="form-group w-100">
-            <input name="offer_category" type="text" class="form-control" value="category">
+            <input name="offer_category" type="text" class="form-control funk" value="category">
         </div>
 
         <p class="border rounded-md p-3">
@@ -94,19 +94,20 @@
 
 @push('crud_fields_scripts')
     <script>
+
+
         const
             $parser = $('[name={{ $field['name'] }}]'),
             $parserFields = $('.parser-fields'),
             $addFunctionsInputs = $('.add_functions').find('input');
 
-        let parserData = {json:[], xml:[]},
-            parser = $parser.text();
+        let parser = $parser.text(), parserData = {json:[], xml:[]};
 
         if (parser !== '') {
             parser = JSON.parse(parser);
-            $parserFields.find('input').each(function (index, field) {
+            $parserFields.find('input.funk').each(function (index, field) {
                 const fieldName = field.name;
-                if (parser[fieldName]) field.value = parser[fieldName]
+                if (parser[fieldName]) field.value = parser[fieldName];
             })
         }
 
@@ -116,7 +117,11 @@
                 fieldName = $t.attr('name'),
                 fieldValue = $t.val(),
                 newParserObj = {[fieldName]: fieldValue};
+
             parser ? Object.assign(parser, newParserObj) : parser = newParserObj;
+
+            parser = Object.entries(parser).reduce((a,[k,v]) => (v ? {...a, [k]:v} : a), {});
+            delete parser['undefined'];
             $parser.text(JSON.stringify(parser))
         })
 

@@ -79,18 +79,7 @@ class Categories extends Model
 
     public function child()
     {
-        return $this->hasMany(self::class, 'parent_id');
-    }
-
-    public function count()
-    {
-        return DB::table('category_product')->where('category_id', $this->id)->count();
-    }
-
-    public function menuChild()
-    {
-        return $this->hasMany(self::class, 'parent_id')
-            ->orderBy('sort', 'asc');
+        return $this->hasMany(self::class, 'parent_id')->orderBy('sort', 'asc');
     }
 
     public function products()
