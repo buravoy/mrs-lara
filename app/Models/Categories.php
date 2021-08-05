@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\CategoriesController;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -80,6 +81,11 @@ class Categories extends Model
     public function child()
     {
         return $this->hasMany(self::class, 'parent_id')->orderBy('sort', 'asc');
+    }
+
+    public function allChild()
+    {
+        return $this->hasMany(self::class, 'parent_id')->with('allChild');
     }
 
     public function products()
