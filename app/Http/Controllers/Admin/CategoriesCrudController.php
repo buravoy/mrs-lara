@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\CategoriesController;
 use App\Models\Categories;
+use App\Models\CategoryProduct;
+use App\Models\Products;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoriesRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Arr;
 
 /**
  * Class CategoryCrudController
@@ -246,7 +250,20 @@ class CategoriesCrudController extends CrudController
             'inline' => true,
             'tab' => 'Информация',
             'wrapperAttributes' => [
-                'class' => 'form-group col-md-6',
+                'class' => 'form-group col-md-4',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'count',
+            'label' => 'Товаров (с подкатегориями)',
+            'type' => 'text',
+            'tab' => 'Информация',
+            'wrapper' => [
+                'class' => 'form-group col-md-2',
+            ],
+            'attributes' => [
+                'readonly'    => 'readonly',
             ],
         ]);
 

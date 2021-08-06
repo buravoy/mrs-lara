@@ -27,10 +27,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->share('categories',
-            Categories::where('show', true)
-            ->orderBy('sort', 'asc')
-            ->get()
-        );
+        //
     }
 }

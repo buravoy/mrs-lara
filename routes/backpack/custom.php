@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\FileUploadController;
 use App\Http\Controllers\Admin\CategoriesCrudController;
 use App\Http\Controllers\Admin\GroupsCrudController;
 use App\Http\Controllers\Admin\ProductsCrudController;
+use App\Http\Controllers\CategoriesController;
 use App\Modules\Parser;
 
 // --------------------------
@@ -35,18 +36,21 @@ Route::group([
     Route::crud('feeds', 'FeedsCrudController');
     Route::crud('feeds', 'FeedsCrudController');
 
-    Route::post('admin/upload-categories', [FileUploadController::class, 'categoryXmlPostUpload'])->name('xml-category-upload');
-    Route::post('admin/import-categories', [CategoriesCrudController::class, 'categoryXmlImport'])->name('xml-category-import');
-    Route::post('admin/delete-categories', [CategoriesCrudController::class, 'deleteAllCategories'])->name('delete-all-categories');
+    Route::post('count-goods', [CategoriesController::class, 'countProductsInCategory'])->name('count-goods');
+    Route::post('count-goods-in-menu', [CategoriesController::class, 'countProductsInMenu'])->name('count-goods-in-menu');
 
-    Route::post('admin/get-group-type', [GroupsCrudController::class, 'getGroupType'])->name('get-type');
+    Route::post('upload-categories', [FileUploadController::class, 'categoryXmlPostUpload'])->name('xml-category-upload');
+    Route::post('import-categories', [CategoriesCrudController::class, 'categoryXmlImport'])->name('xml-category-import');
+    Route::post('delete-categories', [CategoriesCrudController::class, 'deleteAllCategories'])->name('delete-all-categories');
 
-    Route::post('admin/download-feed', [FileUploadController::class, 'downloadXml'])->name('download-feed');
-    Route::post('admin/get-size', [FileUploadController::class, 'getSize'])->name('get-size');
+    Route::post('get-group-type', [GroupsCrudController::class, 'getGroupType'])->name('get-type');
+
+    Route::post('download-feed', [FileUploadController::class, 'downloadXml'])->name('download-feed');
+    Route::post('get-size', [FileUploadController::class, 'getSize'])->name('get-size');
 
 
-    Route::post('admin/handle-offers', [Parser::class, 'handleOffers'])->name('handle-offers');
-    Route::post('admin/parse-xml', [Parser::class, 'parseXml'])->name('parse-xml');
-    Route::post('admin/save-function', [Parser::class, 'saveFunction'])->name('save-function');
-    Route::post('admin/delete-all-goods', [Parser::class, 'deleteAllGoods'])->name('delete-all-goods');
+    Route::post('handle-offers', [Parser::class, 'handleOffers'])->name('handle-offers');
+    Route::post('parse-xml', [Parser::class, 'parseXml'])->name('parse-xml');
+    Route::post('save-function', [Parser::class, 'saveFunction'])->name('save-function');
+    Route::post('delete-all-goods', [Parser::class, 'deleteAllGoods'])->name('delete-all-goods');
 }); // this should be the absolute last line of this file

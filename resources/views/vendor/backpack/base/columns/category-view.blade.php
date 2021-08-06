@@ -19,9 +19,6 @@
                 {!! !empty($entry->form) ? $entry->form : '<i class="las la-times-circle text-error"></i>' !!}
             </span>
         </p>
-
-
     </div>
-    <p>Товары: <b>{{ $entry->count() }}</b></p>
+    <button class="btn btn-sm btn-outline-primary py-0 mt-1 mb-0 count-goods" style="line-height: 16px;" data-id="{{ $entry->id }}">{{ $entry->count ?? 'Посчитать' }}</button>
 </div>
-

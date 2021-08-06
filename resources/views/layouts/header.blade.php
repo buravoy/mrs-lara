@@ -10,13 +10,15 @@
 
         <div class="d-flex align-items-center ms-5 w-100 justify-content-end ">
 
-            <button type="button" class="btn btn-cyan-outline">
+            <button type="button" class="btn btn-cyan-outline py-0 px-1 me-2 main-menu-toggle">
                 <span id="menu-closed">
-                    <i class="las la-bars"></i> КАТЕГОРИИ
+                    <i class="las la-bars font-12"></i>
+                    <span>КАТЕГОРИИ</span>
                 </span>
 
                 <span id="menu-shown" style="display: none">
-                    <i class="las la-bars"></i> ЗАКРЫТЬ
+                    <i class="las la-times font-12"></i>
+                    <span>КАТЕГОРИИ</span>
                 </span>
 
             </button>
@@ -24,8 +26,8 @@
             @auth
                 @include('layouts.menu.dashboard-menu')
             @endauth
-
         </div>
-
     </div>
 </div>
+
+

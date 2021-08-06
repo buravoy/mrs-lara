@@ -32,6 +32,7 @@ class CategoriesRequest extends FormRequest
             'short_description' => 'bail|nullable|string|max:65535',
             'form' => 'bail|nullable|string|max:10',
             'image' => 'bail|nullable|string|max:65535',
+            'count' => 'bail|nullable|integer',
 
             'slug' => 'bail|nullable|string|max:255|unique:categories,slug,'.request()->id,
             'meta_title' => 'bail|nullable|string|max:255',

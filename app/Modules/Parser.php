@@ -2,6 +2,7 @@
 
 namespace App\Modules;
 
+use App\Http\Controllers\CategoriesController;
 use App\Models\Attributes;
 use App\Models\Categories;
 use App\Models\Feeds;
@@ -178,6 +179,7 @@ class Parser
             }
         }
 
+        CategoriesController::countProductsInMenu();
     }
 
     public function saveFunction(Request $request)
