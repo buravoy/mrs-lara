@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\CategoriesController;
 use App\Models\Categories;
-use App\Models\CategoryProduct;
-use App\Models\Products;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoriesRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Illuminate\Support\Arr;
 
 /**
  * Class CategoryCrudController
@@ -39,7 +35,7 @@ class CategoriesCrudController extends CrudController
         CRUD::setEntityNameStrings('категорию', 'Категории');
         CRUD::addClause('withTrashed');
         CRUD::set('softdelete', true);
-        CRUD::orderBy('id');
+        CRUD::orderBy('xml_id');
 
         CRUD::addFilter(
             [
@@ -133,10 +129,16 @@ class CategoriesCrudController extends CrudController
 
 //        CRUD::setFromDb(); // columns
 
+//        CRUD::addColumn([
+//            'name' => 'id',
+//            'type' => 'text',
+//            'label' => 'ID'
+//        ]);
+
         CRUD::addColumn([
-            'name' => 'id',
+            'name' => 'xml_id',
             'type' => 'text',
-            'label' => 'ID'
+            'label' => 'XML ID'
         ]);
 
         CRUD::addColumn([

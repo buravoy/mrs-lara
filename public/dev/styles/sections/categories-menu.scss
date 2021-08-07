@@ -1,104 +1,135 @@
 @import "styles/global/vars";
 
+.main-menu-toggle {
+    position: relative;
+    width: 80px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-button-text {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.categories-menu {
+    @media (min-width: 576px) {
+        display: flex !important;
+
+    }
+    @media (max-width: 576px) {
+        display: none;
+        margin-top: 0 !important;
+        box-shadow: 0 10px 15px 0 #c7c7c7;
+    }
+}
+
 .drop-categories-wrapper {
-  position: absolute;
-  left: 0;
-  right: 0;
-  background-color: $white;
-  z-index: 9;
-  border: 1px solid $cyan;
+    position: absolute;
+    left: 0;
+    right: 0;
+    background-color: $white;
+    z-index: 9;
+    border: 1px solid $cyan;
+    box-shadow: 0 10px 15px 0 #525252;
 
-  .parent {
-    display: block;
-    text-decoration: none;
-    font-family: $condensed;
-    text-transform: uppercase;
-    position: relative;
-  }
-
-  .sector {
-    position: relative;
-
-    &:before {
-      content: '';
-      background-color: $cyan;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      opacity: .06;
+    .parent {
+        display: block;
+        text-decoration: none;
+        font-family: $condensed;
+        text-transform: uppercase;
+        position: relative;
     }
 
-    .child-element{
-      padding: 3px 0;
-      position: relative;
+    .sector {
+        position: relative;
 
-      i {
-        opacity: .4;
-      }
+        &:before {
+            content: '';
+            background-color: $cyan;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            opacity: .06;
+        }
+
+        .child-element {
+            padding: 3px 0;
+            position: relative;
+
+            i {
+                opacity: .4;
+            }
+        }
+
+        .child-title {
+            position: relative;
+            color: $white;
+            background-color: $cyan;
+        }
+
+        a {
+            transition: .2s;
+
+            &:hover {
+                color: $white;
+                background-color: darken($cyan, 7%);
+                text-shadow: 0 0 0 $white;
+            }
+        }
     }
 
-    .child-title {
-      position: relative;
-      color: $white;
-      background-color: $cyan;
+    .wrapper-bg {
+        position: relative;
+        background-position: bottom right;
+        background-repeat: no-repeat;
+
+        &:before {
+            content: '';
+            background-color: $white;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            opacity: .8;
+        }
     }
-
-    a {
-      transition: .2s;
-
-      &:hover {
-        color: $white;
-        background-color: darken($cyan, 7%);
-        text-shadow: 0 0 0 $white;
-      }
-    }
-  }
-
-  .wrapper-bg {
-    position: relative;
-    background-position: bottom right;
-    background-repeat: no-repeat;
-
-    &:before {
-      content: '';
-      background-color: $white;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      opacity: .8;
-    }
-  }
 }
 
 .category-menu-toggle {
-  border-bottom: 2px solid transparent;
-  cursor: pointer;
-  transition: .2s;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: .2s;
 
-  .title {
-    font-family: $condensed;
-    text-transform: uppercase;
-    font-weight: 600;
-    min-height: 40px;
-  }
+    .title {
+        font-family: $condensed;
+        text-transform: uppercase;
+        font-weight: 600;
+        min-height: 40px;
+    }
 
-  &.active,
-  &:hover {
-    border-bottom: 2px solid $cyan;
+    &.active,
+    &:hover {
+        border-bottom: 2px solid $cyan;
+
+        i {
+            color: $cyan;
+        }
+    }
 
     i {
-      color: $cyan;
-    }
-  }
+        transition: .2s;
 
-  i {
-    transition: .2s;
-    &.rotate {
-      transform: rotate(180deg);
+        &.rotate {
+            transform: rotate(180deg);
+        }
     }
-  }
 }

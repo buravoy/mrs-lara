@@ -28,6 +28,7 @@ class AttributesRequest extends FormRequest
         return [
             'name' => 'bail|required|string|max:255',
             'group_id' => 'bail|required|integer|max:999999999',
+            'creator' => 'bail|nullable|string',
 
             'slug' => 'bail|nullable|string|max:255|unique:attributes,slug,'.request()->id,
         ];

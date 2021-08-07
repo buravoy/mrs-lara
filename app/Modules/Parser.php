@@ -54,7 +54,7 @@ class Parser
         $xml = simplexml_load_file(base_path('uploads/xml/feeds/') . $slug . '.xml');
         $offers = $xml->shop->offers->offer;
 
-        $parserFields = Feeds::where('slug', $slug)->select('parser')->first();
+        $parserFields = Feeds::where('slug', $slug)->first();
         $attributesGroups = Groups::all();
 
         $fields = (array)json_decode($parserFields->parser);
@@ -119,6 +119,7 @@ class Parser
                         $attributeInBase = Attributes::insertGetId([
                             'group_id' => $groupId,
                             'name' => $attributeReturnedValue,
+                            'creator' => $parserFields->name,
                             'slug' => SlugService::createSlug(Attributes::class, 'slug', $attributeReturnedValue),
                         ]);
                     }

@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Categories;
 use App\Models\CategoryProduct;
 use App\Models\Products;
+use App\Modules\Generator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use phpDocumentor\Reflection\Types\Self_;
 
 class CategoriesController extends Controller
 {
@@ -16,9 +16,18 @@ class CategoriesController extends Controller
         $catIdWithChild = Categories::where('slug', $slug)->with('allChild')->get();
         $idArray = Arr::flatten(self::collectId($catIdWithChild));
         $productsId = CategoryProduct::whereIn('category_id', $idArray)->get('product_id');
-        $products = Products::whereIn('id', $productsId)->get();
 
-        return view('category', ['products' => $products]);
+        $products = Products::whereIn('id', $productsId)
+            ->orderBy('price', 'asc')
+            ->paginate(10);
+
+        $description = Generator::categoryDescription($catIdWithChild[0]);
+
+        return view('category', [
+            'products' => $products,
+            'category' => $catIdWithChild[0],
+            'description' => $description
+        ]);
     }
 
     public function countProductsInCategory(Request $request)

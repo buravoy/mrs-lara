@@ -1,0 +1,16 @@
+@import "styles/global/vars";
+
+.product {
+    &-card {
+        border: 1px solid $grey-light;
+    }
+
+    &-img {
+        width: 100%;
+        height: 200px;
+
+        img {
+            width: inherit;
+        }
+    }
+}

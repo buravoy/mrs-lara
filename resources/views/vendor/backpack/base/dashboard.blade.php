@@ -3,7 +3,10 @@
 @section('content')
     <div class="row">
         <div class="col-3">
-            <button class="btn btn-primary count-goods-in-menu">Посчитать товары меню категорий</button>
+            <div class="border rounded p-3 mb-4">
+                <p class="mb-0">В базе <b>{{ $productsCount }}</b> товаров в <b>{{ $categoriesCount }}</b> категориях.</p>
+            </div>
+            <button class="btn btn-sm btn-primary count-goods-in-menu">Оптимизировать меню категорий</button>
         </div>
     </div>
 @endsection

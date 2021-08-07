@@ -34,8 +34,8 @@ class AttributesCrudController extends CrudController
     {
 
         CRUD::setModel(\App\Models\Attributes::class);
-        CRUD::orderBy('id');
         CRUD::setRoute(config('backpack.base.route_prefix') . '/attributes');
+        CRUD::orderBy('id', 'desc');
 
         if (!Groups::exists()) {
             \Alert::add('error', 'Сперва создайте группу атрибутов');
@@ -67,6 +67,13 @@ class AttributesCrudController extends CrudController
     protected function setupListOperation()
     {
 //        CRUD::setFromDb(); // columns
+
+        CRUD::addColumn([
+            'name' => 'id',
+            'type' => 'text',
+            'label' => 'ID',
+        ]);
+
         CRUD::addColumn([
             'name' => 'group',
             'label' => 'Группа',
@@ -86,6 +93,12 @@ class AttributesCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
+            'name' => 'creator',
+            'type' => 'text',
+            'label' => 'Кем создан',
+        ]);
+
+        CRUD::addColumn([
             'name' => 'show',
             'label' => 'Отображать',
             'type' => 'check',
@@ -94,14 +107,14 @@ class AttributesCrudController extends CrudController
             ],
         ]);
 
-        CRUD::addColumn([
-            'name' => 'slug',
-            'label' => 'Символьный код',
-            'type' => 'text',
-            'attributes' => [
-                'readonly'    => 'readonly',
-            ],
-        ]);
+//        CRUD::addColumn([
+//            'name' => 'slug',
+//            'label' => 'Символьный код',
+//            'type' => 'text',
+//            'attributes' => [
+//                'readonly'    => 'readonly',
+//            ],
+//        ]);
 
 
         /**
@@ -204,7 +217,20 @@ class AttributesCrudController extends CrudController
             'tab' => 'Информация',
             'default' => 1,
             'wrapper' => [
-                'class' => 'form-group col-md-12',
+                'class' => 'form-group col-md-6',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'creator',
+            'label' => 'Кем создан',
+            'type' => 'text',
+            'tab' => 'Информация',
+            'wrapper' => [
+                'class' => 'form-group col-md-2',
+            ],
+            'attributes' => [
+                'readonly'    => 'readonly',
             ],
         ]);
 

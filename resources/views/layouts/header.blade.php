@@ -10,15 +10,15 @@
 
         <div class="d-flex align-items-center ms-5 w-100 justify-content-end ">
 
-            <button type="button" class="btn btn-cyan-outline py-0 px-1 me-2 main-menu-toggle">
-                <span id="menu-closed">
+            <button type="button" class="btn btn-cyan-outline main-menu-toggle d-sm-none">
+                <span class="menu-button-text">
                     <i class="las la-bars font-12"></i>
                     <span>КАТЕГОРИИ</span>
                 </span>
 
-                <span id="menu-shown" style="display: none">
+                <span class="menu-button-text" style="display: none">
                     <i class="las la-times font-12"></i>
-                    <span>КАТЕГОРИИ</span>
+                    <span>ЗАКРЫТЬ</span>
                 </span>
 
             </button>

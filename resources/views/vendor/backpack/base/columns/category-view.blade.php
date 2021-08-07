@@ -20,5 +20,8 @@
             </span>
         </p>
     </div>
-    <button class="btn btn-sm btn-outline-primary py-0 mt-1 mb-0 count-goods" style="line-height: 16px;" data-id="{{ $entry->id }}">{{ $entry->count ?? 'Посчитать' }}</button>
+    <div class="d-flex align-items-center">
+        <button class="btn btn-sm btn-outline-primary py-0 mt-1 mb-0 mr-5 count-goods" style="line-height: 16px;" data-id="{{ $entry->id }}">{{ $entry->count ?? 'Посчитать' }}</button>
+        <a href="{{ route('category') }}/{{ $entry->slug }}" target="_blank">Перейти</a>
+    </div>
 </div>

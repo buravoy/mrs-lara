@@ -15,7 +15,7 @@ $(function (){
     $('.main-menu-toggle').on('click', function () {
         const $t = $(this)
 
-        $t.find('#menu-closed').fadeToggle(200)
-        $t.find('#menu-shown').fadeToggle(200)
+        $t.find('.menu-button-text').fadeToggle(200)
+        $('.categories-menu').slideToggle(200)
     })
 })

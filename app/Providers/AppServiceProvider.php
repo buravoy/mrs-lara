@@ -2,10 +2,7 @@
 
 namespace App\Providers;
 
-use App\Http\Controllers\CategoriesController;
-use App\Models\Categories;
-use App\Models\CategoryProduct;
-use App\Models\Products;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +24,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+
+
+//        Paginator::defaultView('sections.pagination');
+
+
+        Paginator::useBootstrap();
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CategoriesCrudController;
 use App\Http\Controllers\Admin\GroupsCrudController;
 use App\Http\Controllers\Admin\ProductsCrudController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Modules\Parser;
 
 // --------------------------
@@ -28,6 +29,8 @@ Route::group([
     ),
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
+    Route::get('dashboard', [DashboardController::class, 'index']);
+
     Route::crud('user', 'UserCrudController');
     Route::crud('products', 'ProductsCrudController');
     Route::crud('category', 'CategoriesCrudController');
