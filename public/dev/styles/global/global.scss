@@ -96,3 +96,23 @@ a {
 .relative {
   position: relative;
 }
+
+.position-unset {
+    position: unset;
+}
+
+.container-xxl {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    position: relative;
+}
+
+
+@media (min-width: 1400px) {
+    .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+        max-width: 1320px;
+    }
+}

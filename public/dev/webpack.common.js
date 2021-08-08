@@ -26,7 +26,7 @@ module.exports = {
         splitChunks: {
             cacheGroups: {
                 commons: {
-                    test: /[\\/]node_modules[\\/]/,
+                    test: /[\\/]jquery[\\/]/,
                     name: 'vendors',
                     chunks: 'all',
                 },

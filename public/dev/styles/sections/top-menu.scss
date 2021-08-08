@@ -46,9 +46,8 @@
         text-decoration: none;
         cursor: pointer;
         transition: .2s;
-        padding: 0 10px;
+        padding: 5px 10px;
         margin-bottom: 10px;
-        font-size: .8rem;
 
         &:hover {
           background-color: $cyan;
@@ -57,7 +56,6 @@
 
         .icon {
           margin-right: 5px;
-          font-size: 1.3rem;
         }
       }
     }
@@ -71,5 +69,4 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  font-size: 1.4rem;
 }
