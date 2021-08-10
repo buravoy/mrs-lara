@@ -124,7 +124,10 @@ class Parser
                         ]);
                     }
 
-                    $productAttributes[$function['slug']][] = $attributeInBase;
+                    if ($attributeInBase != null) {
+                        $productAttributes[$function['slug']][] = $attributeInBase;
+                    }
+
                 }
             }
 
@@ -180,7 +183,7 @@ class Parser
             }
         }
 
-        CategoriesController::countProductsInMenu();
+        CategoriesController::countAllProductsInCategories();
     }
 
     public function saveFunction(Request $request)

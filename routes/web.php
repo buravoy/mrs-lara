@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\FilterController;
 
 
 /*
@@ -29,8 +30,12 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/favorites', function () {
 //    Route::get('{reviewSlug}', [Front\NewsResearch\ReviewController::class, 'show'])->name('show');
 //});
 
-Route::get('category/{slug?}', [CategoriesController::class, 'index'])->name('category');
+Route::get('/category/{category?}/{discount?}', [CategoriesController::class, 'index'])->name('category');
+
+Route::get('/filter/{category?}/{params?}', [FilterController::class, 'index'])->name('filter');
 
 
 
-Route::get('product', [ProductsController::class, 'index']);
+Route::get('/away/{slug?}', [ProductsController::class, 'away'])->name('away');
+Route::get('/product/{slug?}', [ProductsController::class, 'index'])->name('product');
+Route::post('/product-info', [ProductsController::class, 'getInfo'])->name('product-info');

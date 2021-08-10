@@ -30,6 +30,9 @@
     @include('layouts.footer')
 </footer>
 
+@yield('modals')
+
+@csrf
 <script src="{{ asset('js/vendors.js') }}"></script>
 <script src="{{ asset('js/main.js') }}"></script>
 @stack('scripts')

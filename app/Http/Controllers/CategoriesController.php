@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Categories;
 use App\Models\CategoryProduct;
+use App\Models\Groups;
 use App\Models\Products;
 use App\Modules\Generator;
 use Illuminate\Http\Request;
@@ -11,67 +12,78 @@ use Illuminate\Support\Arr;
 
 class CategoriesController extends Controller
 {
-    public function index($slug = null)
+    public function index($category = null, $discount = null)
     {
-        $catIdWithChild = Categories::where('slug', $slug)->with('allChild')->get();
-        $idArray = Arr::flatten(self::collectId($catIdWithChild));
+        if($discount != null && $discount != 'discount') abort(404);
+        if(!$category) abort(404);
+
+        $catIdWithChild = Categories::where('slug', $category)->with('allChild')->first();
+        $idArray = Arr::flatten(self::collectId(collect([$catIdWithChild])));
         $productsId = CategoryProduct::whereIn('category_id', $idArray)->get('product_id');
+        $products = Products::whereIn('id', $productsId);
+        if($discount) $products->where('discount','<>', null);
 
-        $products = Products::whereIn('id', $productsId)
-            ->orderBy('price', 'asc')
-            ->paginate(10);
+        $attributesGroups = Groups::with('attributes')->get();
+        $productsAttributes = Products::whereIn('id', $productsId)->pluck('attributes')->toArray();
 
-        $description = Generator::categoryDescription($catIdWithChild[0]);
+        $mergedAttributes = [];
+        foreach ($productsAttributes as $attribute) $mergedAttributes = array_merge_recursive($mergedAttributes, (array)json_decode($attribute));
+        $mergedAttributes = array_map('array_unique', $mergedAttributes);
+
+        foreach ($attributesGroups as $key => $group) {
+            if ( array_key_exists($group->slug, $mergedAttributes) === false ) {
+                unset($attributesGroups[$key]);
+                continue;
+            }
+
+            foreach ($group->attributes as $k => $attribute) {
+                if ( array_search($attribute->id, $mergedAttributes[$group->slug]) === false ) {
+                    unset($group->attributes[$k]);
+                }
+            }
+        }
+
+        $filters = collect([
+            'route' => 'category',
+            'discount' => $discount ? null : 'discount',
+            'category' => $catIdWithChild,
+            'attributes' => $attributesGroups
+        ]);
 
         return view('category', [
-            'products' => $products,
-            'category' => $catIdWithChild[0],
-            'description' => $description
+            'products' => $products->orderBy('price', 'asc')->paginate(10),
+            'title' => $catIdWithChild->name,
+            'description' => Generator::categoryDescription($catIdWithChild),
+            'filters' => $filters
         ]);
     }
 
-    public function countProductsInCategory(Request $request)
+
+    public static function countProductsInCategory($catId)
     {
-        $catId = $request->id;
         $categoriesWithChild = Categories::where('id', $catId)->with('allChild')->get();
         $idArray = Arr::flatten(self::collectId($categoriesWithChild));
         $productsCount = CategoryProduct::whereIn('category_id', $idArray)->count();
         Categories::where('id', $catId)->update([ 'count' => $productsCount ]);
 
-        return response()->json($productsCount);
+        return $productsCount;
     }
 
-    public static function countProductsInMenu() {
-        $categoriesWithChild = Categories::where('show', true)->with('allChild')->get();
 
-        foreach ($categoriesWithChild as $category_1) {
+    public function RequestCountProductsInCategory(Request $request)
+    {
+        return self::countProductsInCategory($request->id);
+    }
 
-            if(!empty($category_1->allChild)) {
-                foreach ($category_1->allChild as $category_2) {
 
-                    if(!empty($category_2->allChild)) {
-                        foreach ($category_2->allChild as $category_3) {
-                            $idArray_3 = Arr::flatten(CategoriesController::collectId(collect([$category_3])));
-                            $catId_3 = $category_3->id;
-                            $catCount_3 = CategoryProduct::whereIn('category_id', $idArray_3)->count();
-                            Categories::where('id', $catId_3)->update([ 'count' => $catCount_3 ]);
-                        }
-                    }
-
-                    $idArray_2 = Arr::flatten(CategoriesController::collectId(collect([$category_2])));
-                    $catId_2 = $category_2->id;
-                    $catCount_2 = CategoryProduct::whereIn('category_id', $idArray_2)->count();
-                    Categories::where('id', $catId_2)->update([ 'count' => $catCount_2 ]);
-                }
-            }
-            $idArray_1 = Arr::flatten(CategoriesController::collectId(collect([$category_1])));
-            $catId_1 = $category_1->id;
-            $catCount_1 = CategoryProduct::whereIn('category_id', $idArray_1)->count();
-            Categories::where('id', $catId_1)->update([ 'count' => $catCount_1 ]);
+    public static function countAllProductsInCategories()
+    {
+        $categories = Categories::all();
+        foreach ($categories as $category) {
+            self::countProductsInCategory($category->id);
         }
-
-        return true;
     }
+
 
     static function collectId($collection){
         $arr = [];

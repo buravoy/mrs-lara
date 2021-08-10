@@ -11,7 +11,7 @@
         position: relative;
         overflow: hidden;
         transition: .2s;
-        margin: 0 15px 20px;
+        margin: 0 15px 30px;
 
         @media (max-width: 992px) {
             margin: 0 10px 20px;
@@ -66,7 +66,7 @@
                     position: absolute;
                     width: calc(100% + 5px);
                     height: 1px;
-                    right: -3px;
+                    right: -2px;
                     top: 8px;
                     transform: rotate(-15deg);
                     background-color: black;
@@ -84,6 +84,10 @@
 
         &:hover {
             & .title {
+                color: darken($cyan, 15%);
+            }
+
+            & .description {
                 opacity: 1;
             }
 
@@ -100,7 +104,7 @@
             display: flex;
             align-items: start;
             transition: .2s;
-            opacity: .7;
+            color: darken($cyan, 9%);
             @media (max-width: 420px) {
                 height: 35px;
             }
@@ -116,18 +120,30 @@
             }
         }
 
+        .description {
+            font-size: .7rem;
+            font-family: $condensed;
+            padding: 5px 5px 0;
+            text-align: justify;
+            height: 31px;
+            overflow: hidden;
+            opacity: .7;
+            transition: .2s;
+        }
+
         .about {
-            text-align: center;
-            margin-top: 5px;
+            text-align: right;
+            margin-top: -5px;
             a {
                 font-family: $condensed;
                 font-weight: 500;
-                opacity: .5;
-                font-size: 85%;
+                opacity: .4;
+                font-size: 75%;
                 transition: .2s;
+                margin-top: -5px;
 
                 &:hover {
-                    opacity: 1;
+                    opacity: .6;
                 }
             }
         }
@@ -144,7 +160,7 @@
         cursor: pointer;
 
         @media (max-width: 420px) {
-            height: 190px;
+            height: 200px;
         }
 
         &:before {
@@ -192,12 +208,48 @@
             top: 0;
             right: 0;
             background: $white;
-            padding: 5px 7px;
+            padding: 10px 12px;
             margin: 0;
             transition: .2s;
 
             &:hover {
                 color: $cyan;
+            }
+        }
+    }
+
+    .attributes {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        min-width: 300px;
+        width: 50%;
+
+        li {
+            font-family: $condensed;
+            display: flex;
+            align-items: center;
+
+            &:nth-child(odd) {
+                background-color: #f3f3f3;
+            }
+
+            span{
+                width: 50%;
+                display: block;
+                padding: 5px;
+                line-height: 15px;
+
+                &:first-child{
+                    font-size: .8rem;
+                }
+
+                &:last-child {
+                    font-size: 1rem;
+                    font-weight: 500;
+                    text-transform: uppercase;
+                }
+
             }
         }
     }
@@ -224,23 +276,38 @@
             width: 30px;
             height: 30px;
             border-radius: 50%;
+            @media (max-width: 576px) {
+                width: 20px;
+                height: 20px;
+                i {
+                    margin-top: 2px;
+                    font-size: 80%;
+                }
+            }
         }
 
         &-prev {
             i {
                 margin-right: 3px;
+                @media (max-width: 576px) {
+                    margin-right: 1px;
+                }
             }
         }
 
         &-next {
             i {
                 margin-left: 3px;
+                @media (max-width: 576px) {
+                    margin-left: 1px;
+                }
             }
         }
     }
 
     &-indicators {
         position: unset;
+        flex-wrap: wrap;
         li {
             text-indent: unset;
             width: unset;
@@ -251,6 +318,9 @@
             height: 50px;
             border: 1px solid #dee2e6;
             overflow: hidden;
+            @media (max-width: 576px) {
+                height: 35px;
+            }
         }
     }
 }

@@ -39,8 +39,8 @@ Route::group([
     Route::crud('feeds', 'FeedsCrudController');
     Route::crud('feeds', 'FeedsCrudController');
 
-    Route::post('count-goods', [CategoriesController::class, 'countProductsInCategory'])->name('count-goods');
-    Route::post('count-goods-in-menu', [CategoriesController::class, 'countProductsInMenu'])->name('count-goods-in-menu');
+    Route::post('count-goods', [CategoriesController::class, 'RequestCountProductsInCategory'])->name('count-goods');
+    Route::post('count-goods-in-menu', [CategoriesController::class, 'countAllProductsInCategories'])->name('count-goods-in-menu');
 
     Route::post('upload-categories', [FileUploadController::class, 'categoryXmlPostUpload'])->name('xml-category-upload');
     Route::post('import-categories', [CategoriesCrudController::class, 'categoryXmlImport'])->name('xml-category-import');

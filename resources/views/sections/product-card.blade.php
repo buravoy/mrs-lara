@@ -4,16 +4,23 @@
     @endif
 
     <div
-        class="product-img"
-        data-source="{{ json_encode($product->image) }}"
-        data-title="{{ $product->name }}">
-
+        class="product-img img-popup"
+        @if (!empty($product->image)) data-source="{{ json_encode($product->image) }}" @endif
+        data-title="{{ $product->name }}"
+        data-attributes="{{ $product->attributes }}"
+        data-url="{{ route('product-info') }}"
+        data-away="{{ route('away') }}/{{ $product->slug }}"
+    >
         @include('sections.rating', ['value' => $product->rating])
-        <img src="{{ $product->image[0] }}" alt="">
 
+        @if (!empty($product->image))
+            <img src="{{ $product->image[0] }}" alt="">
+        @else
+            <i class="far fa-image font-30 grey-light"></i>
+        @endif
     </div>
 
-    <a href="#">
+    <a href="{{ route('away') }}/{{ $product->slug }}" target="_blank">
         <div class="price">
             @if($product->old_price)
                 <p class="old">{{ $product->old_price }}</p>
@@ -24,9 +31,13 @@
         <div class="title">
             <h2>{{ $product->name }}</h2>
         </div>
+
+        <div class="description">
+            <p>{{ $product->description_1 }}</p>
+        </div>
     </a>
 
     <div class="about">
-        <a href="#">Подробнее</a>
+        <a href="{{ route('product') }}/{{ $product->slug }}"><i class="fas fa-info-circle"></i></a>
     </div>
 </div>
