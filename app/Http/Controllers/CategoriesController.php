@@ -12,16 +12,26 @@ use Illuminate\Support\Arr;
 
 class CategoriesController extends Controller
 {
-    public function index($category = null, $discount = null)
+    public function index($category = null, $attr = null, $discount = null)
     {
         if($discount != null && $discount != 'discount') abort(404);
         if(!$category) abort(404);
 
-        $catIdWithChild = Categories::where('slug', $category)->with('allChild')->first();
+        $catIdWithChild = Categories::where('slug', $category)->first();
         $idArray = Arr::flatten(self::collectId(collect([$catIdWithChild])));
         $productsId = CategoryProduct::whereIn('category_id', $idArray)->get('product_id');
         $products = Products::whereIn('id', $productsId);
+
         if($discount) $products->where('discount','<>', null);
+        if($attr && $attr != 'all') {
+            $attrArr = explode('_', $attr);
+
+//            dd($attr[0]);
+
+//            $products->whereRaw('JSON_CONTAINS(attributes->pol)', [36]);;
+
+            dump($products);
+        }
 
         $attributesGroups = Groups::with('attributes')->get();
         $productsAttributes = Products::whereIn('id', $productsId)->pluck('attributes')->toArray();
@@ -43,13 +53,16 @@ class CategoriesController extends Controller
             }
         }
 
+        $allowDiscount = (boolean)Products::whereIn('id', $productsId)->where('discount','<>', null)->first();
+
         $filters = collect([
             'route' => 'category',
             'discount' => [
                 'link' => $discount ? null : 'discount',
-//                'count' =>
+                'count' => $allowDiscount
             ],
             'category' => $catIdWithChild,
+            'attribute' => $attr,
             'attributes' => $attributesGroups
         ]);
 

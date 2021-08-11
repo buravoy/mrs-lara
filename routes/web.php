@@ -30,9 +30,9 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/favorites', function () {
 //    Route::get('{reviewSlug}', [Front\NewsResearch\ReviewController::class, 'show'])->name('show');
 //});
 
-Route::get('/category/{category?}/{discount?}', [CategoriesController::class, 'index'])->name('category');
+Route::get('/category/{category?}/{attr?}/{discount?}', [CategoriesController::class, 'index'])->name('category');
 
-Route::get('/filter/{category?}/{params?}', [FilterController::class, 'index'])->name('filter');
+//Route::get('/filter/{category?}/{params?}/{discount?}', [FilterController::class, 'index'])->name('filter');
 
 
 

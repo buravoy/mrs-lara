@@ -25,6 +25,7 @@ class Products extends Model
 //     protected $dates = [];
     protected $casts = [
         'image' => 'array',
+//        'attributes' => 'json'
     ];
 
     /*
