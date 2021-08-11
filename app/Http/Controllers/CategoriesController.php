@@ -45,7 +45,10 @@ class CategoriesController extends Controller
 
         $filters = collect([
             'route' => 'category',
-            'discount' => $discount ? null : 'discount',
+            'discount' => [
+                'link' => $discount ? null : 'discount',
+//                'count' =>
+            ],
             'category' => $catIdWithChild,
             'attributes' => $attributesGroups
         ]);

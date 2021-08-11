@@ -17,8 +17,12 @@
 
     <h4>Распродажа</h4>
     <div>
-        <a href="{{ route($filters['route'], ['category' => $filters['category']->slug, 'discount' => $filters['discount']]) }}"
-           class="btn-cyan mb-1 @if(!$filters['discount']) f-w-9 @endif">распродажа</a>
+
+        <a href="{{ route($filters['route'], ['category' => $filters['category']->slug, 'discount' => $filters['discount']['link']]) }}"
+           class="btn-cyan mb-1 @if(!$filters['discount']) f-w-9 @endif">
+            распродажа
+        </a>
+
     </div>
 
     <hr>
@@ -27,7 +31,7 @@
     <div>
         @foreach($filters['attributes'] as $attribute)
             @if($attribute->attributes->count() > 1)
-            <p>{{ $attribute->name }}</p>
+                <p>{{ $attribute->name }}</p>
                 @foreach($attribute->attributes as $value)
                     <a href="#" class="btn-cyan mb-1">{{ $value->name }}</a>
                 @endforeach

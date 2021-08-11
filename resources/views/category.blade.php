@@ -32,6 +32,8 @@
                 <div class="col-12 col-md-9">
                     <p class="mb-2">найдено: {{ $products->links()->paginator->total() }}</p>
 
+                    @dump($products->links())
+
                     <div class="">
                         @foreach($filters['category']->allChild->sortBy('sort') as $cate)
                             @if($cate->count)
@@ -43,11 +45,15 @@
 {{--                    @dump($products->items())--}}
 
                     <div class="row">
-                        @foreach($products as $product)
-                            <div class="col-6 col-sm-4 col-lg-3 pb-2 px-0">
-                                @include('sections.product-card', ['product' => $product])
-                            </div>
-                        @endforeach
+                        @if(!empty($products->items()))
+                            @foreach($products as $product)
+                                <div class="col-6 col-sm-4 col-lg-3 pb-2 px-0">
+                                    @include('sections.product-card', ['product' => $product])
+                                </div>
+                            @endforeach
+                        @else
+                            <p>Ничего не найдено</p>
+                        @endif
                     </div>
                 </div>
             </div>
