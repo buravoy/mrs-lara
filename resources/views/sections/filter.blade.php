@@ -40,5 +40,5 @@
     </div>
 
 
-    @dump($filters)
+{{--    @dump($filters)--}}
 </div>

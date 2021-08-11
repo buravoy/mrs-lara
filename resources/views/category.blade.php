@@ -32,7 +32,7 @@
                 <div class="col-12 col-md-9">
                     <p class="mb-2">найдено: {{ $products->links()->paginator->total() }}</p>
 
-                    @dump($products->links())
+{{--                    @dump($products->links())--}}
 
                     <div class="">
                         @foreach($filters['category']->allChild->sortBy('sort') as $cate)
