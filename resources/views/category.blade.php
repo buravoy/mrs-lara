@@ -9,7 +9,7 @@
 @endpush
 
 @section('title')
-    {{ $title }}
+    {{ $category->name }}
 @endsection
 
 @section('content')
@@ -19,7 +19,7 @@
         <div class="py-3">
 
             <div class="mb-3">
-                <h1 class="font-11 mb-3">{{ $title }}</h1>
+                <h1 class="font-11 mb-3">{{ $category->name }}</h1>
                 <p class="mb-4"> {{ $description }}</p>
             </div>
 
@@ -35,7 +35,7 @@
 {{--                    @dump($products->links())--}}
 
                     <div class="">
-                        @foreach($filters['category']->allChild->sortBy('sort') as $cat)
+                        @foreach($category->allChild->sortBy('sort') as $cat)
                             @if($cat->count)
                                 <a href="{{ route('category',['category' => $cat->slug]) }}" class="btn-cyan mb-1">{{ $cat->short_name }}</a>
                             @endif

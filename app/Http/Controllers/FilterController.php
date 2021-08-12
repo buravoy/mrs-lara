@@ -2,32 +2,76 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attributes;
 use App\Models\Categories;
 use App\Models\CategoryProduct;
 use App\Models\Groups;
 use App\Models\Products;
+use App\Modules\Functions;
 use App\Modules\Generator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 class FilterController extends Controller
 {
-    public function index($category = null, $params = null, $discount = null)
+    public function query($params = null)
     {
+        $params = collect(explode('/', $params));
+        $productsData = Functions::productsData($params->first());
+        $params->forget($params->keys()->first());
+
+        if ($params->last() == 'discount') {
+            $params->forget($params->keys()->last());
+        }
+
 
         dump($params);
 
-        if($discount != null && $discount != 'discount') abort(404);
 
-        if(!$category) abort(404);
 
-        $catIdWithChild = Categories::where('slug', $category)->first();
-        $idArray = Arr::flatten(CategoriesController::collectId(collect([$catIdWithChild])));
-        $productsId = CategoryProduct::whereIn('category_id', $idArray)->get('product_id');
-        $products = Products::whereIn('id', $productsId);
-        if($discount) $products->where('discount','<>', null);
+        $productsQuery = $productsData['query'];
 
+        foreach ($params as $param) {
+            $param = explode('_', $param);
+            $groupSlug = $param[0];
+            unset($param[0]);
+
+            foreach ($param as $seekSlug) {
+                $seekId = Attributes::where('slug', $seekSlug)->pluck('id');
+
+
+            }
+//
+
+
+//            dd($attrArr[1]);
+
+            $products->whereJsonContains('attributes->' . $attrArr[0], $attrValue);
+
+//            dump($products);
+
+        }
+
+
+
+//        if ($attr && $attr != 'all') {
+//
+//        }
+
+//        $allowDiscount = (boolean)Products::whereIn('id', $productsId)->where('discount', '<>', null)->first();
+//        return view('category', [
+//            'products' => '',
+//            'category' => '',
+//            'description' => '',
+//            'filters' => ''
+//        ]);
+    }
+
+    public static function availableFilters($productsId)
+    {
         $attributesGroups = Groups::with('attributes')->get();
+
+//        dd($attributesGroups);
         $productsAttributes = Products::whereIn('id', $productsId)->pluck('attributes')->toArray();
 
         $mergedAttributes = [];
@@ -47,23 +91,8 @@ class FilterController extends Controller
             }
         }
 
-        $allowDiscount = (boolean)Products::whereIn('id', $productsId)->where('discount','<>', null)->first();
+        return $attributesGroups;
 
-        $filters = collect([
-            'route' => 'filter',
-            'discount' => [
-                'link' => $discount ? null : 'discount',
-                'count' => $allowDiscount
-            ],
-            'category' => $catIdWithChild,
-            'attributes' => $attributesGroups
-        ]);
 
-        return view('category', [
-            'products' => $products->orderBy('price', 'asc')->paginate(10),
-            'title' => $catIdWithChild->name,
-            'description' => Generator::categoryDescription($catIdWithChild),
-            'filters' => $filters
-        ]);
     }
 }

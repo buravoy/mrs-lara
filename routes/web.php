@@ -32,6 +32,10 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/favorites', function () {
 
 Route::get('/category/{category?}/{attr?}/{discount?}', [CategoriesController::class, 'index'])->name('category');
 
+
+Route::get('/filter/{params?}', [FilterController::class, 'query'])->where('params', '(.*)')->name('filter');
+
+
 //Route::get('/filter/{category?}/{params?}/{discount?}', [FilterController::class, 'index'])->name('filter');
 
 
