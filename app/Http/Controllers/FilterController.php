@@ -24,11 +24,6 @@ class FilterController extends Controller
             $params->forget($params->keys()->last());
         }
 
-
-        dump($params);
-
-
-
         $productsQuery = $productsData['query'];
 
         foreach ($params as $param) {
@@ -36,35 +31,24 @@ class FilterController extends Controller
             $groupSlug = $param[0];
             unset($param[0]);
 
-            foreach ($param as $seekSlug) {
-                $seekId = Attributes::where('slug', $seekSlug)->pluck('id');
+            $seekId = Attributes::whereIn('slug', $param)->pluck('id');
 
-
-            }
-//
-
-
-//            dd($attrArr[1]);
-
-            $products->whereJsonContains('attributes->' . $attrArr[0], $attrValue);
-
-//            dump($products);
-
+            $productsQuery = $productsQuery->where(function($query) use($seekId, $groupSlug) {
+                foreach($seekId as $id) {
+                    $query->orWhereJsonContains('attributes->' . $groupSlug , $id);
+                }
+            });
         }
 
+        $filteredProducts = $productsQuery->orderBy('price', 'asc')->paginate(10);
 
-
-//        if ($attr && $attr != 'all') {
-//
-//        }
-
-//        $allowDiscount = (boolean)Products::whereIn('id', $productsId)->where('discount', '<>', null)->first();
-//        return view('category', [
-//            'products' => '',
-//            'category' => '',
-//            'description' => '',
-//            'filters' => ''
-//        ]);
+        return view('category', [
+            'products' => $filteredProducts,
+            'category' => $productsData['category'],
+            'description' => Generator::categoryDescription($productsData['category']),
+            'filters' => FilterController::availableFilters($productsData['productsId']),
+            'filters_prefix' => ''
+        ]);
     }
 
     public static function availableFilters($productsId)
