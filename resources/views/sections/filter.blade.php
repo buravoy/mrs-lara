@@ -6,8 +6,8 @@
     <h4>Посмотрите еще:</h4>
 
     <div>
-        @foreach($category->parent->allChild->sortBy('sort') as $categoryFirst)
-            @if($categoryFirst->id != $category->id)
+        @foreach($category->parent->allChild->sortByDesc('count') as $categoryFirst)
+            @if($categoryFirst->id != $category->id && $categoryFirst->count > 0)
                 <a href="{{ route('category',['category' => $categoryFirst->slug]) }}" class="btn-cyan mb-1">{{ $categoryFirst->short_name }}</a>
             @endif
         @endforeach

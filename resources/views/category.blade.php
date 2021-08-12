@@ -35,7 +35,7 @@
 {{--                    @dump($products->links())--}}
 
                     <div class="">
-                        @foreach($category->allChild->sortBy('sort') as $cat)
+                        @foreach($category->allChild->sortByDesc('count') as $cat)
                             @if($cat->count)
                                 <a href="{{ route('category',['category' => $cat->slug]) }}" class="btn-cyan mb-1">{{ $cat->short_name }}</a>
                             @endif
