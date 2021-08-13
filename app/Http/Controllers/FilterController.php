@@ -16,6 +16,7 @@ class FilterController extends Controller
 {
     public function query($params = null)
     {
+
         $params = collect(explode('/', $params));
         $productsData = Functions::productsData($params->first());
         $params->forget($params->keys()->first());
@@ -46,8 +47,7 @@ class FilterController extends Controller
             'products' => $filteredProducts,
             'category' => $productsData['category'],
             'description' => Generator::categoryDescription($productsData['category']),
-            'filters' => FilterController::availableFilters($productsData['productsId']),
-            'filters_prefix' => ''
+            'filters' => FilterController::availableFilters($productsData['productsId'])
         ]);
     }
 

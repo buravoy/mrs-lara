@@ -15,12 +15,18 @@
 @push('after_scripts')
     <script>
         $('.count-goods-in-menu').on('click', function () {
+
+            $(this).attr('disabled', true);
+
             $.ajax({
                 async: true,
                 type: "POST",
                 dataType: "json",
                 url: '{{ route('count-goods-in-menu') }}',
-                success: (response) => {  console.log(response) }
+                success: (response) => {
+                    console.log(response)
+                    $(this).attr('disabled', false);
+                }
             })
                 .done(function (response) {
                     console.log(response)

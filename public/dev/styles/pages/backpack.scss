@@ -108,3 +108,22 @@ button:focus {
     line-height: 14px;
     font-size: 14px;
 }
+
+.CodeMirror-scrollbar-filler {
+    background-color: #272727 !important;
+}
+
+.CodeMirror-gutter-filler {
+    left: 0;
+    bottom: 0;
+    background-color: transparent !important;
+}
+
+.CodeMirror-simplescroll-horizontal {
+    height: 15px !important;
+}
+
+.cm-s-liquibyte div.CodeMirror-simplescroll-horizontal div,
+.cm-s-liquibyte div.CodeMirror-simplescroll-vertical div {
+    background-color: #ff4444 !important;
+}

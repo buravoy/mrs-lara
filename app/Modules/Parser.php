@@ -71,16 +71,16 @@ class Parser
             'category' => $fields['offer_category']
         ];
 
+        if(isset($fields['offer_available'])) $functions['available'] = $fields['offer_available'];
+
         $functionsAttributes = [];
 
         foreach ($attributesGroups as $attributeGroup) {
             if(isset( $fields['offer_'.$attributeGroup->slug] )) {
-
                 $functionsAttributes['offer_'.$attributeGroup->slug] = [
                     'slug' => $attributeGroup->slug,
                     'function' => $fields['offer_'.$attributeGroup->slug]
                 ];
-
             }
         }
 
@@ -96,6 +96,13 @@ class Parser
             $offerOldPrice = $functions['old_price']($offerObj);
             $offerDiscount = $offerOldPrice ? ceil(($offerOldPrice - $offerPrice) / $offerOldPrice * 100) : null;
             $productCatsArr = $functions['category']($offerObj);
+
+            if(isset($fields['offer_available'])) {
+                $functions['available'] = $fields['offer_available'];
+                $productAvailable = $functions['available']($offerObj);
+            }
+
+
             $productAttributes = [];
 
             if (is_string($offerImg)) {
@@ -127,7 +134,6 @@ class Parser
                     if ($attributeInBase != null) {
                         $productAttributes[$function['slug']][] = $attributeInBase;
                     }
-
                 }
             }
 
@@ -142,8 +148,13 @@ class Parser
                 'href' => $functions['href']($offerObj),
                 'parser_slug' => $slug,
                 'rating' => rand(40, 50) / 10,
-                'discount' => $offerDiscount
+                'discount' => $offerDiscount,
+                'deleted_at' => null
             ];
+
+            if(isset($productAvailable) && !$productAvailable) {
+                $product['deleted_at'] = now();
+            }
 
             if (Products::where('uniq_id', $uniqId)->exists()) {
                 $productExistAttributes = json_decode(Products::where('uniq_id', $uniqId)->pluck('attributes')->first());
@@ -151,7 +162,9 @@ class Parser
                 $productMergedAttributes = array_map('array_unique', $productMergedAttributes);
                 $product['attributes'] = json_encode($productMergedAttributes);
                 $updatedProduct = Products::where('uniq_id', $uniqId)->first();
+
                 $updatedProduct->update($product);
+
             } else {
                 $product['slug'] = SlugService::createSlug(Products::class, 'slug', $offerName);
                 $product['attributes'] = json_encode($productAttributes);
@@ -183,7 +196,7 @@ class Parser
             }
         }
 
-        CategoriesController::countAllProductsInCategories();
+        return true;
     }
 
     public function saveFunction(Request $request)

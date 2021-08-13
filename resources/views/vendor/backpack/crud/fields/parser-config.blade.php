@@ -8,7 +8,7 @@
     </div>
 
     <div class="col-md-4 parser-fields">
-        <label class="mb-3">Функции для основных полей:</label>
+        <label class="mb-3">Функции для основных полей: <span class="font-sm font-weight-normal text-error">(Все обязательно)</span></label>
 
         <div class="form-group w-100 d-flex">
             <label class="mr-3 font-sm">Уникальный ID товара:</label>
@@ -68,7 +68,7 @@
             <input name="offer_category" type="text" class="form-control funk" value="category">
         </div>
 
-        <p class="border rounded-md p-3">
+        <p class="border rounded-md mb-5 p-3">
             Должна возвращать массив <br> <span class="font-weight-bold"><i>НАЗВАНИЙ</i></span><br> конечных категорий.
             <br>
             <br>
@@ -77,6 +77,11 @@
             <span class="font-weight-bold">['Женские брюки', 'Спортивные брюки']</span>
         </p>
 
+        <label class="mb-3">Проверка наличия:</label>
+
+        <div class="form-group w-100">
+            <input name="offer_available" type="text" class="form-control funk" value="">
+        </div>
     </div>
 
 

@@ -52,6 +52,8 @@ class CategoriesController extends Controller
         foreach ($categories as $category) {
             self::countProductsInCategory($category->id);
         }
+
+        return true;
     }
 
 

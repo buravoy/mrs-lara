@@ -108,6 +108,9 @@
             const
                 $t = $(this),
                 name = $t.data('name');
+
+            $t.attr('disabled', true);
+
             $.ajax({
                 async: true,
                 type: "POST",
@@ -119,7 +122,12 @@
                     count_to: $count.val(),
                     mode: !!$('input[name=mode]').prop("checked")
                 },
-                success: (response) => {  console.log(response) }
+                success: (response) => {
+                    console.log(response)
+                    if (response) {
+                        $t.attr('disabled', false);
+                    }
+                }
             })
                 .done(function () {
 

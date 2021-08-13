@@ -11,7 +11,10 @@
                 @if($categoryFirst->child)
                     <div class="drop-categories-wrapper" style="display: none">
 
-                        <div class="w-100 h-100 row pt-3 pb-0 px-0 m-0 wrapper-bg" style="background-image: url('{{ asset($category->image) }}')">
+                        <div class="w-100 h-100 row pt-3 pb-0 px-0 m-0 wrapper-bg"
+                             @if($categoryFirst->image)
+                             style="background-image: url('{{ asset($categoryFirst->image) }}')"
+                             @endif>
                             @php
                                 $firstChildren = $categoryFirst->child;
                                 $key = 0;
@@ -25,11 +28,8 @@
                             @endphp
 
                             @foreach($cols as $col)
-{{--                                @dump($col)--}}
-{{--                                @if(count($col) > 0)--}}
                                 <div class="col-lg-3 col-md-6 col-12">
                                     @foreach($col as $firstChild)
-{{--                                        @if($firstChild->count)--}}
                                             <div class="sector mb-3">
 
                                             <a href="{{ route('category').'/'.$firstChild->slug }}" class="f-w-6 child-title d-flex align-items-center justify-content-between uppercase condensed px-3 py-1 mb-1">

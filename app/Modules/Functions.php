@@ -9,6 +9,39 @@ use Illuminate\Support\Arr;
 
 class Functions
 {
+    static function getFilterUrl($group, $attribute, $url)
+    {
+
+        return null;
+
+        $urlArr = collect(explode('/', $url));
+
+        $filterPage = $urlArr->first();
+        $urlArr->forget($urlArr->keys()->first());
+        $filterCategory = $urlArr->first();
+        $urlArr->forget($urlArr->keys()->first());
+        if ($urlArr->last() == 'discount') {
+            $filterDiscount = $urlArr->last();
+            $urlArr->forget($urlArr->keys()->last());
+        }
+
+        $filterString = '/';
+
+        foreach ($urlArr as $filterGroup) {
+           $groupArr = explode('_', $filterGroup);
+           $groupName = $groupArr[0];
+           unset($groupArr[0]);
+            $filterString = $filterString.$group;
+           foreach ($groupArr as $attr) {
+               $filterString = $filterString.'_'.$attr.'_'.$attribute;
+           }
+        }
+        dump($filterString);
+
+
+//        return $filterPage. '/' . $filterCategory . '/';
+    }
+
     static function productsData($category){
         $catIdWithChild = Categories::where('slug', $category)->first();
         $idArray = Arr::flatten(Functions::collectId(collect([$catIdWithChild])));
@@ -21,7 +54,6 @@ class Functions
             'productsId' => $productsId
         ]);
     }
-
 
     static function collectId($collection){
         $arr = [];

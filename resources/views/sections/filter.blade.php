@@ -22,9 +22,11 @@
             @if($filter->attributes->count() > 1)
                 <p>{{ $filter->name }}</p>
 
-
                 @foreach($filter->attributes as $attribute)
-                    <a href="{{ route('filter') }}/{{ $category->slug }}/{{ $filter->slug }}_{{ $attribute->slug }}"
+
+                    @php \App\Modules\Functions::getFilterUrl($filter->slug, $attribute->slug, Request::path()) @endphp
+
+                    <a href="{{ route('filter') }}"
                        class="btn-cyan mb-1">
                         {{ $attribute->name }}
                     </a>
@@ -36,5 +38,6 @@
     </div>
 
 
-    @dump($filters)
 </div>
+
+{{--@dump($selectedFilters)--}}
