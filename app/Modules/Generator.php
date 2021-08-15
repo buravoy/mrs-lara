@@ -6,8 +6,17 @@ class Generator
 {
     public static function categoryDescription($category) {
 
-//        dd($category);
+        return 'Купить ' . $category->name . ' CATEGORY GENERATOR';
+    }
 
-        return 'Купить ' . $category->name . ' AUTO GENERATOR';
+    public static function filterDescription($params) {
+
+        $paramString = '';
+
+        foreach ($params as $param) {
+            $paramString = $paramString . ' ' . $param;
+        }
+
+        return 'Купить ' . $paramString . ' FILTER GENERATOR';
     }
 }

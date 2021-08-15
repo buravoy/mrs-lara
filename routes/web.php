@@ -18,7 +18,7 @@ use App\Http\Controllers\FilterController;
 |
 */
 
-Route::get('/', [MainController::class, 'index']);
+Route::get('/', [MainController::class, 'index'])->name('index');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/favorites', function () {
     return view('favorites');

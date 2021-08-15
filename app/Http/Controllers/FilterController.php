@@ -21,11 +21,14 @@ class FilterController extends Controller
         $productsData = Functions::productsData($params->first());
         $params->forget($params->keys()->first());
 
+        $productsQuery = $productsData['query'];
+
         if ($params->last() == 'discount') {
+            $productsQuery->where('discount', true);
             $params->forget($params->keys()->last());
         }
 
-        $productsQuery = $productsData['query'];
+
 
         foreach ($params as $param) {
             $param = explode('_', $param);
@@ -41,42 +44,61 @@ class FilterController extends Controller
             });
         }
 
-        $filteredProducts = $productsQuery->orderBy('price', 'asc')->paginate(10);
+        $filteredProducts = $productsQuery;
+
+        $filteredProductsId = Functions::collectId($productsQuery->get('id'));
+
+        $availableCategoryFilters = CategoriesController::availableCategoryFilters($productsData['productsId']);
+
+        $availableFilters = self::availableFilters($availableCategoryFilters, $filteredProductsId, $params);
 
         return view('category', [
-            'products' => $filteredProducts,
+            'products' => $filteredProducts->orderBy('price', 'asc')->paginate(10),
             'category' => $productsData['category'],
-            'description' => Generator::categoryDescription($productsData['category']),
-            'filters' => FilterController::availableFilters($productsData['productsId'])
+            'description' => Generator::filterDescription($params),
+            'filters' => $availableFilters
         ]);
     }
 
-    public static function availableFilters($productsId)
+
+    public function availableFilters($categoryFilters, $filteredId, $params)
     {
+        $params = array_map(function ($item) { return explode('_',$item)[0]; }, $params->toArray());
+
         $attributesGroups = Groups::with('attributes')->get();
 
-//        dd($attributesGroups);
-        $productsAttributes = Products::whereIn('id', $productsId)->pluck('attributes')->toArray();
+        $productsAttributes = Products::whereIn('id', $filteredId)->pluck('attributes')->toArray();
 
         $mergedAttributes = [];
-        foreach ($productsAttributes as $attribute) $mergedAttributes = array_merge_recursive($mergedAttributes, (array)json_decode($attribute));
+        foreach ($productsAttributes as $attribute) {
+            $mergedAttributes = array_merge_recursive($mergedAttributes, (array)json_decode($attribute));
+        }
+
         $mergedAttributes = array_map('array_unique', $mergedAttributes);
 
+
         foreach ($attributesGroups as $key => $group) {
+
             if ( array_key_exists($group->slug, $mergedAttributes) === false ) {
                 unset($attributesGroups[$key]);
                 continue;
             }
 
+            if( array_search($group->slug, $params) !== false) {
+                $attributesGroups[$key] = $categoryFilters->where('slug', $group->slug)->first();
+            }
+
+
+
             foreach ($group->attributes as $k => $attribute) {
-                if ( array_search($attribute->id, $mergedAttributes[$group->slug]) === false ) {
+//                dump($attribute->id , $mergedAttributes[$group->slug]);
+
+                if ( array_search($attribute->id, $mergedAttributes[$group->slug] ) === false ) {
                     unset($group->attributes[$k]);
                 }
             }
         }
 
         return $attributesGroups;
-
-
     }
 }

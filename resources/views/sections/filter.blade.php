@@ -1,8 +1,8 @@
+@php
+use App\Modules\Functions;
+@endphp
+
 <div>
-
-
-
-
     <h4>Посмотрите еще:</h4>
 
     <div>
@@ -12,7 +12,6 @@
             @endif
         @endforeach
     </div>
-
 
     <hr>
 
@@ -24,14 +23,19 @@
 
                 @foreach($filter->attributes as $attribute)
 
-                    @php \App\Modules\Functions::getFilterUrl($filter->slug, $attribute->slug, Request::path()) @endphp
+{{--                    @dump( Functions::getFilterUrl($filter->slug, $attribute->slug, Request::path()) )--}}
+                    @php
+                        $filterUrlData = Functions::getFilterUrl($filter->slug, $attribute->slug, Request::path());
+                    @endphp
 
-                    <a href="{{ route('filter') }}"
-                       class="btn-cyan mb-1">
+{{--                    @dump($filterUrlData)--}}
+
+                    <a
+                        href="{{ route('index') }}/{{ $filterUrlData['link'] }}"
+                        class="btn-cyan mb-1 @if($filterUrlData['isActive']) red @endif ">
                         {{ $attribute->name }}
                     </a>
                 @endforeach
-
 
             @endif
         @endforeach

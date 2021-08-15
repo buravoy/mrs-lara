@@ -6,43 +6,71 @@ use App\Models\Categories;
 use App\Models\CategoryProduct;
 use App\Models\Products;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class Functions
 {
-    static function getFilterUrl($group, $attribute, $url)
+    static function getFilterUrl($group, $attribute, $url): array
     {
+        $urlArr = explode('/', $url);
+        $category = $urlArr[1];
+        unset($urlArr[0], $urlArr[1]);
+        $isActive = false;
+        $isThisGroup = false;
 
-        return null;
-
-        $urlArr = collect(explode('/', $url));
-
-        $filterPage = $urlArr->first();
-        $urlArr->forget($urlArr->keys()->first());
-        $filterCategory = $urlArr->first();
-        $urlArr->forget($urlArr->keys()->first());
-        if ($urlArr->last() == 'discount') {
-            $filterDiscount = $urlArr->last();
-            $urlArr->forget($urlArr->keys()->last());
+        foreach ($urlArr as $item) {
+            $seek = explode('_', $item);
+            if (array_search($attribute, $seek) !== false) {
+                $isActive = true;
+            }
         }
 
-        $filterString = '/';
 
-        foreach ($urlArr as $filterGroup) {
-           $groupArr = explode('_', $filterGroup);
-           $groupName = $groupArr[0];
-           unset($groupArr[0]);
-            $filterString = $filterString.$group;
-           foreach ($groupArr as $attr) {
-               $filterString = $filterString.'_'.$attr.'_'.$attribute;
-           }
+        if (!count($urlArr)) {
+            return [
+                'link' => 'filter/' . $category . '/' . $group . '_' . $attribute,
+                'isActive' => $isActive
+            ];
         }
-        dump($filterString);
+
+        $urlArr = array_map(function ($item) use ($group, $attribute) {
+
+//            dump($item);
+
+            if (strpos($item, $group) !== false && strpos($item, $attribute) == true) {
+                return str_replace('_' . $attribute, null, $item);
+            }
+
+            if (strpos($item, $group) !== false && strpos($item, $attribute) != true) {
+                return $item . '_' . $attribute;
+            }
+
+            return $item;
+        }, $urlArr);
+
+        $cleanUrlArr = array_diff($urlArr, [$group, null]);
 
 
-//        return $filterPage. '/' . $filterCategory . '/';
+
+        foreach ($cleanUrlArr as $item) if (strpos($item, $group) !== false) $isThisGroup = true;
+
+        if (!$isThisGroup && strpos($url, $attribute) == false) $cleanUrlArr[] = $group . '_' . $attribute;
+
+
+        if (!count($cleanUrlArr)) {
+            return [
+                'link' => 'category/' . $category,
+                'isActive' => $isActive
+            ];
+        }
+        return [
+            'link' => 'filter/' . $category . '/' . implode('/', $cleanUrlArr),
+            'isActive' => $isActive
+        ];
     }
 
-    static function productsData($category){
+    static function productsData($category): Collection
+    {
         $catIdWithChild = Categories::where('slug', $category)->first();
         $idArray = Arr::flatten(Functions::collectId(collect([$catIdWithChild])));
         $productsId = CategoryProduct::whereIn('category_id', $idArray)->get('product_id');
@@ -55,11 +83,12 @@ class Functions
         ]);
     }
 
-    static function collectId($collection){
+    static function collectId($collection): array
+    {
         $arr = [];
         foreach ($collection as $item) {
-            if(isset($item->id)) $arr[] = $item->id;
-            if(!empty($item->allChild)) $arr[] = self::collectId($item->allChild);
+            if (isset($item->id)) $arr[] = $item->id;
+            if (!empty($item->allChild)) $arr[] = self::collectId($item->allChild);
         }
         return $arr;
     }
