@@ -21,6 +21,7 @@ class CreateAttributesTable extends Migration
             $table->jsonb('form')->nullable();
             $table->string('slug');
             $table->integer('sort')->default(500);
+            $table->string('creator')->default('Personally');
             $table->softDeletes();
             $table->timestamps();
         });

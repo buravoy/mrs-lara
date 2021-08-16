@@ -171,6 +171,7 @@ class Parser
                 $product['slug'] = SlugService::createSlug(Products::class, 'slug', $offerName);
                 $product['attributes'] = json_encode($productAttributes);
                 $createdProduct = Products::create($product);
+
                 self::insertProductCategory($productCatsArr, $createdProduct);
             }
 
@@ -216,18 +217,18 @@ class Parser
     }
 
     function insertProductCategory($productCatsArr, $product) {
+
+        CategoryProduct::where('id', $product->id)->forceDelete();
+
         foreach ($productCatsArr as $productCatEntry)
         {
             $catId = Categories::where('name', $productCatEntry)->first()->id ?? false;
 
             if($catId) {
-                CategoryProduct::where('product_id', $product->id)->forceDelete();
-
                 CategoryProduct::insert([
                     'category_id' => $catId,
                     'product_id' => $product->id,
                 ]);
-
             } else {
                 $newCatId = Categories::insertGetId([
                     'name' => $productCatEntry,

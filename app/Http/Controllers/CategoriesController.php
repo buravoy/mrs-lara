@@ -35,9 +35,9 @@ class CategoriesController extends Controller
         $attributesGroups = Groups::with('attributes')->get()->toArray();
         $productsAttributes = Products::whereIn('id', $productsId)->pluck('attributes')->toArray();
 
-        $mergedAttributes = [];
-        foreach ($productsAttributes as $attribute) $mergedAttributes = array_merge_recursive($mergedAttributes, (array)json_decode($attribute));
-        $mergedAttributes = array_map('array_unique', $mergedAttributes);
+        $mergedAttributes = array_map('array_unique', array_merge_recursive(...array_map(function ($attribute) {
+            return (array)json_decode($attribute);
+        }, $productsAttributes)));
 
         foreach ($attributesGroups as $key => $group) {
             if ( !array_key_exists($group['slug'], $mergedAttributes ) ) {
@@ -50,6 +50,8 @@ class CategoriesController extends Controller
                 return null;
             }, $group['attributes']));
         }
+
+        dump($mergedAttributes);
 
         return $attributesGroups;
     }

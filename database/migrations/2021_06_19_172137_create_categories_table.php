@@ -18,6 +18,7 @@ class CreateCategoriesTable extends Migration
             $table->integer('parent_id')->nullable();
             $table->string('xml_id')->nullable();
             $table->boolean('show')->default(0);
+            $table->boolean('skip')->default(0);
             $table->string('name');
             $table->string('slug');
             $table->string('short_name')->nullable();
@@ -31,6 +32,7 @@ class CreateCategoriesTable extends Migration
             $table->integer('depth')->default(0);
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
+            $table->integer('count')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
