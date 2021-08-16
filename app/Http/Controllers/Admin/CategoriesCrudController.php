@@ -371,8 +371,6 @@ class CategoriesCrudController extends CrudController
             $xmlId = $category->attributes()->id ? (string)$category->attributes()->id : null;
             $xmlParent = $category->attributes()->parent ? (string)$category->attributes()->parent : null;
 
-
-
             if (Categories::where('xml_id', $xmlId)->exists()) {
                 $id = Categories::where('xml_id', $xmlId)->update([
                     'name' => $name,

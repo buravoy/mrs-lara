@@ -39,9 +39,6 @@ class CategoriesController extends Controller
         foreach ($productsAttributes as $attribute) $mergedAttributes = array_merge_recursive($mergedAttributes, (array)json_decode($attribute));
         $mergedAttributes = array_map('array_unique', $mergedAttributes);
 
-
-//       dump($mergedAttributes);
-
         foreach ($attributesGroups as $key => $group) {
             if ( !array_key_exists($group['slug'], $mergedAttributes ) ) {
                 unset($attributesGroups[$key]);

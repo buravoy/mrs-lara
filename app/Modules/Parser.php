@@ -2,9 +2,9 @@
 
 namespace App\Modules;
 
-use App\Http\Controllers\CategoriesController;
 use App\Models\Attributes;
 use App\Models\Categories;
+use App\Models\CategoryProduct;
 use App\Models\Feeds;
 use App\Models\Groups;
 use App\Models\Products;
@@ -165,29 +165,15 @@ class Parser
 
                 $updatedProduct->update($product);
 
+                self::insertProductCategory($productCatsArr, $updatedProduct);
+
             } else {
                 $product['slug'] = SlugService::createSlug(Products::class, 'slug', $offerName);
                 $product['attributes'] = json_encode($productAttributes);
                 $createdProduct = Products::create($product);
-
-                foreach ($productCatsArr as $productCatEntry)
-                {
-                    $catId = Categories::where('name', $productCatEntry)->first()->id ?? false;
-
-                    if($catId) {
-                        DB::table('category_product')->insert([
-                            'category_id' => $catId,
-                            'product_id' => $createdProduct->id,
-                        ]);
-                    } else {
-                        Categories::insertGetId([
-                            'name' => $productCatEntry,
-                            'slug' => SlugService::createSlug(Categories::class, 'slug', $productCatEntry),
-                        ]);
-                    }
-
-                }
+                self::insertProductCategory($productCatsArr, $createdProduct);
             }
+
 
             if ($mode == 'true') {
                 $countIteration++;
@@ -227,5 +213,32 @@ class Parser
         }
 
         return $offerArr;
+    }
+
+    function insertProductCategory($productCatsArr, $product) {
+        foreach ($productCatsArr as $productCatEntry)
+        {
+            $catId = Categories::where('name', $productCatEntry)->first()->id ?? false;
+
+            if($catId) {
+                CategoryProduct::where('product_id', $product->id)->forceDelete();
+
+                CategoryProduct::insert([
+                    'category_id' => $catId,
+                    'product_id' => $product->id,
+                ]);
+
+            } else {
+                $newCatId = Categories::insertGetId([
+                    'name' => $productCatEntry,
+                    'slug' => SlugService::createSlug(Categories::class, 'slug', $productCatEntry),
+                ]);
+
+                CategoryProduct::insert([
+                    'category_id' => $newCatId,
+                    'product_id' => $product->id,
+                ]);
+            }
+        }
     }
 }

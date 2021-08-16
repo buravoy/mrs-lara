@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use App\Http\Requests\AttributesRequest;
+use App\Models\Attributes;
 use App\Models\Groups;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Redirect;
-use phpDocumentor\Reflection\Location;
 
 /**
  * Class AttributesCrudController
@@ -24,6 +23,7 @@ class AttributesCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\BulkDeleteOperation { bulkDelete as traitBulkDelete; }
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -54,6 +54,25 @@ class AttributesCrudController extends CrudController
             },
             function ($value) {
                 $this->crud->addClause('where', 'group_id', $value);
+            }
+        );
+
+        CRUD::addFilter(
+            [
+                'name' => 'creator',
+                'type' => 'select2',
+                'label' => 'Кем создан',
+            ],
+            function () {
+                $creator = Attributes::pluck('creator')->unique()->values()->toArray();
+                $filterArr = [];
+                foreach ($creator as $item) $filterArr[$item] = $item;
+
+                return $filterArr;
+            },
+            function ($value) {
+
+                $this->crud->addClause('where', 'creator', $value);
             }
         );
     }
