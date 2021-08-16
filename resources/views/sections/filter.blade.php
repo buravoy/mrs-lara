@@ -18,14 +18,15 @@ use App\Modules\Functions;
     <h4>атрибуты</h4>
     <div>
         @foreach($filters as $filter)
-            @if($filter->attributes->count() > 1)
-                <p>{{ $filter->name }}</p>
+{{--            @dump($filter)--}}
+            @if(!empty($filter['attributes']))
+                <p>{{ $filter['name'] }}</p>
 
-                @foreach($filter->attributes as $attribute)
+                @foreach($filter['attributes'] as $attribute)
 
 {{--                    @dump( Functions::getFilterUrl($filter->slug, $attribute->slug, Request::path()) )--}}
                     @php
-                        $filterUrlData = Functions::getFilterUrl($filter->slug, $attribute->slug, Request::path());
+                        $filterUrlData = Functions::getFilterUrl($filter['slug'], $attribute['slug'], Request::path());
                     @endphp
 
 {{--                    @dump($filterUrlData)--}}
@@ -33,7 +34,7 @@ use App\Modules\Functions;
                     <a
                         href="{{ route('index') }}/{{ $filterUrlData['link'] }}"
                         class="btn-cyan mb-1 @if($filterUrlData['isActive']) red @endif ">
-                        {{ $attribute->name }}
+                        {{ $attribute['name'] }}
                     </a>
                 @endforeach
 

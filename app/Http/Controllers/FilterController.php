@@ -65,7 +65,7 @@ class FilterController extends Controller
     {
         $params = array_map(function ($item) { return explode('_',$item)[0]; }, $params->toArray());
 
-        $attributesGroups = Groups::with('attributes')->get();
+        $attributesGroups = Groups::with('attributes')->get()->toArray();
 
         $productsAttributes = Products::whereIn('id', $filteredId)->pluck('attributes')->toArray();
 
@@ -76,28 +76,23 @@ class FilterController extends Controller
 
         $mergedAttributes = array_map('array_unique', $mergedAttributes);
 
-
         foreach ($attributesGroups as $key => $group) {
-
-            if ( array_key_exists($group->slug, $mergedAttributes) === false ) {
+            if ( !array_key_exists($group['slug'], $mergedAttributes ) ) {
                 unset($attributesGroups[$key]);
                 continue;
             }
 
-            if( array_search($group->slug, $params) !== false) {
-                $attributesGroups[$key] = $categoryFilters->where('slug', $group->slug)->first();
-            }
-
-
-
-            foreach ($group->attributes as $k => $attribute) {
-//                dump($attribute->id , $mergedAttributes[$group->slug]);
-
-                if ( array_search($attribute->id, $mergedAttributes[$group->slug] ) === false ) {
-                    unset($group->attributes[$k]);
-                }
-            }
+            $attributesGroups[$key]['attributes'] = array_filter(array_map(function ($item) use ($group,$mergedAttributes){
+                if ( array_search($item['id'],$mergedAttributes[$group['slug']]) ) return $item;
+                return null;
+            }, $group['attributes']));
         }
+
+
+        dump($attributesGroups);
+        dump($categoryFilters);
+
+
 
         return $attributesGroups;
     }

@@ -22,38 +22,36 @@ class CategoriesController extends Controller
         $productsData = Functions::productsData($category);
         $productsQuery = $productsData['query'];
 
-        $availableFilters = self::availableCategoryFilters($productsData['productsId']);
-
-//        Session::flash('availableFilters', $availableFilters);
-
         return view('category', [
             'products' => $productsQuery->orderBy('price', 'asc')->paginate(10),
             'category' => $productsData['category'],
             'description' => Generator::categoryDescription($productsData['category']),
-            'filters' => $availableFilters
+            'filters' => self::availableCategoryFilters($productsData['productsId'])
         ]);
     }
 
     public static function availableCategoryFilters($productsId)
     {
-        $attributesGroups = Groups::with('attributes')->get();
+        $attributesGroups = Groups::with('attributes')->get()->toArray();
         $productsAttributes = Products::whereIn('id', $productsId)->pluck('attributes')->toArray();
 
         $mergedAttributes = [];
         foreach ($productsAttributes as $attribute) $mergedAttributes = array_merge_recursive($mergedAttributes, (array)json_decode($attribute));
         $mergedAttributes = array_map('array_unique', $mergedAttributes);
 
+
+//       dump($mergedAttributes);
+
         foreach ($attributesGroups as $key => $group) {
-            if ( array_key_exists($group->slug, $mergedAttributes) === false) {
+            if ( !array_key_exists($group['slug'], $mergedAttributes ) ) {
                 unset($attributesGroups[$key]);
                 continue;
             }
 
-            foreach ($group->attributes as $k => $attribute) {
-                if ( array_search($attribute->id, $mergedAttributes[$group->slug]) === false ) {
-                    unset($group->attributes[$k]);
-                }
-            }
+            $attributesGroups[$key]['attributes'] = array_filter(array_map(function ($item) use ($group,$mergedAttributes){
+                if ( array_search($item['id'],$mergedAttributes[$group['slug']]) ) return $item;
+                return null;
+            }, $group['attributes']));
         }
 
         return $attributesGroups;
