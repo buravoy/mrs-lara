@@ -71,9 +71,11 @@ class Functions
 
     static function productsData($category): Collection
     {
-        $catIdWithChild = Categories::where('slug', $category)->first();
+        $catIdWithChild = Categories::where('slug', $category)->with('parent')->select('id', 'slug', 'name', 'count')->first();
         $idArray = Arr::flatten(Functions::collectId(collect([$catIdWithChild])));
         $productsId = CategoryProduct::whereIn('category_id', $idArray)->get('product_id');
+
+//        dump($catIdWithChild);
 
         return collect([
             'query' => Products::whereIn('id', $productsId),
@@ -88,7 +90,11 @@ class Functions
         $arr = [];
         foreach ($collection as $item) {
             if (isset($item->id)) $arr[] = $item->id;
-            if (!empty($item->allChild)) $arr[] = self::collectId($item->allChild);
+            $child = $item->allChild;
+
+//            dd($child);
+
+            if (!empty($child)) $arr[] = self::collectId($child);
         }
         return $arr;
     }

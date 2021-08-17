@@ -68,8 +68,8 @@ class FilterController extends Controller
             return (array)json_decode($attribute);
         }, $filteredProductsAttributes)));
 
-        dump($categoryFilters);
-        dump($mergedAttributes);
+//        dump($categoryFilters);
+//        dump($mergedAttributes);
 
         return $categoryFilters;
     }

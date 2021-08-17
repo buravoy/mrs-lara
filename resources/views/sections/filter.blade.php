@@ -6,13 +6,15 @@ use App\Modules\Functions;
     <h4>Посмотрите еще:</h4>
 
     <div>
+        @dump($category)
+
         @if($category->parent)
 
-        @foreach($category->parent->allChild->sortByDesc('count') as $categoryFirst)
-            @if($categoryFirst->id != $category->id && $categoryFirst->count > 0)
-                <a href="{{ route('category',['category' => $categoryFirst->slug]) }}" class="btn-cyan mb-1">{{ $categoryFirst->short_name }}</a>
-            @endif
-        @endforeach
+            @foreach($category->parent->allChild->sortByDesc('count') as $categoryFirst)
+                @if($categoryFirst->id != $category->id && $categoryFirst->count > 0)
+                    <a href="{{ route('category',['category' => $categoryFirst->slug]) }}" class="btn-cyan mb-1">{{ $categoryFirst->short_name }}</a>
+                @endif
+            @endforeach
 
         @endif
 

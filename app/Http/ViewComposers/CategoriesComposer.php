@@ -13,7 +13,7 @@ class CategoriesComposer
     public function compose(View $view)
     {
         return $view->with('categories',
-            Categories::where('show', true)
+            Categories::where('show', true)->with('parent')
                 ->orderBy('sort', 'asc')
                 ->get()
         );

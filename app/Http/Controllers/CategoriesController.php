@@ -51,8 +51,6 @@ class CategoriesController extends Controller
             }, $group['attributes']));
         }
 
-        dump($mergedAttributes);
-
         return $attributesGroups;
     }
 
