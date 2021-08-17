@@ -21,7 +21,7 @@
         </p>
     </div>
     <div class="d-flex align-items-center">
-        <p class="mb-0 mr-5">Товаров: <b>{{ $entry->count }}</b></p>
+        <p class="mb-0 mr-5 count-goods" style="cursor: pointer" data-slug="{{ $entry->slug }}">Товаров: <b>{{ $entry->count }}</b></p>
         <a href="{{ route('category') }}/{{ $entry->slug }}" target="_blank">Перейти</a>
     </div>
 </div>

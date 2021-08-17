@@ -71,6 +71,6 @@ class FilterController extends Controller
         dump($categoryFilters);
         dump($mergedAttributes);
 
-        return [];
+        return $categoryFilters;
     }
 }

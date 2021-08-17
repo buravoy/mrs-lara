@@ -56,26 +56,27 @@ class CategoriesController extends Controller
         return $attributesGroups;
     }
 
-    public static function countProductsInCategory($catId)
+    public function RequestCountProductsInCategory(Request $request)
     {
-        $categoriesWithChild = Categories::where('id', $catId)->with('allChild')->get();
-        $idArray = Arr::flatten(Functions::collectId($categoriesWithChild));
-        $productsCount = CategoryProduct::whereIn('category_id', $idArray)->count();
-        Categories::where('id', $catId)->update([ 'count' => $productsCount ]);
+        return self::countProductsInCategory($request->slug);
+    }
+
+    public static function countProductsInCategory($catSlug)
+    {
+
+        $productsData = Functions::productsData($catSlug);
+        $productsQuery = $productsData['query'];
+        $productsCount = $productsQuery->count();
+        Categories::where('slug', $catSlug)->update([ 'count' => $productsCount ]);
 
         return $productsCount;
     }
 
-    public function RequestCountProductsInCategory(Request $request)
-    {
-        return self::countProductsInCategory($request->id);
-    }
-
     public static function countAllProductsInCategories()
     {
-        $categories = Categories::all();
+        $categories = Categories::all()->pluck('slug');
         foreach ($categories as $category) {
-            self::countProductsInCategory($category->id);
+            self::countProductsInCategory($category);
         }
 
         return true;
