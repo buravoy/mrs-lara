@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\CategoriesController;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\DB;
 
 
 class Categories extends Model

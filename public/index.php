@@ -53,3 +53,9 @@ $response = tap($kernel->handle(
 ))->send();
 
 $kernel->terminate($request, $response);
+
+
+// get time page generation
+$time_end = microtime(true);
+$time = $time_end - LARAVEL_START;
+if ($request->route()->getPrefix() != 'admin') printf('<span class="script-time">%.4F</span>', $time);

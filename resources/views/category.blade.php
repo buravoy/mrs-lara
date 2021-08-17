@@ -17,7 +17,6 @@
         @include('sections.categories')
 
         <div class="py-3">
-
             <div class="mb-3">
                 <h1 class="font-11 mb-3">{{ $category->name }}</h1>
                 <p class="mb-4"> {{ $description }}</p>

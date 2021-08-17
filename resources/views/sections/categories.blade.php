@@ -8,6 +8,7 @@
                         <i class="fas fa-chevron-down ml-3"></i>
                     </div>
                 </div>
+
                 @if($categoryFirst->child)
                     <div class="drop-categories-wrapper" style="display: none">
 
@@ -20,7 +21,7 @@
                                 $key = 0;
                                 $cols = collect([ collect([]), collect([]), collect([]), collect([]) ]);
                                 foreach( $firstChildren as $item ) {
-                                    if($item->count > 0) {
+                                    if($item->count !== false) {
                                         $cols[$key]->push($item);
                                         if (++$key > 3) $key = 0;
                                     }
@@ -49,10 +50,8 @@
                                                 </div>
                                             @endif
                                         </div>
-{{--                                        @endif--}}
                                     @endforeach
                                 </div>
-{{--                                @endif--}}
                             @endforeach
                         </div>
                     </div>

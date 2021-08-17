@@ -33,8 +33,25 @@
                     @csrf
                     <div class="modal-body">
                         <p id="original"></p>
-                        <input type="text" name="filename" class="form-control">
+                        <input hidden type="text" name="filename" class="form-control">
+
+                        <div class="checkbox">
+                            <input type="checkbox" id="update_name" name="update_name" checked>
+                            <label class="form-check-label font-weight-normal" for="update_name">Обновлять названия</label>
+                        </div>
+
+                        <div class="checkbox">
+                            <input type="checkbox" id="update_short" name="update_short">
+                            <label class="form-check-label font-weight-normal" for="update_short">Обновлять короткие названия</label>
+                        </div>
+
+                        <div class="checkbox">
+                            <input type="checkbox" id="update_form" name="update_form">
+                            <label class="form-check-label font-weight-normal" for="update_form">Обновлять словоформы</label>
+                        </div>
                     </div>
+
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary controls">Импортировать XML</button>
@@ -108,6 +125,8 @@
                 action = form.attr('action'),
                 formdata = new FormData(form[0]);
 
+            $this.find('.controls').attr('disabled', true).text('Идет импорт...')
+
             $.ajax({
                 async: true,
                 type: "POST",
@@ -117,6 +136,7 @@
                 data: formdata,
                 processData: false,
                 success: function () {
+                    $this.find('.controls').attr('disabled', false).text('Импортировать XML')
                     location.reload();
                 },
             })

@@ -22,6 +22,7 @@ class CategoriesCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ReorderOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\BulkDeleteOperation { bulkDelete as traitBulkDelete; }
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -62,6 +63,8 @@ class CategoriesCrudController extends CrudController
                 $this->crud->addClause('where', 'parent_id', null);
             }
         );
+
+
 
         CRUD::addFilter(
             [
@@ -271,12 +274,23 @@ class CategoriesCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'show',
-            'label' => 'Показывать в главном меню',
+            'label' => 'Первая в меню категорий',
             'type' => 'checkbox',
             'tab' => 'Информация',
             'inline' => true,
             'wrapper' => [
-                'class' => 'form-group col-md-6',
+                'class' => 'form-group col-md-3',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'skip',
+            'label' => 'Просто галочка',
+            'type' => 'checkbox',
+            'tab' => 'Информация',
+            'inline' => true,
+            'wrapper' => [
+                'class' => 'form-group col-md-3',
             ],
         ]);
 
@@ -361,7 +375,13 @@ class CategoriesCrudController extends CrudController
         $file = simplexml_load_file($filepath);
         $categories = $file->shop->categories->category;
 
+        $upd_name = $request->update_name;
+        $upd_short = $request->update_short;
+        $upd_form = $request->update_form;
+
         $tempCategories = [];
+
+        Categories::query()->update(['deleted_at' => now()]);
 
         foreach ($categories as $category) {
 
@@ -372,11 +392,13 @@ class CategoriesCrudController extends CrudController
             $xmlParent = $category->attributes()->parent ? (string)$category->attributes()->parent : null;
 
             if (Categories::where('xml_id', $xmlId)->exists()) {
-                $id = Categories::where('xml_id', $xmlId)->update([
-                    'name' => $name,
-                    'short_name' => $short,
-                    'form' => $form,
-                ]);
+                $updatedCategory = [ 'deleted_at' => null ];
+
+                if($upd_name != null) $updatedCategory['name'] = $name;
+                if($upd_short != null) $updatedCategory['short_name'] = $short;
+                if($upd_form != null) $updatedCategory['form'] = $form;
+
+                $id = Categories::where('xml_id', $xmlId)->update($updatedCategory);
             } else {
                 $id = Categories::query()->insertGetId([
                     'name' => $name,
@@ -384,6 +406,7 @@ class CategoriesCrudController extends CrudController
                     'slug' => SlugService::createSlug(Categories::class, 'slug', $name),
                     'short_name' => $short,
                     'form' => $form,
+                    'deleted_at' => null
                 ]);
             }
 
@@ -409,6 +432,8 @@ class CategoriesCrudController extends CrudController
                 ]);
             }
         }
+
+        Categories::where('deleted_at', '<>', null)->forceDelete();
 
         return true;
     }
