@@ -283,16 +283,16 @@ class CategoriesCrudController extends CrudController
             ],
         ]);
 
-        CRUD::addField([
-            'name' => 'skip',
-            'label' => 'Просто галочка',
-            'type' => 'checkbox',
-            'tab' => 'Информация',
-            'inline' => true,
-            'wrapper' => [
-                'class' => 'form-group col-md-3',
-            ],
-        ]);
+//        CRUD::addField([
+//            'name' => 'skip',
+//            'label' => 'Просто галочка',
+//            'type' => 'checkbox',
+//            'tab' => 'Информация',
+//            'inline' => true,
+//            'wrapper' => [
+//                'class' => 'form-group col-md-3',
+//            ],
+//        ]);
 
         CRUD::addField([
             'name' => 'short_description',
