@@ -20,22 +20,19 @@ class FilterController extends Controller
         $productsData = Functions::productsData($params->first());
         $params->forget($params->keys()->first());
 
-        $productsQuery = $productsData['query'];
+        $filteredProductsQuery = $productsData['query'];
 
         if ($params->last() == 'discount') {
-            $productsQuery->where('discount', true);
+            $filteredProductsQuery->where('discount', true);
             $params->forget($params->keys()->last());
         }
 
-        foreach ($params as $param) {
-            $productsQuery = self::createFilterQuery($param, $productsQuery);
-        }
+        foreach ($params as $param) $filteredProductsQuery = self::createFilterQuery($param, $filteredProductsQuery);
 
-
-        $availableFilters = self::availableFilters($params->toArray(), $productsData);
+        $availableFilters = self::availableFilters($params->toArray(), $productsData, $filteredProductsQuery);
 
         return view('category', [
-            'products' => $productsQuery->orderBy('price', 'asc')->paginate(10),
+            'products' => $filteredProductsQuery->orderBy('price', 'asc')->paginate(10),
             'category' => $productsData['category'],
             'description' => Generator::filterDescription($params),
             'filters' => $availableFilters
@@ -43,40 +40,42 @@ class FilterController extends Controller
     }
 
 
-    public function availableFilters($params, $productsData)
+    public function availableFilters($params, $productsData, $filteredProductsQuery)
     {
         $availableFilters = [];
 
-//        dump(count($params));
+        $currentFilters = Functions::collectFilters($filteredProductsQuery->pluck('id')->toArray());
 
-//        if (count($params) == 1) {
-//
-//            $categoryFilters = Functions::collectFilters($productsData['productsId']);
-//
-//            dump($categoryFilters);
-//        }
+        if (count($params) == 1) {
+            $categoryFilters = Functions::collectFilters($productsData['productsId']);
+            $singleParam = explode('_', $params[1])[0];
+        }
 
         foreach ($params as $param) {
             $groupSlug = explode('_', $param)[0];
             $productsQuery = Products::whereIn('id', $productsData['productsId']);
-
             $query = self::createFilterQuery($param, $productsQuery);
-
             $filteredProductsId = Functions::collectId($query->get('id'));
             $availableFilters[$groupSlug] = Functions::collectFilters($filteredProductsId);
         }
 
-        dump($availableFilters);
-
         $existFilters = [];
-        foreach ($availableFilters as $filters) {
-            $existFilters = array_merge($filters);
-        }
 
-        dump($existFilters);
+        foreach ($availableFilters as $filters) foreach ($filters as $filter) $existFilters[$filter['slug']][] = $filter;
+
+        $existFilters = array_map(function($item) {
+                return array_map(function($i) { return unserialize($i); }, $item);
+            }, array_map(function($item) {
+            return array_unique(array_map(function($a) {
+                return serialize($a);
+            }, array_merge(...$item)));
+        }, $existFilters));
+
+        foreach ($currentFilters as $key => $currentFilter) if (!array_key_exists($key, $existFilters)) unset($existFilters[$key]);
+        if (count($params) == 1) $existFilters[$singleParam] = $categoryFilters[$singleParam];
+
         return $existFilters;
     }
-
 
     public function createFilterQuery($param, $productsQuery)
     {

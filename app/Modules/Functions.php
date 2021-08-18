@@ -98,7 +98,10 @@ class Functions
     }
 
     static function collectFilters($idArray) {
-        $attributesGroups = Groups::with('attributes:group_id,id,name,slug')->select('id', 'name', 'slug')->get()->toArray();
+        $attributesGroups = Groups::with('attributes:group_id,id,name,slug,sort')
+            ->select('id', 'name', 'slug', 'sort')
+            ->orderBy('sort')
+            ->get()->toArray();
 
         $productsAttributes = Products::whereIn('id', $idArray)->pluck('attributes')->toArray();
 
@@ -118,6 +121,11 @@ class Functions
                         return array_search($item['id'], $mergedAttributes[$group['slug']]) !== false ? $item : null;
                     }, $group['attributes']),
                 );
+        }
+
+        foreach ($attributesGroups as $key => $group) {
+            $attributesGroups[$group['slug']] = $group;
+            unset($attributesGroups[$key]);
         }
 
         return $attributesGroups;

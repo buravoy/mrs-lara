@@ -2,6 +2,8 @@
 use App\Modules\Functions;
 @endphp
 
+{{--@dump($filters)--}}
+
 <div>
     <h4>Посмотрите еще:</h4>
 

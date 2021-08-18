@@ -48,7 +48,7 @@ class Groups extends Model
     */
     public function attributes()
     {
-        return $this->hasMany(Attributes::class, 'group_id');
+        return $this->hasMany(Attributes::class, 'group_id')->orderBy('name');
     }
     /*
     |--------------------------------------------------------------------------
