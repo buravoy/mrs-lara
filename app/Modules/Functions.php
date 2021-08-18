@@ -4,6 +4,7 @@ namespace App\Modules;
 
 use App\Models\Categories;
 use App\Models\CategoryProduct;
+use App\Models\Groups;
 use App\Models\Products;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -71,7 +72,7 @@ class Functions
 
     static function productsData($category): Collection
     {
-        $catIdWithChild = Categories::where('slug', $category)->with('parent')->select('id', 'slug', 'name', 'count')->first();
+        $catIdWithChild = Categories::where('slug', $category)->select('id', 'parent_id', 'slug', 'name', 'count')->first();
         $idArray = Arr::flatten(Functions::collectId(collect([$catIdWithChild])));
         $productsId = CategoryProduct::whereIn('category_id', $idArray)->get('product_id');
 
@@ -97,5 +98,31 @@ class Functions
             if (!empty($child)) $arr[] = self::collectId($child);
         }
         return $arr;
+    }
+
+    static function collectFilters($idArray) {
+        $attributesGroups = Groups::with('attributes:group_id,id,name,slug')->select('id', 'name', 'slug')->get()->toArray();
+
+        $productsAttributes = Products::whereIn('id', $idArray)->pluck('attributes')->toArray();
+
+        $mergedAttributes = array_map('array_unique', array_merge_recursive(...array_map(function ($attribute) {
+            return (array)json_decode($attribute);
+        }, $productsAttributes)));
+
+        foreach ($attributesGroups as $key => $group) {
+            if ( !array_key_exists($group['slug'], $mergedAttributes ) ) {
+                unset($attributesGroups[$key]);
+                continue;
+            }
+
+            $attributesGroups[$key]['attributes'] = array_filter(
+                array_map(
+                    function ($item) use ($group, $mergedAttributes) {
+                        return array_search($item['id'], $mergedAttributes[$group['slug']]) !== false ? $item : null;
+                    }, $group['attributes']),
+                );
+        }
+
+        return $attributesGroups;
     }
 }

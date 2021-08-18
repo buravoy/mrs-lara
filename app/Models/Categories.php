@@ -71,9 +71,9 @@ class Categories extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function parent()
+     public function parent()
     {
-        return $this->belongsTo(self::class);
+        return $this->belongsTo(self::class, 'parent_id');
     }
 
     public function child()

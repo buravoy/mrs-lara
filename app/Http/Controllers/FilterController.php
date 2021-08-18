@@ -16,17 +16,18 @@ class FilterController extends Controller
 {
     public function query($params = null)
     {
-
         $params = collect(explode('/', $params));
         $productsData = Functions::productsData($params->first());
         $params->forget($params->keys()->first());
 
-        $productsQuery = $productsData['query'];
+        $allProductsQuery = $productsData['query'];
 
         if ($params->last() == 'discount') {
-            $productsQuery->where('discount', true);
+            $allProductsQuery->where('discount', true);
             $params->forget($params->keys()->last());
         }
+
+        $productsQuery = $allProductsQuery;
 
         foreach ($params as $param) {
             $param = explode('_', $param);
@@ -46,9 +47,9 @@ class FilterController extends Controller
 
         $filteredProductsId = Functions::collectId($productsQuery->get('id'));
 
-        $availableCategoryFilters = CategoriesController::availableCategoryFilters($productsData['productsId']);
+        $availableCategoryFilters = Functions::collectFilters($productsData['productsId']);
 
-        $availableFilters = self::availableFilters($availableCategoryFilters, $filteredProductsId, $params);
+        $availableFilters = self::availableFilters($availableCategoryFilters, $filteredProductsId, $params->toArray(), $productsQuery);
 
         return view('category', [
             'products' => $filteredProducts->orderBy('price', 'asc')->paginate(10),
@@ -59,18 +60,24 @@ class FilterController extends Controller
     }
 
 
-    public function availableFilters($categoryFilters, $filteredId, $params)
+    public function availableFilters($categoryFilters, $filteredId, $params, $allProductsQuery)
     {
+        $paramArr = [];
+        foreach ($params as $param) {
+            $param = $param = explode('_', $param);
+            $key = $param[0]; unset($param[0]);
+            $paramArr[$key] = $param;
+        }
 
-        $filteredProductsAttributes = Products::whereIn('id', $filteredId)->pluck('attributes')->toArray();
 
-        $mergedAttributes = array_map('array_unique', array_merge_recursive(...array_map(function ($attribute) {
-            return (array)json_decode($attribute);
-        }, $filteredProductsAttributes)));
 
-//        dump($categoryFilters);
-//        dump($mergedAttributes);
+        $availableFilters = Functions::collectFilters($filteredId);
 
-        return $categoryFilters;
+
+
+        dump($paramArr);
+        dump($availableFilters);
+
+        return $availableFilters;
     }
 }

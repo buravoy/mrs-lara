@@ -6,7 +6,6 @@ use App\Modules\Functions;
     <h4>Посмотрите еще:</h4>
 
     <div>
-        @dump($category)
 
         @if($category->parent)
 

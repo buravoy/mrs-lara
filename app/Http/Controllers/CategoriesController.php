@@ -26,33 +26,34 @@ class CategoriesController extends Controller
             'products' => $productsQuery->orderBy('price', 'asc')->paginate(10),
             'category' => $productsData['category'],
             'description' => Generator::categoryDescription($productsData['category']),
-            'filters' => self::availableCategoryFilters($productsData['productsId'])
+            'filters' => Functions::collectFilters($productsData['productsId'])
         ]);
     }
 
-    public static function availableCategoryFilters($productsId)
-    {
-        $attributesGroups = Groups::with('attributes')->get()->toArray();
-        $productsAttributes = Products::whereIn('id', $productsId)->pluck('attributes')->toArray();
-
-        $mergedAttributes = array_map('array_unique', array_merge_recursive(...array_map(function ($attribute) {
-            return (array)json_decode($attribute);
-        }, $productsAttributes)));
-
-        foreach ($attributesGroups as $key => $group) {
-            if ( !array_key_exists($group['slug'], $mergedAttributes ) ) {
-                unset($attributesGroups[$key]);
-                continue;
-            }
-
-            $attributesGroups[$key]['attributes'] = array_filter(array_map(function ($item) use ($group,$mergedAttributes){
-                if ( array_search($item['id'],$mergedAttributes[$group['slug']]) ) return $item;
-                return null;
-            }, $group['attributes']));
-        }
-
-        return $attributesGroups;
-    }
+//    public static function availableCategoryFilters($productsId)
+//    {
+//        $attributesGroups = Groups::with('attributes')->get()->toArray();
+//
+//        $productsAttributes = Products::whereIn('id', $productsId)->pluck('attributes')->toArray();
+//
+//        $mergedAttributes = array_map('array_unique', array_merge_recursive(...array_map(function ($attribute) {
+//            return (array)json_decode($attribute);
+//        }, $productsAttributes)));
+//
+//        foreach ($attributesGroups as $key => $group) {
+//            if ( !array_key_exists($group['slug'], $mergedAttributes ) ) {
+//                unset($attributesGroups[$key]);
+//                continue;
+//            }
+//
+//            $attributesGroups[$key]['attributes'] = array_filter(array_map(function ($item) use ($group,$mergedAttributes){
+//                if ( array_search($item['id'],$mergedAttributes[$group['slug']]) ) return $item;
+//                return null;
+//            }, $group['attributes']));
+//        }
+//
+//        return $attributesGroups;
+//    }
 
     public function RequestCountProductsInCategory(Request $request)
     {
