@@ -20,6 +20,7 @@ class CategoriesController extends Controller
         if(!$category) abort(404);
 
         $productsData = Functions::productsData($category);
+        dump($productsData);
         $productsQuery = $productsData['query'];
 
         return view('category', [
@@ -62,7 +63,6 @@ class CategoriesController extends Controller
 
     public static function countProductsInCategory($catSlug)
     {
-
         $productsData = Functions::productsData($catSlug);
         $productsQuery = $productsData['query'];
         $productsCount = $productsQuery->count();

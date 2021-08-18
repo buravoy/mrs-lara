@@ -74,7 +74,7 @@ class Functions
     {
         $catIdWithChild = Categories::where('slug', $category)->select('id', 'parent_id', 'slug', 'name', 'count')->first();
         $idArray = Arr::flatten(Functions::collectId(collect([$catIdWithChild])));
-        $productsId = CategoryProduct::whereIn('category_id', $idArray)->get('product_id');
+        $productsId = CategoryProduct::whereIn('category_id', $idArray)->pluck('product_id')->unique();
 
 //        dump($catIdWithChild);
 
@@ -92,9 +92,6 @@ class Functions
         foreach ($collection as $item) {
             if (isset($item->id)) $arr[] = $item->id;
             $child = $item->allChild;
-
-//            dd($child);
-
             if (!empty($child)) $arr[] = self::collectId($child);
         }
         return $arr;
