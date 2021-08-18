@@ -21,11 +21,8 @@ class Functions
 
         foreach ($urlArr as $item) {
             $seek = explode('_', $item);
-            if (array_search($attribute, $seek) !== false) {
-                $isActive = true;
-            }
+            if (array_search($attribute, $seek) !== false) $isActive = true;
         }
-
 
         if (!count($urlArr)) {
             return [
@@ -35,28 +32,20 @@ class Functions
         }
 
         $urlArr = array_map(function ($item) use ($group, $attribute) {
-
-//            dump($item);
-
-            if (strpos($item, $group) !== false && strpos($item, $attribute) == true) {
+            if (strpos($item, $group) !== false && strpos($item, $attribute) == true)
                 return str_replace('_' . $attribute, null, $item);
-            }
 
-            if (strpos($item, $group) !== false && strpos($item, $attribute) != true) {
+            if (strpos($item, $group) !== false && strpos($item, $attribute) != true)
                 return $item . '_' . $attribute;
-            }
 
             return $item;
         }, $urlArr);
 
         $cleanUrlArr = array_diff($urlArr, [$group, null]);
 
-
-
         foreach ($cleanUrlArr as $item) if (strpos($item, $group) !== false) $isThisGroup = true;
 
         if (!$isThisGroup && strpos($url, $attribute) == false) $cleanUrlArr[] = $group . '_' . $attribute;
-
 
         if (!count($cleanUrlArr)) {
             return [
@@ -64,6 +53,9 @@ class Functions
                 'isActive' => $isActive
             ];
         }
+
+        asort($cleanUrlArr);
+
         return [
             'link' => 'filter/' . $category . '/' . implode('/', $cleanUrlArr),
             'isActive' => $isActive
@@ -75,8 +67,6 @@ class Functions
         $catIdWithChild = Categories::where('slug', $category)->select('id', 'parent_id', 'slug', 'name', 'count')->first();
         $idArray = Arr::flatten(Functions::collectId(collect([$catIdWithChild])));
         $productsId = CategoryProduct::whereIn('category_id', $idArray)->pluck('product_id')->unique();
-
-//        dump($catIdWithChild);
 
         return collect([
             'query' => Products::whereIn('id', $productsId),
