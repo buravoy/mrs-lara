@@ -71,7 +71,8 @@ class FilterController extends Controller
             }, array_merge(...$item)));
         }, $existFilters));
 
-        foreach ($currentFilters as $key => $currentFilter) if (!array_key_exists($key, $existFilters)) unset($existFilters[$key]);
+        foreach ($existFilters as $key => $existFilter) if (!array_key_exists($key, $currentFilters)) unset($existFilters[$key]);
+
         if (count($params) == 1) $existFilters[$singleParam] = $categoryFilters[$singleParam];
 
         return $existFilters;
