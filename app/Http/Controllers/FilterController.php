@@ -45,7 +45,7 @@ class FilterController extends Controller
     }
 
 
-    public function availableFilters($params, $productsData, $filteredProductsQuery, $discount)
+    public function availableFilters($params, $productsData, $filteredProductsQuery, $discount): array
     {
         $availableFilters = [];
         $currentFilters = Functions::collectFilters($filteredProductsQuery->pluck('id')->toArray(), $discount);
@@ -101,11 +101,9 @@ class FilterController extends Controller
 
         $seekId = Attributes::whereIn('slug', $param)->pluck('id');
 
-        $productsQuery = $productsQuery->where(function($query) use($seekId, $groupSlug) {
+        return $productsQuery->where(function($query) use($seekId, $groupSlug) {
             foreach($seekId as $id)
                 $query->orWhereJsonContains('attributes->' . $groupSlug , $id);
         });
-
-        return $productsQuery;
     }
 }
