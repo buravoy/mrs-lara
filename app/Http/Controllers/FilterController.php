@@ -3,22 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attributes;
-use App\Models\Categories;
-use App\Models\CategoryProduct;
-use App\Models\Groups;
 use App\Models\Products;
 use App\Modules\Functions;
 use App\Modules\Generator;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 
 class FilterController extends Controller
 {
     public function query($params = null)
     {
         $discount = false;
-
         $params = collect(explode('/', $params));
+
+        if(count($params) == 1) return redirect(route('category',['category' => $params[0]]));
 
         if ($params->last() == 'discount') {
             $params->forget($params->keys()->last());
@@ -54,13 +50,14 @@ class FilterController extends Controller
         $availableFilters = [];
         $currentFilters = Functions::collectFilters($filteredProductsQuery->pluck('id')->toArray(), $discount);
 
-        if ($discount && empty($params)) {
-            return $currentFilters;
-        }
+        if ($discount && empty($params)) return $currentFilters;
 
         if (count($params) == 1) {
             $categoryFilters = Functions::collectFilters($productsData['productsId'], $discount);
             $singleParam = explode('_', $params[1])[0];
+
+            $currentFilters[$singleParam] = $categoryFilters[$singleParam];
+            return $currentFilters;
         }
 
         foreach ($params as $param) {
@@ -71,32 +68,29 @@ class FilterController extends Controller
             $availableFilters[$groupSlug] = Functions::collectFilters($filteredProductsId, $discount);
         }
 
-        $existFilters = [];
+        $merged = array_map(function (){ return []; }, $currentFilters);
 
-        foreach ($availableFilters as $filters)
-            foreach ($filters as $filter)
-                $existFilters[$filter['slug']][] = $filter;
+        foreach ($availableFilters as $availableFilter)
+            foreach ($availableFilter as $group => $attribute)
+                if(array_key_exists($group, $merged))
+                    $merged[$group] = array_merge_recursive($merged[$group], $attribute );
 
-        $existFilters = array_map(function($item) {
-                return array_map(function($i) {
-                    return unserialize($i); }, $item);
-            }, array_map(function($item) {
-            return array_unique(array_map(function($a) {
-                return serialize($a);
-            }, array_merge(...$item)));
-        }, $existFilters));
+        foreach ($merged as $key => $group) {
+            $merged[$key] = [
+                'id' => $group['id'][0],
+                'name' => $group['name'][0],
+                'slug' => $group['slug'][0],
+                'sort' => $group['sort'][0],
+                'attributes' => array_map(function($item){ return unserialize($item); },
+                    array_unique(array_map(function($item){ return serialize($item); }, $group['attributes'])))
+            ];
+        }
 
-        foreach ($existFilters as $key => $existFilter)
-            if (!array_key_exists($key, $currentFilters))
-                unset($existFilters[$key]);
-
-        foreach ($existFilters as $key => $existFilter)
+        foreach ($merged as $key => $filter)
             if (!array_key_exists($key, $availableFilters))
-                $existFilters[$key] = $currentFilters[$key];
+                $merged[$key] = $currentFilters[$key];
 
-        if (count($params) == 1) $existFilters[$singleParam] = $categoryFilters[$singleParam];
-
-        return $existFilters;
+        return $merged;
     }
 
     public function createFilterQuery($param, $productsQuery)
@@ -108,12 +102,9 @@ class FilterController extends Controller
         $seekId = Attributes::whereIn('slug', $param)->pluck('id');
 
         $productsQuery = $productsQuery->where(function($query) use($seekId, $groupSlug) {
-            foreach($seekId as $id) {
+            foreach($seekId as $id)
                 $query->orWhereJsonContains('attributes->' . $groupSlug , $id);
-            }
         });
-
-//        if ($discount) $productsQuery->where('discount','<>', null);
 
         return $productsQuery;
     }
