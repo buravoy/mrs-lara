@@ -61,17 +61,26 @@ class FilterController extends Controller
 
         $existFilters = [];
 
-        foreach ($availableFilters as $filters) foreach ($filters as $filter) $existFilters[$filter['slug']][] = $filter;
+        foreach ($availableFilters as $filters)
+            foreach ($filters as $filter)
+                $existFilters[$filter['slug']][] = $filter;
 
         $existFilters = array_map(function($item) {
-                return array_map(function($i) { return unserialize($i); }, $item);
+                return array_map(function($i) {
+                    return unserialize($i); }, $item);
             }, array_map(function($item) {
             return array_unique(array_map(function($a) {
                 return serialize($a);
             }, array_merge(...$item)));
         }, $existFilters));
 
-        foreach ($existFilters as $key => $existFilter) if (!array_key_exists($key, $currentFilters)) unset($existFilters[$key]);
+        foreach ($existFilters as $key => $existFilter)
+            if (!array_key_exists($key, $currentFilters))
+                unset($existFilters[$key]);
+
+        foreach ($existFilters as $key => $existFilter)
+            if (!array_key_exists($key, $availableFilters))
+                $existFilters[$key] = $currentFilters[$key];
 
         if (count($params) == 1) $existFilters[$singleParam] = $categoryFilters[$singleParam];
 
