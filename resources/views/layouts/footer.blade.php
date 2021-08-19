@@ -1,5 +1,5 @@
 <div class="container-xxl">
-    <div class="d-flex align-items-center justify-content-between pt-3 pb-5">
+    <div class="d-flex align-items-center justify-content-between py-3">
         <div class="d-flex align-items-center">
             <i class="far fa-copyright mr-1"></i>
             <span>2021. Mr.Shopper</span>
@@ -14,7 +14,3 @@
         </div>
     </div>
 </div>
-
-<a href="/admin" class="admin-signin" target="_blank">
-    <i class="fas fa-lock"></i>
-</a>
