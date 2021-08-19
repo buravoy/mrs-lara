@@ -16,38 +16,50 @@ class FilterController extends Controller
 {
     public function query($params = null)
     {
+        $discount = false;
+
         $params = collect(explode('/', $params));
-        $productsData = Functions::productsData($params->first());
+
+        if ($params->last() == 'discount') {
+            $params->forget($params->keys()->last());
+            $discount = true;
+        }
+
+        $productsData = Functions::productsData($params->first(), $discount);
         $params->forget($params->keys()->first());
 
         $filteredProductsQuery = $productsData['query'];
 
-        if ($params->last() == 'discount') {
-            $filteredProductsQuery->where('discount', true);
-            $params->forget($params->keys()->last());
-        }
-
         foreach ($params as $param) $filteredProductsQuery = self::createFilterQuery($param, $filteredProductsQuery);
 
-        $availableFilters = self::availableFilters($params->toArray(), $productsData, $filteredProductsQuery);
+        if ($discount) $filteredProductsQuery->where('discount','<>', null);
+
+//        $isDiscountAvailable = $filteredProductsQuery->where('discount','<>', null)->first();
+
+        $availableFilters = self::availableFilters($params->toArray(), $productsData, $filteredProductsQuery, $discount);
 
         return view('category', [
             'products' => $filteredProductsQuery->orderBy('price', 'asc')->paginate(10),
+            'discountAvailable' => $filteredProductsQuery->where('discount','<>' , null)->first(),
             'category' => $productsData['category'],
             'description' => Generator::filterDescription($params),
-            'filters' => $availableFilters
+            'filters' => $availableFilters,
+            'discountSet' => $discount
         ]);
     }
 
 
-    public function availableFilters($params, $productsData, $filteredProductsQuery)
+    public function availableFilters($params, $productsData, $filteredProductsQuery, $discount)
     {
         $availableFilters = [];
+        $currentFilters = Functions::collectFilters($filteredProductsQuery->pluck('id')->toArray(), $discount);
 
-        $currentFilters = Functions::collectFilters($filteredProductsQuery->pluck('id')->toArray());
+        if ($discount && empty($params)) {
+            return $currentFilters;
+        }
 
         if (count($params) == 1) {
-            $categoryFilters = Functions::collectFilters($productsData['productsId']);
+            $categoryFilters = Functions::collectFilters($productsData['productsId'], $discount);
             $singleParam = explode('_', $params[1])[0];
         }
 
@@ -56,7 +68,7 @@ class FilterController extends Controller
             $productsQuery = Products::whereIn('id', $productsData['productsId']);
             $query = self::createFilterQuery($param, $productsQuery);
             $filteredProductsId = Functions::collectId($query->get('id'));
-            $availableFilters[$groupSlug] = Functions::collectFilters($filteredProductsId);
+            $availableFilters[$groupSlug] = Functions::collectFilters($filteredProductsId, $discount);
         }
 
         $existFilters = [];
@@ -100,6 +112,8 @@ class FilterController extends Controller
                 $query->orWhereJsonContains('attributes->' . $groupSlug , $id);
             }
         });
+
+//        if ($discount) $productsQuery->where('discount','<>', null);
 
         return $productsQuery;
     }

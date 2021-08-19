@@ -55,7 +55,7 @@ $(function (){
             success: function (response) {
                 console.log(response)
                 const attributes = response.map(function (item) {
-                    return `<li style="order: ${item.sort}"><span>${item.name}</span><span>${item.value.join(', ')}</span></li>`;
+                    return `<li><span>${item.name}</span><span>${item.value.join(', ')}</span></li>`;
                 });
 
                 $('.attributes').html(attributes);

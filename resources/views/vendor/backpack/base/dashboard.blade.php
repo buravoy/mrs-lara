@@ -1,5 +1,12 @@
 @extends(backpack_view('blank'))
 
+@php
+    $breadcrumbs = [
+        'Главная' => backpack_url('dashboard'),
+        'Панель управления' => false,
+    ];
+@endphp
+
 @section('content')
     <div class="row">
         <div class="col-12 col-md-3">

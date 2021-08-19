@@ -8,9 +8,38 @@ use App\Models\Groups;
 use App\Models\Products;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use phpDocumentor\Reflection\Types\This;
 
 class Functions
 {
+    static function getDiscountUrl($url)
+    {
+        $url = explode('/', $url);
+        $isActive = false;
+
+
+        $generatedUrl = array_filter(array_map(function($item) use($url) {
+            if ($item == 'category' && count($url) <= 3) return 'filter';
+            if ($item == 'filter' && count($url) <= 3) return 'category';
+            if ($item == 'discount') return null;
+            return $item;
+        }, $url));
+
+
+        if(end($url) == 'discount') $isActive = true;
+        if(end($url) != 'discount') $generatedUrl[] = 'discount';
+//        if($url[0] == 'category') $generatedUrl[] = 'discount';
+
+
+
+//        dump($generatedUrl);
+
+        return [
+            'link' => implode('/', $generatedUrl),
+            'isActive' => $isActive
+        ];
+    }
+
     static function getFilterUrl($group, $attribute, $url): array
     {
         $urlArr = explode('/', $url);
@@ -62,14 +91,17 @@ class Functions
         ];
     }
 
-    static function productsData($category): Collection
+    static function productsData($category, $discount = false): Collection
     {
         $catIdWithChild = Categories::where('slug', $category)->select('id', 'parent_id', 'slug', 'name', 'count')->first();
         $idArray = Arr::flatten(Functions::collectId(collect([$catIdWithChild])));
-        $productsId = CategoryProduct::whereIn('category_id', $idArray)->pluck('product_id')->unique();
+        $productsId = CategoryProduct::whereIn('category_id', $idArray)->pluck('product_id')->unique();;
+        $products = Products::whereIn('id', $productsId);
+
+        if ($discount) $products->where('discount','<>', null);
 
         return collect([
-            'query' => Products::whereIn('id', $productsId),
+            'query' => $products,
             'category' => $catIdWithChild,
             'categoriesId' => $idArray,
             'productsId' => $productsId
@@ -87,13 +119,17 @@ class Functions
         return $arr;
     }
 
-    static function collectFilters($idArray) {
+    static function collectFilters($idArray, $discount = false) {
         $attributesGroups = Groups::with('attributes:group_id,id,name,slug,sort')
             ->select('id', 'name', 'slug', 'sort')
             ->orderBy('sort')
             ->get()->toArray();
 
-        $productsAttributes = Products::whereIn('id', $idArray)->pluck('attributes')->toArray();
+        $productsAttributesQery = Products::whereIn('id', $idArray);
+
+        if ($discount) $productsAttributesQery->where('discount','<>', null);
+
+        $productsAttributes = $productsAttributesQery->pluck('attributes')->toArray();
 
         $mergedAttributes = array_map('array_unique', array_merge_recursive(...array_map(function ($attribute) {
             return (array)json_decode($attribute);

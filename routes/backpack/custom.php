@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ProductsCrudController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Modules\Parser;
+use App\Http\Controllers\MetaGeneratorController;
 
 // --------------------------
 // Custom Backpack Routes
@@ -30,6 +31,8 @@ Route::group([
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
     Route::get('dashboard', [DashboardController::class, 'index']);
+    Route::get('meta-generators', [MetaGeneratorController::class, 'index']);
+    Route::post('save-meta-generator', [MetaGeneratorController::class, 'save'])->name('save-meta-generator');
 
     Route::crud('user', 'UserCrudController');
     Route::crud('products', 'ProductsCrudController');
@@ -47,6 +50,7 @@ Route::group([
     Route::post('delete-categories', [CategoriesCrudController::class, 'deleteAllCategories'])->name('delete-all-categories');
 
     Route::post('get-group-type', [GroupsCrudController::class, 'getGroupType'])->name('get-type');
+
 
     Route::post('download-feed', [FileUploadController::class, 'downloadXml'])->name('download-feed');
     Route::post('get-size', [FileUploadController::class, 'getSize'])->name('get-size');

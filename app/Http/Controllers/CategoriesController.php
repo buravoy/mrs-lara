@@ -2,16 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attributes;
 use App\Models\Categories;
-use App\Models\CategoryProduct;
-use App\Models\Groups;
-use App\Models\Products;
 use App\Modules\Functions;
 use App\Modules\Generator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Session;
 
 class CategoriesController extends Controller
 {
@@ -24,9 +18,11 @@ class CategoriesController extends Controller
 
         return view('category', [
             'products' => $productsQuery->orderBy('price', 'asc')->paginate(10),
+            'discountAvailable' => $productsQuery->where('discount','<>' , null)->first(),
             'category' => $productsData['category'],
             'description' => Generator::categoryDescription($productsData['category']),
-            'filters' => Functions::collectFilters($productsData['productsId'])
+            'filters' => Functions::collectFilters($productsData['productsId']),
+            'discountSet' => false
         ]);
     }
 

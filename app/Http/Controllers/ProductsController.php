@@ -42,7 +42,9 @@ class ProductsController extends Controller
             $group = Groups::where('slug', $key)->first();
 
             $values = [];
-            foreach ($attribute as $attr) if ($attr !== null) $values[] = Attributes::where('id', $attr)->value('name');
+            foreach ($attribute as $attr) if ($attr !== null)
+                $values[] = Attributes::where('id', $attr)->value('name');
+
             if (!empty($values)) $currentAttributes[] = [
                 'name' => $group->name,
                 'value' => $values,
@@ -50,7 +52,6 @@ class ProductsController extends Controller
             ];
             unset($values);
         }
-
         return json_encode($currentAttributes);
     }
 }

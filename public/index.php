@@ -58,4 +58,7 @@ $kernel->terminate($request, $response);
 // get time page generation
 $time_end = microtime(true);
 $time = $time_end - LARAVEL_START;
-if ($request->route()->getPrefix() != 'admin') printf('<span class="script-time">%.4F</span>', $time);
+
+if($request->route())
+    if (($request->route()->getPrefix() != 'admin') && !$request->ajax())
+        printf('<span class="script-time">%.4F</span>', $time);
