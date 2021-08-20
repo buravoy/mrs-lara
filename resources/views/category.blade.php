@@ -8,31 +8,48 @@
     <script src="{{ asset('js/products.js') }}"></script>
 @endpush
 
-@section('title')
-    {{ $category->name }}
+@section('meta_title')
+    @if($page == 'category')<title>{{ $category->meta_title ?? $meta['meta_title'] ?? $category->name }} - Mr.Shopper</title>@endif
+    @if($page == 'filter')<title>Filter</title>@endif
+@endsection
+
+@section('meta_description')
+    @if($page == 'category')
+        <meta name="description"
+              content="{{ $category->meta_description ?? $meta['meta_description'] ?? 'Выбирайте - '. $category->name . ' в интернет каталоге Mr.Shopper' }}">
+    @endif
+    @if($page == 'filter')
+        <meta name="description"
+              content="Filter">
+    @endif
 @endsection
 
 @section('content')
+    @php
+        use App\Modules\Functions;
+    @endphp
     <div class="container-xxl">
         @include('sections.categories')
-
         <div class="py-3">
             <div class="mb-3">
-                <h1 class="font-11 mb-3">{{ $category->name }}</h1>
-                <p class="mb-4"> {{ $description }}</p>
+                @if($page == 'category')
+                    <h1 class="font-11 mb-3">{!! $meta['title'] ?? $category->name !!}</h1>
+                    <p class="mb-5">{!! $category->short_description ?? $meta['description1'] !!}</p>
+                @endif
+                @if($page == 'filter')
+                        <h1 class="font-11 mb-3">Filter</h1>
+                        <p class="mb-5">Filter</p>
+                @endif
             </div>
-
             <div class="row">
-
                 <div class="col-12 col-md-3">
                     @include('sections.filter')
                 </div>
-
                 <div class="col-12 col-md-9">
-                    <p class="mb-2">найдено: {{ $products->links()->paginator->total() }}</p>
-
-{{--                    @dump($products->links())--}}
-
+                    <p class="mb-2">
+                        В каталоге: <b>{{ $products->links()->paginator->total() }}</b>
+                        {{Functions::plural($products->links()->paginator->total(), ['товар', 'товара', 'товаров'])  }}
+                    </p>
                     <div class="">
                         @foreach($category->allChild->sortByDesc('count') as $cat)
                             @if($cat->count)
@@ -40,9 +57,6 @@
                             @endif
                         @endforeach
                     </div>
-
-{{--                    @dump($products->items())--}}
-
                     <div class="row">
                         @if(!empty($products->items()))
                             @foreach($products as $product)
@@ -56,10 +70,15 @@
                     </div>
                 </div>
             </div>
-
             <div class="py-3">
                 {{ $products->onEachSide(1)->links() }}
             </div>
+            @if($page == 'category')
+                <p class="my-5">{!! $category->description ?? $meta['description2'] !!}</p>
+            @endif
+            @if($page == 'filter')
+                <p class="my-5">Filter</p>
+            @endif
         </div>
     </div>
 @endsection

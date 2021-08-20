@@ -3,39 +3,84 @@
 @php
     $breadcrumbs = [
         'Главная' => backpack_url('dashboard'),
-        'Мета генераторы' => false,
+        'Генераторы' => false,
     ];
 @endphp
 
 
 @section('content')
-    <div class="row">
-        <div class="col-12 col-md-3">
-            @dump($generators)
+
+    <h2 class="mb-5">Настройка генераторов СЕО контента</h2>
 
 
-            @foreach($generators as $generator)
+    <div class="tab-container  mb-2">
 
-                <form action="{{ route('save-meta-generator') }}">
-                    @csrf
-                    <div class="form-group">
-                        <label>Email address</label>
-                        <input type="email" class="form-control" value="{{ $generator->name }}">
-                        <small class="form-text text-muted">We'll never share your email with anyone else.</small>
+        <div class="nav-tabs-custom " id="form_tabs">
+            <ul class="nav nav-tabs " role="tablist">
+                @foreach($generators as $generator)
+                    <li class="nav-item">
+                        <a href="#{{ $generator->type }}" data-toggle="tab" class="nav-link @if($loop->first) active @endif">{{ $generator->name }}</a>
+                    </li>
+                @endforeach
+            </ul>
+
+            <div class="tab-content p-0 ">
+                @foreach($generators as $generator)
+                    <div role="tabpanel" class="tab-pane fade @if($loop->first) active show @else @endif" id="{{ $generator->type }}">
+                        <h4 class="mb-3">{{ $generator->name }}
+                            <span class="font-sm text-muted">({{ $generator->type }})</span>
+                        </h4>
+
+                        <form action="{{ route('save-meta-generator') }}">
+                            @csrf
+                            <input hidden type="text" name="type" value="{{ $generator->type }}">
+                            <div class="row">
+                                <div class="form-group col-md-6 col-12">
+                                    <label>META Title</label>
+                                    <input type="text" name="template_meta_title" class="form-control" value="{{ $generator->template_meta_title }}">
+                                </div>
+                                <div class="form-group col-md-6 col-12">
+                                    <label>META Description</label>
+                                    <input type="text" class="form-control" name="template_meta_description" value="{{ $generator->template_meta_description }}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-4 col-12">
+                                    <label>Title (H1)</label>
+                                    <textarea class="form-control" rows="5" name="template_title">{{ $generator->template_title }}</textarea>
+                                </div>
+                                <div class="form-group col-md-4 col-12">
+                                    <label>Description 1</label>
+                                    <textarea class="form-control" rows="5" name="template_description1">{{ $generator->template_description1 }}</textarea>
+                                </div>
+                                <div class="form-group col-md-4 col-12">
+                                    <label>Description 2</label>
+                                    <textarea class="form-control" rows="5" name="template_description2">{{ $generator->template_description2 }}</textarea>
+                                </div>
+                            </div>
+                            @if($generator->type == 'category')
+                                <p class="mb-1">Переменные: <i><b>$name$ $count$ $discountMax$ $discountMin$ $priceMax$ $priceMin$</b></i></p>
+                                <p>Подстановка слов: <b>[слово/ второе слово/ третье слово]</b></p>
+                            @endif
+                            <button type="submit" class="btn btn-success d-block mt-4">
+                                <span class="la la-save"></span> &nbsp;Сохранить
+                            </button>
+                        </form>
+
+
                     </div>
-
-                    <button type="submit">qweqwe</button>
-                </form>
-
-            @endforeach
-
+                @endforeach
+            </div>
         </div>
     </div>
+
 @endsection
 
 
 @push('after_scripts')
     <script>
+        $('#myTab li:last-child a').tab('show')
+
         $('form').on('submit', function (e) {
             e.preventDefault();
 
@@ -44,8 +89,6 @@
                 form = $this.closest('form'),
                 action = form.attr('action'),
                 formdata = new FormData(form[0]);
-
-            formdata.append('_token', $this.find('input[name=_token]').val());
 
             $.ajax({
                 async: true,

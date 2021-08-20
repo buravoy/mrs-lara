@@ -4,7 +4,7 @@
 <li class="nav-title">Партнерки</li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('feeds') }}'><i class="las la-comments-dollar"></i> Парсеры</a></li>
 <li class="nav-title">СЕО</li>
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('meta-generators') }}'><i class="las la-money-check-alt"></i> Мета генераторы</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('meta-generators') }}'><i class="las la-money-check-alt"></i> Генераторы</a></li>
 <li class="nav-title mt-3">Каталог</li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('category') }}'><i class='nav-icon la la-stream'></i> Категории</a></li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('products') }}'><i class='nav-icon la la-box'></i>Товары</a></li>

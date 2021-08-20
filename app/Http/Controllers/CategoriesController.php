@@ -20,9 +20,10 @@ class CategoriesController extends Controller
             'products' => $productsQuery->orderBy('price', 'asc')->paginate(10),
             'discountAvailable' => $productsQuery->where('discount','<>' , null)->first(),
             'category' => $productsData['category'],
-            'description' => Generator::categoryDescription($productsData['category']),
             'filters' => Functions::collectFilters($productsData['productsId']),
-            'discountSet' => false
+            'meta' => Generator::categoryMeta($productsData),
+            'discountSet' => false,
+            'page' => 'category'
         ]);
     }
 

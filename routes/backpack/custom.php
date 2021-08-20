@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\ProductsCrudController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Modules\Parser;
-use App\Http\Controllers\MetaGeneratorController;
+use App\Http\Controllers\Admin\MetaGeneratorController;
 
 // --------------------------
 // Custom Backpack Routes

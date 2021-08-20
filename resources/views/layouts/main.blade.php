@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     @stack('styles')
 
-    <title>@yield('title')</title>
+    @yield('meta_title')
+    @yield('meta_description')
 </head>
 
 <body>

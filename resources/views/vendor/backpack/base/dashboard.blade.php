@@ -8,6 +8,7 @@
 @endphp
 
 @section('content')
+    <h2 class="mb-5">Панель управления</h2>
     <div class="row">
         <div class="col-12 col-md-3">
             <div class="border rounded p-3 mb-4">

@@ -40,7 +40,8 @@ class FilterController extends Controller
             'category' => $productsData['category'],
             'description' => Generator::filterDescription($params),
             'filters' => $availableFilters,
-            'discountSet' => $discount
+            'discountSet' => $discount,
+            'page' => 'filter'
         ]);
     }
 
