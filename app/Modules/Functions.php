@@ -93,7 +93,7 @@ class Functions
 
     static function productsData($category, $discount = false): Collection
     {
-        $catIdWithChild = Categories::where('slug', $category)->select('id', 'parent_id', 'slug', 'name', 'count')->first();
+        $catIdWithChild = Categories::where('slug', $category)->select('id', 'parent_id', 'slug', 'name', 'count', 'form')->first();
         $idArray = Arr::flatten(Functions::collectId(collect([$catIdWithChild])));
         $productsId = CategoryProduct::whereIn('category_id', $idArray)->pluck('product_id')->unique();;
         $products = Products::whereIn('id', $productsId);

@@ -9,19 +9,12 @@
 @endpush
 
 @section('meta_title')
-    @if($page == 'category')<title>{{ $category->meta_title ?? $meta['meta_title'] ?? $category->name }} - Mr.Shopper</title>@endif
-    @if($page == 'filter')<title>Filter</title>@endif
+    <title>{{ $category->meta_title ?? $meta['meta_title'] ?? $category->name }} - Mr.Shopper</title>
 @endsection
 
 @section('meta_description')
-    @if($page == 'category')
-        <meta name="description"
-              content="{{ $category->meta_description ?? $meta['meta_description'] ?? 'Выбирайте - '. $category->name . ' в интернет каталоге Mr.Shopper' }}">
-    @endif
-    @if($page == 'filter')
-        <meta name="description"
-              content="Filter">
-    @endif
+    <meta name="description"
+          content="{{ $category->meta_description ?? $meta['meta_description'] ?? 'Выбирайте - '. $category->name . ' в интернет каталоге Mr.Shopper' }}">
 @endsection
 
 @section('content')
@@ -32,14 +25,8 @@
         @include('sections.categories')
         <div class="py-3">
             <div class="mb-3">
-                @if($page == 'category')
-                    <h1 class="font-11 mb-3">{!! $meta['title'] ?? $category->name !!}</h1>
-                    <p class="mb-5">{!! $category->short_description ?? $meta['description1'] !!}</p>
-                @endif
-                @if($page == 'filter')
-                        <h1 class="font-11 mb-3">Filter</h1>
-                        <p class="mb-5">Filter</p>
-                @endif
+                <h1 class="font-11 mb-3">{!! $meta['title'] ?? $category->name !!}</h1>
+                <p class="mb-5">{!! $category->short_description ?? $meta['description1'] !!}</p>
             </div>
             <div class="row">
                 <div class="col-12 col-md-3">

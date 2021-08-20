@@ -58,11 +58,12 @@
                                     <textarea class="form-control" rows="5" name="template_description2">{{ $generator->template_description2 }}</textarea>
                                 </div>
                             </div>
-                            @if($generator->type == 'category')
-                                <p class="mb-1">Переменные: <i><b>$name$ $count$ $discountMax$ $discountMin$ $priceMax$ $priceMin$</b></i></p>
-                                <p>Подстановка слов: <b>[слово/ второе слово/ третье слово]</b></p>
+                            <p class="mb-1">Переменные: <i><b>$name$ $count$ $discountMax$ $discountMin$ $priceMax$ $priceMin$</b></i></p>
+                            <p class="mb-1">Подстановка слов: <b>[слово/ второе слово/ третье слово]</b></p>
+                            @if($generator->type == 'filter')
+                                <p class="mb-1">Использование атрибутов: <b>[$group$]</b> подставит атрибуты группы, <b>[$attributes$]</b> подставит оставшиеся атрибуты</p>
                             @endif
-                            <button type="submit" class="btn btn-success d-block mt-4">
+                            <button type="submit" class="btn btn-success d-block mt-5">
                                 <span class="la la-save"></span> &nbsp;Сохранить
                             </button>
                         </form>

@@ -30,15 +30,13 @@ class FilterController extends Controller
 
         if ($discount) $filteredProductsQuery->where('discount','<>', null);
 
-//        $isDiscountAvailable = $filteredProductsQuery->where('discount','<>', null)->first();
-
         $availableFilters = self::availableFilters($params->toArray(), $productsData, $filteredProductsQuery, $discount);
 
         return view('category', [
             'products' => $filteredProductsQuery->orderBy('price', 'asc')->paginate(10),
             'discountAvailable' => $filteredProductsQuery->where('discount','<>' , null)->first(),
             'category' => $productsData['category'],
-            'description' => Generator::filterDescription($params),
+            'meta' => Generator::filterMeta($params, $productsData),
             'filters' => $availableFilters,
             'discountSet' => $discount,
             'page' => 'filter'
