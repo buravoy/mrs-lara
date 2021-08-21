@@ -23,12 +23,13 @@ class FilterController extends Controller
 
         $productsData = Functions::productsData($params->first(), $discount);
         $params->forget($params->keys()->first());
-
         $filteredProductsQuery = $productsData['query'];
 
         foreach ($params as $param) $filteredProductsQuery = self::createFilterQuery($param, $filteredProductsQuery);
-
         if ($discount) $filteredProductsQuery->where('discount','<>', null);
+
+        $queryForGenerator = $filteredProductsQuery;
+        $filteredId = $queryForGenerator->pluck('id')->toArray();
 
         $availableFilters = self::availableFilters($params->toArray(), $productsData, $filteredProductsQuery, $discount);
 
@@ -36,7 +37,7 @@ class FilterController extends Controller
             'products' => $filteredProductsQuery->orderBy('price', 'asc')->paginate(10),
             'discountAvailable' => $filteredProductsQuery->where('discount','<>' , null)->first(),
             'category' => $productsData['category'],
-            'meta' => Generator::filterMeta($params, $productsData),
+            'meta' => Generator::filterMeta($params, $productsData, $filteredId),
             'filters' => $availableFilters,
             'discountSet' => $discount,
             'page' => 'filter'
@@ -49,6 +50,8 @@ class FilterController extends Controller
         $availableFilters = [];
         $currentFilters = Functions::collectFilters($filteredProductsQuery->pluck('id')->toArray(), $discount);
 
+
+
         if ($discount && empty($params)) return $currentFilters;
 
         if (count($params) == 1) {
@@ -56,8 +59,12 @@ class FilterController extends Controller
             $singleParam = explode('_', $params[1])[0];
 
             $currentFilters[$singleParam] = $categoryFilters[$singleParam];
+
+//            dump($currentFilters);
             return $currentFilters;
         }
+
+
 
         foreach ($params as $param) {
             $groupSlug = explode('_', $param)[0];
@@ -67,7 +74,9 @@ class FilterController extends Controller
             $availableFilters[$groupSlug] = Functions::collectFilters($filteredProductsId, $discount);
         }
 
-        $merged = array_map(function (){ return []; }, $currentFilters);
+
+
+        $merged = array_map(function() { return []; }, $currentFilters);
 
         foreach ($availableFilters as $availableFilter)
             foreach ($availableFilter as $group => $attribute)
@@ -80,8 +89,8 @@ class FilterController extends Controller
                 'name' => $group['name'][0],
                 'slug' => $group['slug'][0],
                 'sort' => $group['sort'][0],
-                'attributes' => array_map(function($item){ return unserialize($item); },
-                    array_unique(array_map(function($item){ return serialize($item); }, $group['attributes'])))
+                'active_attributes' => array_map(function($item){ return unserialize($item); },
+                    array_unique(array_map(function($item){ return serialize($item); }, $group['active_attributes'])))
             ];
         }
 

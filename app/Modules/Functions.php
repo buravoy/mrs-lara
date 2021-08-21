@@ -120,16 +120,16 @@ class Functions
     }
 
     static function collectFilters($idArray, $discount = false) {
-        $attributesGroups = Groups::with('attributes:group_id,id,name,slug,sort')
-            ->select('id', 'name', 'slug', 'sort')
+        $attributesGroups = Groups::with('active_attributes:group_id,id,name,slug,sort')
+            ->select('id', 'name', 'slug', 'sort', 'show')
             ->orderBy('sort')
             ->get()->toArray();
 
-        $productsAttributesQery = Products::whereIn('id', $idArray);
+        $productsAttributesQuery = Products::whereIn('id', $idArray);
 
-        if ($discount) $productsAttributesQery->where('discount','<>', null);
+        if ($discount) $productsAttributesQuery->where('discount','<>', null);
 
-        $productsAttributes = $productsAttributesQery->pluck('attributes')->toArray();
+        $productsAttributes = $productsAttributesQuery->pluck('attributes')->toArray();
 
         $mergedAttributes = array_map('array_unique', array_merge_recursive(...array_map(function ($attribute) {
             return (array)json_decode($attribute);
@@ -141,11 +141,11 @@ class Functions
                 continue;
             }
 
-            $attributesGroups[$key]['attributes'] = array_filter(
+            $attributesGroups[$key]['active_attributes'] = array_filter(
                 array_map(
                     function ($item) use ($group, $mergedAttributes) {
                         return array_search($item['id'], $mergedAttributes[$group['slug']]) !== false ? $item : null;
-                    }, $group['attributes']),
+                    }, $group['active_attributes']),
                 );
         }
 

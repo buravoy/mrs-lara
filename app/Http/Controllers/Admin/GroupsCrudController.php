@@ -132,7 +132,7 @@ class GroupsCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'show',
-            'label' => 'Показывать название группы в описании',
+            'label' => 'Показывать название группы в описании фильтра',
             'type' => 'checkbox',
             'tab' => 'Информация',
             'default' => 1,

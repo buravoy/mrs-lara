@@ -231,7 +231,7 @@ class AttributesCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'show',
-            'label' => 'Показывать в доступных в фильтре',
+            'label' => 'Показывать в фильтре',
             'type' => 'checkbox',
             'tab' => 'Информация',
             'default' => 1,

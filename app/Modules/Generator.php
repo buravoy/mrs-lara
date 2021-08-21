@@ -11,7 +11,7 @@ class Generator
 {
     public static function categoryMeta($productsData): array
     {
-        dump($productsData);
+//        dump($productsData);
         $data = self::getData($productsData);
         $templates = self::getTemplates('category');
 
@@ -24,18 +24,24 @@ class Generator
         ];
     }
 
-    public static function filterMeta($params, $productsData): array
+    public static function filterMeta($params, $productsData, $filteredId): array
     {
-        dump($productsData);
-        $data = self::getData($productsData);
+//        dump($filteredId);
 
-        $params = array_map(function($item) { return explode('_',$item); }, $params->toArray());
+        $data = self::getData($productsData, $filteredId);
+
+        $params = array_map(function ($item) {
+            return explode('_', $item);
+        }, $params->toArray());
+
 
         foreach ($params as $param)
             foreach ($param as $key => $value) {
                 if ($key == 0) {
 //                    $data[$param[0]][] = Groups::where('slug', $value)->pluck('name')->first();
-                    $data['attributes'][$param[0]][] = Groups::where('slug', $value)->pluck('name')->first();
+                    $name = Groups::where('slug', $value)->select('name', 'show')->first();
+                    $data['attributes'][$param[0]][] = $name->show ? $name->name : null;
+
                 }
                 if ($key > 0) {
 //                    $data[$param[0]][] = Attributes::where('slug', $value)->pluck('name')->first();
@@ -48,7 +54,6 @@ class Generator
 
 
         $templates = self::getTemplates('filter');
-
 
 
         return [
@@ -79,33 +84,40 @@ class Generator
 
         if (isset($data['attributes'])) {
             foreach ($data['attributes'] as $key => $attribute) {
-                if($group = substr($template, strpos($template, '$'.$key), (strlen($key)+2) )) {
-                    if(strpos($group,'#')) {
-                        unset($attribute[0]);
-                        $merged = implode(', ', $attribute);
-                        if(strpos($template, '$'.$key))
-                            unset ($data['attributes'][$key]);
-                        $template = str_replace('$'.$key.'#$', $merged, $template);
-                        continue;
-                    }
-                    $name = $attribute[0];
+                if (substr($template, strpos($template, '$' . $key), (strlen($key) + 2))) {
+                    $name = $attribute[0] ? $attribute[0] . ': ' : $attribute[0];
                     unset ($attribute[0]);
-                    if(strpos($template, '$'.$key))
-                        unset ($data['attributes'][$key]);
-                    $merged = $name. ': '. implode(', ', $attribute);
-                    $template = str_replace('$'.$key.'$', $merged, $template);
+                    if (strpos($template, '$' . $key)) unset ($data['attributes'][$key]);
+                    $merged = $name . implode(', ', $attribute);
+                    $template = str_replace('$' . $key . '$', $merged, $template);
                 }
             }
 
-            $attributes = array_map(function($item) {
+            $attributes = array_map(function ($item) {
                 $name = $item[0];
                 unset($item[0]);
-                return $name.': '.implode(', ', $item);
+                return $name . ': ' . implode(', ', $item);
             }, $data['attributes']);
-            $template = str_replace('$attributes$', implode('. ',$attributes), $template);
 
-            $template = preg_replace('/\$.*?\$/is', '', $template);
-//            $template = str_replace('$%%$', implode(', ',$attributes), $template);
+            $template = str_replace('$attributes$', implode('. ', $attributes), $template);
+
+//
+
+        }
+
+        while (strpos($template, '{')) {
+            $fromS = strpos($template, '{');
+            $toS = strpos($template, '}');
+
+            $section = substr($template, $fromS, ($toS - $fromS + 1));
+
+            if(strpos($section, '$')) $template = str_replace($section, '', $template);
+
+            else $template = str_replace($section, substr($section, 1, -1), $template);
+//
+//            dump($section);
+
+
         }
 
         $templateRun = strrev($data['categoryId']);
@@ -120,35 +132,56 @@ class Generator
             $template = str_replace($part, $word[$wordPos], $template);
         }
 
+        $template = preg_replace('/\$.*?\$/is', '', $template);
+
+//        while(preg_match('/\$.*?\$/is', $template, $matches)){
+//        preg_match('/\$.*?\$/is', $template, $matches) ;
+//
+//            dump(preg_match('/\$.*?\$/is', $template));
+
+//            if ($matches) {
+//
+//            }
+
+//        }
+
+
+
         return $template;
     }
 
-    static function getData($productsData): array
+    static function getData($productsData, $filteredId = null): array
     {
 
-        $productsId = $productsData['productsId']->toArray();
+        $productsId = $filteredId ?? $productsData['productsId']->toArray();
+
+        $discountMin = Products::whereIn('id', $productsId)->whereNotNull('discount')->select('discount')
+            ->orderBy('discount', 'asc')
+            ->first();
+
+        $discountMax = Products::whereIn('id', $productsId)->whereNotNull('discount')->select('discount')
+            ->orderBy('discount', 'desc')
+            ->first();
+
+        $priceMin = Products::whereIn('id', $productsId)->whereNotNull('price')->select('price')
+            ->orderBy('price', 'asc')
+            ->first();
+
+        $priceMax = Products::whereIn('id', $productsId)->whereNotNull('price')->select('price')
+            ->orderBy('price', 'desc')
+            ->first();
 
         return [
             'categoryId' => $productsData['category']->id,
             'name' => $productsData['category']->name,
-            'count' => $productsData['category']->count,
+            'count' => $filteredId ? Products::whereIn('id', $productsId)->count() : $productsData['category']->count,
             'discount' => [
-                'min' => Products::whereIn('id', $productsId)->whereNotNull('discount')->select('discount')
-                    ->orderBy('discount', 'asc')
-                    ->first()->toArray()['discount'],
-
-                'max' => Products::whereIn('id', $productsId)->whereNotNull('discount')->select('discount')
-                    ->orderBy('discount', 'desc')
-                    ->first()->toArray()['discount'],
+                'min' => $discountMin ? $discountMin->toArray()['discount'] : null,
+                'max' => $discountMax ? $discountMax->toArray()['discount'] : null,
             ],
             'price' => [
-                'min' => Products::whereIn('id', $productsId)->whereNotNull('price')->select('price')
-                    ->orderBy('price', 'asc')
-                    ->first()->toArray()['price'],
-
-                'max' => Products::whereIn('id', $productsId)->whereNotNull('price')->select('price')
-                    ->orderBy('price', 'desc')
-                    ->first()->toArray()['price'],
+                'min' => $priceMin ? $priceMin->toArray()['price'] : null,
+                'max' => $priceMax ? $priceMax->toArray()['price'] : null,
             ]
         ];
     }
@@ -165,11 +198,11 @@ class Generator
             )->first();
 
         return [
-             'meta_title' => $templates->template_meta_title,
-             'meta_description' => $templates->template_meta_description,
-             'title' => $templates->template_title,
-             'description1' => $templates->template_description1,
-             'description2' => $templates->template_description2,
+            'meta_title' => $templates->template_meta_title,
+            'meta_description' => $templates->template_meta_description,
+            'title' => $templates->template_title,
+            'description1' => $templates->template_description1,
+            'description2' => $templates->template_description2,
         ];
     }
 }

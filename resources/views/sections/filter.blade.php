@@ -20,6 +20,8 @@
 
     <h4>Посмотрите еще:</h4>
 
+
+
     <div>
 
         @if($category->parent)
@@ -40,11 +42,12 @@
     <hr>
 
     <h4>атрибуты</h4>
+
     <div>
         @foreach($filters as $filter)
-            @if(!empty($filter['attributes']) && count($filter['attributes']) > 1)
+            @if(!empty($filter['active_attributes']) && count($filter['active_attributes']) > 1)
                 <p>{{ $filter['name'] }}</p>
-                @foreach($filter['attributes'] as $attribute)
+                @foreach($filter['active_attributes'] as $attribute)
                     @php
                         $filterUrlData = Functions::getFilterUrl($filter['slug'], $attribute['slug'], Request::path());
                         if ($discountSet) $filterUrlData['link'].'/discount';
