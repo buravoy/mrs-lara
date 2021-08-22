@@ -19,8 +19,8 @@ class Functions
 
 
         $generatedUrl = array_filter(array_map(function($item) use($url) {
-            if ($item == 'category' && count($url) <= 3) return 'filter';
-            if ($item == 'filter' && count($url) <= 3) return 'category';
+            if ($item == 'category' && count($url) <= 2) return 'filter';
+            if ($item == 'filter' && count($url) <= 2) return 'category';
             if ($item == 'discount') return null;
             return $item;
         }, $url));

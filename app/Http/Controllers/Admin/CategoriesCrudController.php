@@ -204,7 +204,7 @@ class CategoriesCrudController extends CrudController
             'type' => 'text',
             'tab' => 'Информация',
             'wrapper' => [
-                'class' => 'form-group col-md-6',
+                'class' => 'form-group col-md-4',
             ],
         ]);
 
@@ -214,7 +214,17 @@ class CategoriesCrudController extends CrudController
             'type' => 'text',
             'tab' => 'Информация',
             'wrapper' => [
-                'class' => 'form-group col-md-4',
+                'class' => 'form-group col-md-3',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'vinpad',
+            'label' => 'Винительный падеж',
+            'type' => 'text',
+            'tab' => 'Информация',
+            'wrapper' => [
+                'class' => 'form-group col-md-3',
             ],
         ]);
 

@@ -28,6 +28,7 @@ class CategoriesRequest extends FormRequest
         return [
             'name' => 'bail|required|string|max:255',
             'short_name' => 'bail|nullable|string|max:255',
+            'vinpad' => 'bail|nullable|string|max:255',
             'description' => 'bail|nullable|string|max:65535',
             'short_description' => 'bail|nullable|string|max:65535',
             'form' => 'bail|nullable|string|max:10',

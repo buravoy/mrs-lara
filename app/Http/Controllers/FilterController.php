@@ -37,7 +37,7 @@ class FilterController extends Controller
             'products' => $filteredProductsQuery->orderBy('price', 'asc')->paginate(10),
             'discountAvailable' => $filteredProductsQuery->where('discount','<>' , null)->first(),
             'category' => $productsData['category'],
-            'meta' => Generator::filterMeta($params, $productsData, $filteredId),
+            'meta' => Generator::filterMeta($params, $productsData, $filteredId, $discount),
             'filters' => $availableFilters,
             'discountSet' => $discount,
             'page' => 'filter'

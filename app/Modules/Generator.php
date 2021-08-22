@@ -24,11 +24,12 @@ class Generator
         ];
     }
 
-    public static function filterMeta($params, $productsData, $filteredId): array
+    public static function filterMeta($params, $productsData, $filteredId, $discount): array
     {
-//        dump($filteredId);
+//        dump($discount);
 
-        $data = self::getData($productsData, $filteredId);
+
+        $data = self::getData($productsData, $filteredId, $discount);
 
         $params = array_map(function ($item) {
             return explode('_', $item);
@@ -45,7 +46,37 @@ class Generator
                 }
                 if ($key > 0) {
 //                    $data[$param[0]][] = Attributes::where('slug', $value)->pluck('name')->first();
-                    $data['attributes'][$param[0]][] = Attributes::where('slug', $value)->pluck('name')->first();
+
+
+
+                    $value = Attributes::where('slug', $value)->select('name', 'form')->first();
+
+//                    dump(json_decode($value->form));
+
+                    switch ($productsData['category']->form) {
+                        case 'жен': {
+                            $data['attributes'][$param[0]][] = json_decode($value->form)->form_female ?? $value->name;
+                            break;
+                        }
+                        case 'муж': {
+                            $data['attributes'][$param[0]][] = json_decode($value->form)->form_male ?? $value->name;
+                            break;
+                        }
+                        case 'сред': {
+                            $data['attributes'][$param[0]][] = json_decode($value->form)->form_neutral ?? $value->name;
+                            break;
+                        }
+                        case 'множ': {
+                            $data['attributes'][$param[0]][] = json_decode($value->form)->form_many ?? $value->name;
+                            break;
+                        }
+                        default: {
+                            $data['attributes'][$param[0]][] = $value->name;
+                        }
+                    }
+
+
+//                    $data['attributes'][$param[0]][] = Attributes::where('slug', $value)->pluck('name')->first();
                 }
             }
 
@@ -68,11 +99,12 @@ class Generator
     static function parseTemplate($template, $data)
     {
         if (!$template) return null;
-
         if (isset($data['name']))
             $template = str_replace('$name$', $data['name'], $template);
         if (isset($data['count']))
             $template = str_replace('$count$', $data['count'], $template);
+        if (isset($data['discount']['isset']))
+            $template = str_replace('$discount$', '', $template);
         if (isset($data['discount']['max']))
             $template = str_replace('$discountMax$', $data['discount']['max'], $template);
         if (isset($data['discount']['min']))
@@ -82,12 +114,14 @@ class Generator
         if (isset($data['price']['min']))
             $template = str_replace('$priceMin$', $data['price']['min'], $template);
 
+        $groups = [];
         if (isset($data['attributes'])) {
             foreach ($data['attributes'] as $key => $attribute) {
-                if (substr($template, strpos($template, '$' . $key), (strlen($key) + 2))) {
-                    $name = $attribute[0] ? $attribute[0] . ': ' : $attribute[0];
+                if ($groups[] = substr($template, strpos($template, '$' . $key), (strlen($key) + 2))) {
+                    $name = $attribute[0];
                     unset ($attribute[0]);
-                    if (strpos($template, '$' . $key)) unset ($data['attributes'][$key]);
+                    if (strpos($template, '$' . $key))
+                        unset ($data['attributes'][$key]);
                     $merged = $name . implode(', ', $attribute);
                     $template = str_replace('$' . $key . '$', $merged, $template);
                 }
@@ -96,14 +130,18 @@ class Generator
             $attributes = array_map(function ($item) {
                 $name = $item[0];
                 unset($item[0]);
-                return $name . ': ' . implode(', ', $item);
+                return $name . implode(', ', $item);
             }, $data['attributes']);
 
-            $template = str_replace('$attributes$', implode('. ', $attributes), $template);
-
-//
-
+            $template = str_replace('$attributes$', implode(' ', $attributes), $template);
         }
+
+        foreach ($data['groups'] as $group => $count) {
+            $template = str_replace('$count'.$group.'$', $count, $template);
+        }
+
+
+
 
         while (strpos($template, '{')) {
             $fromS = strpos($template, '{');
@@ -127,32 +165,23 @@ class Generator
             $from = strpos($template, '[');
             $to = strpos($template, ']');
             $part = substr($template, $from, ($to - $from + 1));
-            $word = explode('/', mb_substr(mb_substr($part, 1), 0, -1));
+            $word = explode('|', mb_substr(mb_substr($part, 1), 0, -1));
             $wordPos = ($templateRun[$templateLoop++] + 99) % count($word);
             $template = str_replace($part, $word[$wordPos], $template);
         }
 
         $template = preg_replace('/\$.*?\$/is', '', $template);
 
-//        while(preg_match('/\$.*?\$/is', $template, $matches)){
-//        preg_match('/\$.*?\$/is', $template, $matches) ;
-//
-//            dump(preg_match('/\$.*?\$/is', $template));
 
-//            if ($matches) {
-//
-//            }
+        $template = mb_strtolower($template);
 
-//        }
-
-
-
-        return $template;
+        return preg_replace_callback('#((?:[.!?]|^)\s*)(\w)#us', function($matches) {
+            return $matches[1] . mb_strtoupper($matches[2]);
+        }, $template);
     }
 
-    static function getData($productsData, $filteredId = null): array
+    static function getData($productsData, $filteredId = null, $discount = null): array
     {
-
         $productsId = $filteredId ?? $productsData['productsId']->toArray();
 
         $discountMin = Products::whereIn('id', $productsId)->whereNotNull('discount')->select('discount')
@@ -171,14 +200,28 @@ class Generator
             ->orderBy('price', 'desc')
             ->first();
 
+        $discount = [
+            'isset' => $discount,
+            'min' => $discountMin ? $discountMin->toArray()['discount'] : null,
+            'max' => $discountMax ? $discountMax->toArray()['discount'] : null,
+        ];
+
+        if ($discount) unset($discount['isset']);
+
+        $groups = Groups::with('attributes:group_id')->get();
+
+        $groupsCount = [];
+        foreach ($groups as $group)
+            $groupsCount[ucfirst($group->slug)] = $group->attributes->count();
+
+        $countProducts = $filteredId ? Products::whereIn('id', $productsId)->count() : $productsData['category']->count;
+
         return [
             'categoryId' => $productsData['category']->id,
             'name' => $productsData['category']->name,
-            'count' => $filteredId ? Products::whereIn('id', $productsId)->count() : $productsData['category']->count,
-            'discount' => [
-                'min' => $discountMin ? $discountMin->toArray()['discount'] : null,
-                'max' => $discountMax ? $discountMax->toArray()['discount'] : null,
-            ],
+            'count' => $countProducts . ' ' .Functions::plural($countProducts, ['товар', 'товара', 'товаров']),
+            'discount' => $discount,
+            'groups' => $groupsCount,
             'price' => [
                 'min' => $priceMin ? $priceMin->toArray()['price'] : null,
                 'max' => $priceMax ? $priceMax->toArray()['price'] : null,

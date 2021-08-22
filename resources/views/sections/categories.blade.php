@@ -1,3 +1,4 @@
+{{--@dump($variable)--}}
 <nav class="row relative my-3 categories-menu">
     @foreach($categories as $categoryFirst)
         @if($categoryFirst->count)
