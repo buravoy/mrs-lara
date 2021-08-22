@@ -50,14 +50,48 @@ button {
         &:before {
             content: "";
             position: absolute;
-            width: 12px;
-            height: 12px;
+            width: 13px;
+            height: 13px;
             border: 1px solid;
             left: 0;
-            top: calc(50% - 6px);
+            top: calc(50% - 7px);
         }
 
 
+
+        &:hover {
+            cursor: pointer;
+            z-index: 1;
+            opacity: 1;
+
+            & span {
+                font-size: 1rem;;
+            }
+        }
+    }
+
+    &-assoc {
+        text-transform: uppercase;
+        font-family: $condensed;
+        font-weight: 500;
+        opacity: .75;
+        font-size: .9rem;
+        color: $black;
+        transition: .2s;
+        margin: 0 3px 3px 0;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 90%;
+        max-width: 260px;
+        padding: 3px 4px 2px 0;
+        min-height: 25px;
+
+        span {
+            transition: .1s;
+            line-height: 15px;
+        }
 
         &:hover {
             cursor: pointer;

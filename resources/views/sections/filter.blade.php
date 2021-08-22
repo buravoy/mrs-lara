@@ -29,7 +29,7 @@
             @foreach($category->parent->allChild->sortByDesc('count') as $categoryFirst)
                 @if($categoryFirst->id != $category->id && $categoryFirst->count > 0)
                     <a href="{{ route('category',['category' => $categoryFirst->slug]) }}"
-                       class="btn-filter">
+                       class="btn-assoc">
                         <span>{{ $categoryFirst->short_name }}</span>
                     </a>
                 @endif
