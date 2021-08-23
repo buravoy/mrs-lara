@@ -14,7 +14,6 @@
             <a href="{{ route('index') }}/{{ $discount['link'] }}"
                class="btn-filter btn-sale @if($discount['isActive']) active @endif">
                 <span>распродажа  <span class="red">% SALE %</span></span>
-                <i class="fas fa-tags red"></i>
             </a>
         </div>
     </div>
