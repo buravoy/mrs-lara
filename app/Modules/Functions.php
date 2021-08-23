@@ -93,7 +93,7 @@ class Functions
 
     static function productsData($category, $discount = false): Collection
     {
-        $catIdWithChild = Categories::where('slug', $category)->select('id', 'parent_id', 'slug', 'name', 'count', 'form')->first();
+        $catIdWithChild = Categories::where('slug', $category)->select('id', 'parent_id', 'slug', 'name', 'count', 'form', 'vinpad')->first();
         $idArray = Arr::flatten(Functions::collectId(collect([$catIdWithChild])));
         $productsId = CategoryProduct::whereIn('category_id', $idArray)->pluck('product_id')->unique();;
         $products = Products::whereIn('id', $productsId);
@@ -121,7 +121,7 @@ class Functions
 
     static function collectFilters($idArray, $discount = false) {
         $attributesGroups = Groups::with('active_attributes:group_id,id,name,slug,sort')
-            ->select('id', 'name', 'slug', 'sort', 'show')
+            ->select('id', 'name', 'slug', 'sort', 'show', 'filter_name', 'description_name')
             ->orderBy('sort')
             ->get()->toArray();
 

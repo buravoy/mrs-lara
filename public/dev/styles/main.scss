@@ -48,6 +48,13 @@
     &:first-letter {
         text-transform: uppercase;
     }
+
+    p {
+        margin-bottom: 10px;
+        &:first-letter {
+            text-transform: uppercase;
+        }
+    }
 }
 
 .filters-list {

@@ -3,40 +3,31 @@
     use App\Modules\Beautify;
 @endphp
 
-
-@if($discountAvailable != null)
-
-    @php
-        $discount = Functions::getDiscountUrl(Request::path());
-    @endphp
+@if($category->parent && count($category->parent->allChild) > 1)
     <div class="filters-group">
-        <div class="d-flex flex-wrap align-items-start filters-list">
-            <a href="{{ route('index') }}/{{ $discount['link'] }}"
-               class="btn-filter btn-sale @if($discount['isActive']) active @endif">
-                <span>распродажа  <span class="red">% SALE %</span></span>
-            </a>
-        </div>
-    </div>
-@endif
+        <div class="d-flex flex-wrap align-items-start filters-list" style="max-height: unset;">
+            @foreach($category->parent->parent->allChild->sortByDesc('count') as $categoryFirst)
 
+                <a href="{{ route('category',['category' => $categoryFirst->slug]) }}"
+                   class="btn-assoc"
+                   style="order:@if($categoryFirst->child->contains('id', $category->id))  0 @else 1 @endif">
+                    <span>{{ $categoryFirst->short_name }}</span>
+                </a>
 
+                @if($categoryFirst->child->contains('id', $category->id))
 
-@if($category->parent)
-    <div class="filters-group">
-        <h4 class="my-2">Посмотрите еще</h4>
-        <div class="d-flex flex-wrap align-items-start filters-list">
-            @foreach($category->parent->allChild->sortByDesc('count') as $categoryFirst)
-                @if($categoryFirst->id != $category->id && $categoryFirst->count > 0)
-                    <a href="{{ route('category',['category' => $categoryFirst->slug]) }}"
-                       class="btn-assoc">
-                        <span>{{ $categoryFirst->short_name }}</span>
-                    </a>
+                    @foreach($categoryFirst->allChild as $categorySecond)
+                        @if($categorySecond->count > 0)
+                            <a href="{{ route('category',['category' => $categorySecond->slug]) }}"
+                               class="btn-assoc justify-content-start ml-md-3 ml-2 @if($categorySecond->id == $category->id) cyan @endif">
+                                <span>{{ $categorySecond->short_name }}</span>
+                            </a>
+                        @endif
+                    @endforeach
                 @endif
+
             @endforeach
         </div>
-        @if(count($category->parent->allChild) > 6)
-            <p class="show-all-filters">Показать все</p>
-        @endif
     </div>
 @endif
 
@@ -44,9 +35,8 @@
 
 @foreach($filters as $filter)
     @if(!empty($filter['active_attributes']) && count($filter['active_attributes']) > 1)
-
         <div class="filters-group">
-            <h4 class="my-2">{{ $filter['name'] }}</h4>
+            <h4 class="my-2">{{ $filter['filter_name'] ?? $filter['name'] }}</h4>
 
             <div class="d-flex flex-column align-items-start filters-list">
                 @foreach($filter['active_attributes'] as $attribute)
@@ -54,6 +44,7 @@
                         $filterUrlData = Functions::getFilterUrl($filter['slug'], $attribute['slug'], Request::path());
                         if ($discountSet) $filterUrlData['link'].'/discount';
                     @endphp
+
                     <a href="{{ route('index') }}/{{ $filterUrlData['link'] }}"
                        class="btn-filter @if($filterUrlData['isActive']) active @endif"
                     >
@@ -66,8 +57,20 @@
                 <p class="show-all-filters">Показать все</p>
             @endif
         </div>
-
-
     @endif
 @endforeach
+
+@if($discountAvailable != null)
+    @php
+        $discount = Functions::getDiscountUrl(Request::path());
+    @endphp
+    <div class="filters-group">
+        <div class="d-flex flex-wrap align-items-start filters-list">
+            <a href="{{ route('index') }}/{{ $discount['link'] }}"
+               class="btn-filter btn-sale @if($discount['isActive']) active @endif">
+                <span>распродажа  <span class="red"> SALE</span></span>
+            </a>
+        </div>
+    </div>
+@endif
 

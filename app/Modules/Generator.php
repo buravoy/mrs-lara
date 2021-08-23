@@ -40,8 +40,8 @@ class Generator
             foreach ($param as $key => $value) {
                 if ($key == 0) {
 //                    $data[$param[0]][] = Groups::where('slug', $value)->pluck('name')->first();
-                    $name = Groups::where('slug', $value)->select('name', 'show')->first();
-                    $data['attributes'][$param[0]][] = $name->show ? $name->name : null;
+                    $name = Groups::where('slug', $value)->select('name', 'show', 'description_name')->first();
+                    $data['attributes'][$param[0]][] = $name->show ? $name->description_name ?? $name->name : null;
 
                 }
                 if ($key > 0) {
@@ -74,15 +74,8 @@ class Generator
                             $data['attributes'][$param[0]][] = $value->name;
                         }
                     }
-
-
-//                    $data['attributes'][$param[0]][] = Attributes::where('slug', $value)->pluck('name')->first();
                 }
             }
-
-
-//        dump($data);
-
 
         $templates = self::getTemplates('filter');
 
@@ -99,6 +92,7 @@ class Generator
     static function parseTemplate($template, $data)
     {
         if (!$template) return null;
+
         if (isset($data['name']))
             $template = str_replace('$name$', $data['name'], $template);
         if (isset($data['count']))
@@ -113,6 +107,8 @@ class Generator
             $template = str_replace('$priceMax$', $data['price']['max'], $template);
         if (isset($data['price']['min']))
             $template = str_replace('$priceMin$', $data['price']['min'], $template);
+        if (isset($data['price']['min']))
+            $template = str_replace('$vinpad$', $data['vinpad'], $template);
 
         $groups = [];
         if (isset($data['attributes'])) {
@@ -122,7 +118,7 @@ class Generator
                     unset ($attribute[0]);
                     if (strpos($template, '$' . $key))
                         unset ($data['attributes'][$key]);
-                    $merged = $name . implode(', ', $attribute);
+                    $merged = $name . ' ' . implode(', ', $attribute);
                     $template = str_replace('$' . $key . '$', $merged, $template);
                 }
             }
@@ -130,7 +126,7 @@ class Generator
             $attributes = array_map(function ($item) {
                 $name = $item[0];
                 unset($item[0]);
-                return $name . implode(', ', $item);
+                return $name. ' ' . implode(', ', $item);
             }, $data['attributes']);
 
             $template = str_replace('$attributes$', implode(' ', $attributes), $template);
@@ -182,8 +178,11 @@ class Generator
         }, $template);
     }
 
-    static function getData($productsData, $filteredId = null, $discount = null): array
+    static function getData($productsData, $filteredId = null, $isDiscount = false): array
     {
+
+//        dump($isDiscount);
+
         $productsId = $filteredId ?? $productsData['productsId']->toArray();
 
         $discountMin = Products::whereIn('id', $productsId)->whereNotNull('discount')->select('discount')
@@ -203,12 +202,12 @@ class Generator
             ->first();
 
         $discount = [
-            'isset' => $discount,
+            'isset' => $isDiscount,
             'min' => $discountMin ? $discountMin->toArray()['discount'] : null,
             'max' => $discountMax ? $discountMax->toArray()['discount'] : null,
         ];
 
-        if ($discount) unset($discount['isset']);
+        if ($isDiscount == false) unset($discount['isset']);
 
         $groups = Groups::with('attributes:group_id')->get();
 
@@ -220,6 +219,7 @@ class Generator
 
         return [
             'categoryId' => $productsData['category']->id,
+            'vinpad' => $productsData['category']->vinpad,
             'name' => $productsData['category']->name,
             'count' => $countProducts . ' ' .Functions::plural($countProducts, ['товар', 'товара', 'товаров']),
             'discount' => $discount,

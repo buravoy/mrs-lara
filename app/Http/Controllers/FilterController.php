@@ -51,7 +51,6 @@ class FilterController extends Controller
         $currentFilters = Functions::collectFilters($filteredProductsQuery->pluck('id')->toArray(), $discount);
 
 
-
         if ($discount && empty($params)) return $currentFilters;
 
         if (count($params) == 1) {
@@ -60,11 +59,8 @@ class FilterController extends Controller
 
             $currentFilters[$singleParam] = $categoryFilters[$singleParam];
 
-//            dump($currentFilters);
             return $currentFilters;
         }
-
-
 
         foreach ($params as $param) {
             $groupSlug = explode('_', $param)[0];
@@ -74,8 +70,6 @@ class FilterController extends Controller
             $availableFilters[$groupSlug] = Functions::collectFilters($filteredProductsId, $discount);
         }
 
-
-
         $merged = array_map(function() { return []; }, $currentFilters);
 
         foreach ($availableFilters as $availableFilter)
@@ -84,6 +78,7 @@ class FilterController extends Controller
                     $merged[$group] = array_merge_recursive($merged[$group], $attribute );
 
         foreach ($merged as $key => $group) {
+
             $merged[$key] = [
                 'id' => $group['id'][0],
                 'name' => $group['name'][0],
