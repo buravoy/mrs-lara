@@ -25,8 +25,8 @@
         @include('sections.categories')
         <div class="py-3">
             <div class="mb-3">
-                <h1 class="font-11 mb-3">{!! $meta['title'] ?? $category->name !!}</h1>
-                <p class="mb-5 ucfirst">{!! $category->short_description ?? $meta['description1'] !!}</p>
+                <h1 class="font-10 mb-3">{!! $meta['title'] ?? $category->name !!}</h1>
+                <p class="font-09 mb-5 ucfirst">{!! $category->short_description ?? $meta['description1'] !!}</p>
             </div>
             <div class="row">
                 <div class="col-12 col-md-3">

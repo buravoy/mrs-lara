@@ -167,7 +167,8 @@ class Generator
             $part = substr($template, $from, ($to - $from + 1));
             $word = explode('|', mb_substr(mb_substr($part, 1), 0, -1));
             $wordPos = ($templateRun[$templateLoop++] + 99) % count($word);
-            if ($templateLoop > count($word)) $templateLoop = 0;
+            if ($templateLoop > count($word))
+                $templateLoop = 0;
             $template = str_replace($part, $word[$wordPos], $template);
         }
 

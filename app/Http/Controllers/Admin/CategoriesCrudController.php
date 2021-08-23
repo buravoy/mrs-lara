@@ -132,11 +132,11 @@ class CategoriesCrudController extends CrudController
 
 //        CRUD::setFromDb(); // columns
 
-//        CRUD::addColumn([
-//            'name' => 'id',
-//            'type' => 'text',
-//            'label' => 'ID'
-//        ]);
+        CRUD::addColumn([
+            'name' => 'id',
+            'type' => 'text',
+            'label' => 'ID'
+        ]);
 
         CRUD::addColumn([
             'name' => 'xml_id',
@@ -388,6 +388,7 @@ class CategoriesCrudController extends CrudController
         $upd_name = $request->update_name;
         $upd_short = $request->update_short;
         $upd_form = $request->update_form;
+        $upd_vinpad = $request->update_vinpad;
 
         $tempCategories = [];
 
@@ -398,23 +399,28 @@ class CategoriesCrudController extends CrudController
             $name = $category->name ? (string)$category->name : 'Error';
             $short = $category->short ? (string)$category->short : null;
             $form = $category->form ? (string)$category->form : null;
+            $vinPad = $category->vinpad ? (string)$category->vinpad : null;
             $xmlId = $category->attributes()->id ? (string)$category->attributes()->id : null;
             $xmlParent = $category->attributes()->parent ? (string)$category->attributes()->parent : null;
 
-            if (Categories::where('xml_id', $xmlId)->exists()) {
-                $updatedCategory = [ 'deleted_at' => null ];
+            if ($id = Categories::where('xml_id', $xmlId)->withTrashed()->pluck('id')->first()) {
+                $updatedCategory = [
+                    'deleted_at' => null
+                ];
 
                 if($upd_name != null) $updatedCategory['name'] = $name;
                 if($upd_short != null) $updatedCategory['short_name'] = $short;
                 if($upd_form != null) $updatedCategory['form'] = $form;
+                if($upd_vinpad != null) $updatedCategory['vinpad'] = $vinPad;
 
-                $id = Categories::where('xml_id', $xmlId)->update($updatedCategory);
+                Categories::where('id', $id)->withTrashed()->update($updatedCategory);
             } else {
                 $id = Categories::query()->insertGetId([
                     'name' => $name,
                     'xml_id' => $xmlId,
                     'slug' => SlugService::createSlug(Categories::class, 'slug', $name),
                     'short_name' => $short,
+                    'vinpad' => $vinPad,
                     'form' => $form,
                     'deleted_at' => null
                 ]);

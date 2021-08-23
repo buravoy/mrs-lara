@@ -4,7 +4,13 @@ import 'bootstrap'
 
 $(function (){
 
-    const $modal = $('#images-popup')
+    const $modal = $('#images-popup'), $allFilters = $('.show-all-filters');
+
+    $allFilters.on('click', function (){
+        const $t = $(this);
+
+        $t.closest('.filters-group').find('.filter-list').addClass('show')
+    })
 
     $('.img-popup').on('click', function (){
         $modal.modal('show', $(this))

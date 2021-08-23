@@ -49,6 +49,11 @@
                             <input type="checkbox" id="update_form" name="update_form">
                             <label class="form-check-label font-weight-normal" for="update_form">Обновлять словоформы</label>
                         </div>
+
+                        <div class="checkbox">
+                            <input type="checkbox" id="update_vinpad" name="update_vinpad">
+                            <label class="form-check-label font-weight-normal" for="update_vinpad">Обновлять падежи</label>
+                        </div>
                     </div>
 
 
