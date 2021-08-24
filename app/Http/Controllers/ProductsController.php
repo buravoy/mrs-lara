@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attributes;
+use App\Models\Categories;
 use App\Models\CategoryProduct;
 use App\Models\Groups;
 use App\Models\Products;
@@ -15,9 +16,12 @@ class ProductsController extends Controller
         if(!$slug) abort(404);
 
         $product = Products::where('slug', $slug)->first();
+        $categoryId = CategoryProduct::where('product_id', $product->id)->first()->category_id;
+        $category = Categories::where('id',$categoryId)->first();
 
         return view('product', [
-            'product' => $product
+            'product' => $product,
+            'category' => $category
         ]);
     }
 

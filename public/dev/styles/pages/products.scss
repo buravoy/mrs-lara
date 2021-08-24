@@ -100,7 +100,7 @@
             width: 100%;
             height: 43px;
             overflow: hidden;
-            padding: 5px;
+            padding: 5px 0;
             display: flex;
             align-items: start;
             transition: .2s;
@@ -123,17 +123,22 @@
         .description {
             font-size: .7rem;
             font-family: $condensed;
-            padding: 5px 5px 0;
-            text-align: justify;
-            height: 31px;
+            padding: 3px 0 0;
+            margin: 0 -2px;
+            height: 42px;
             overflow: hidden;
             opacity: .7;
             transition: .2s;
+
+            p, span {
+                margin: 0 3px;
+                white-space: nowrap;
+            }
         }
 
         .about {
             text-align: right;
-            margin-top: -5px;
+            margin-top: -2px;
             a {
                 font-family: $condensed;
                 font-weight: 500;

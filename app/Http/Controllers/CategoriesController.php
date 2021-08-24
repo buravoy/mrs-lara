@@ -15,9 +15,12 @@ class CategoriesController extends Controller
 
         $productsData = Functions::productsData($category);
         $productsQuery = $productsData['query'];
+        $sorting = Functions::sorting();
 
         return view('category', [
-            'products' => $productsQuery->orderBy('price', 'asc')->paginate(10),
+            'products' => $productsQuery->orderBy($sorting['column'], $sorting['direction'])
+                ->orderBy('price', 'asc')
+                ->paginate($_COOKIE['pagination'] ?? 20),
             'discountAvailable' => $productsQuery->where('discount','<>' , null)->first(),
             'category' => $productsData['category'],
             'filters' => Functions::collectFilters($productsData['productsId']),

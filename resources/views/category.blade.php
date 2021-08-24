@@ -28,22 +28,60 @@
                 <h1 class="font-12 mb-3">{!! $meta['title'] ?? $category->name !!}</h1>
                 <div class="font-09 ucfirst">{!! $category->short_description ?? $meta['description1'] !!}</div>
             </div>
+
+            <div class="my-5">
+                @include('sections.breadcrumbs')
+            </div>
+
             <div class="row">
                 <div class="col-12 col-md-3">
                     @include('sections.filter')
                 </div>
                 <div class="col-12 col-md-9">
-                    <p class="mb-2">
-                        В каталоге: <b>{{ $products->links()->paginator->total() }}</b>
-                        {{Functions::plural($products->links()->paginator->total(), ['товар', 'товара', 'товаров'])  }}
-                    </p>
-                    <div class="">
+
+                    <div class="row px-2 mb-3">
                         @foreach($category->allChild->sortByDesc('count') as $cat)
                             @if($cat->count)
-                                <a href="{{ route('category',['category' => $cat->slug]) }}" class="btn-cyan mb-1">{{ $cat->short_name }}</a>
+                                <div class="col-2 px-2 mb-1">
+                                    <a href="{{ route('category',['category' => $cat->slug]) }}" class="deep-category mb-1">
+                                        <span>{{ $cat->short_name }}</span>
+                                    </a>
+                                </div>
                             @endif
                         @endforeach
                     </div>
+
+                    <div class="mb-3 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <p class="condensed">
+                                В каталоге <b>{{ $products->links()->paginator->total() }}</b>
+                                {{Functions::plural($products->links()->paginator->total(), ['товар', 'товара', 'товаров'])  }}
+                            </p>
+                            <div class="sorting-group ml-2">
+                                <select name="sort" id="" style="min-width: 180px;">
+                                    <option value="asc" @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'asc') selected @endif>Сначала подешевле</option>
+                                    <option value="desc" @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'desc') selected @endif>Сначала подороже</option>
+                                    <option value="discount-desc" @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'discount-desc') selected @endif>По убыванию скидки</option>
+                                    <option value="discount-asc" @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'discount-asc') selected @endif>По возрастанию скидки</option>
+                                    <option value="abc" @if(!isset($_COOKIE['sorting']) || $_COOKIE['sorting'] == 'abc') selected @endif>По алфавиту</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="sorting">
+                            <div class="sorting-group">
+                                <p class="mr-2">По </p>
+                                <select name="paginate" id="" class="pr-0">
+                                    <option value="20" @if(isset($_COOKIE['pagination']) && $_COOKIE['pagination'] == '20') selected @endif>20</option>
+                                    <option value="60" @if(isset($_COOKIE['pagination']) && $_COOKIE['pagination'] == '60') selected @endif>60</option>
+                                    <option value="100" @if(isset($_COOKIE['pagination']) && $_COOKIE['pagination'] == '100') selected @endif>100</option>
+                                </select>
+                                <p class="ml-2">на странице</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+
                     <div class="row">
                         @if(!empty($products->items()))
                             @foreach($products as $product)
@@ -61,7 +99,7 @@
                 {{ $products->onEachSide(1)->links() }}
             </div>
 
-            <div class="my-5 ucfirst">{!! $category->description ?? $meta['description2'] !!}</div>
+            <div class="my-5 ucfirst font-09">{!! $category->description ?? $meta['description2'] !!}</div>
 
         </div>
     </div>

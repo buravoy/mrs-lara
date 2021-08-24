@@ -11,7 +11,6 @@ class Generator
 {
     public static function categoryMeta($productsData): array
     {
-//        dump($productsData);
         $data = self::getData($productsData);
         $templates = self::getTemplates('category');
 
@@ -26,32 +25,17 @@ class Generator
 
     public static function filterMeta($params, $productsData, $filteredId, $discount): array
     {
-//        dump($discount);
-
-
         $data = self::getData($productsData, $filteredId, $discount);
-
-        $params = array_map(function ($item) {
-            return explode('_', $item);
-        }, $params->toArray());
-
+        $params = array_map(function ($item) { return explode('_', $item); }, $params->toArray());
 
         foreach ($params as $param)
             foreach ($param as $key => $value) {
                 if ($key == 0) {
-//                    $data[$param[0]][] = Groups::where('slug', $value)->pluck('name')->first();
                     $name = Groups::where('slug', $value)->select('name', 'show', 'description_name')->first();
                     $data['attributes'][$param[0]][] = $name->show ? $name->description_name ?? $name->name : null;
-
                 }
                 if ($key > 0) {
-//                    $data[$param[0]][] = Attributes::where('slug', $value)->pluck('name')->first();
-
-
-
                     $value = Attributes::where('slug', $value)->select('name', 'form')->first();
-
-//                    dump(json_decode($value->form));
 
                     switch ($productsData['category']->form) {
                         case 'жен': {
@@ -78,7 +62,6 @@ class Generator
             }
 
         $templates = self::getTemplates('filter');
-
 
         return [
             'meta_title' => self::parseTemplate($templates['meta_title'], $data),
@@ -132,12 +115,8 @@ class Generator
             $template = str_replace('$attributes$', implode(' ', $attributes), $template);
         }
 
-        foreach ($data['groups'] as $group => $count) {
+        foreach ($data['groups'] as $group => $count)
             $template = str_replace('$count'.$group.'$', $count, $template);
-        }
-
-
-
 
         while (strpos($template, '{')) {
             $fromS = strpos($template, '{');
@@ -146,12 +125,7 @@ class Generator
             $section = substr($template, $fromS, ($toS - $fromS + 1));
 
             if(strpos($section, '$')) $template = str_replace($section, '', $template);
-
             else $template = str_replace($section, substr($section, 1, -1), $template);
-//
-//            dump($section);
-
-
         }
 
         $templateRun = strrev($data['categoryId']);
@@ -168,10 +142,7 @@ class Generator
             $template = str_replace($part, $word[$wordPos], $template);
         }
 
-        $template = preg_replace('/\$.*?\$/is', '', $template);
-
-
-        $template = mb_strtolower($template);
+        $template = mb_strtolower(preg_replace('/\$.*?\$/is', '', $template));
 
         return preg_replace_callback('#((?:[.!?]|^)\s*)(\w)#us', function($matches) {
             return $matches[1] . mb_strtoupper($matches[2]);
@@ -180,9 +151,6 @@ class Generator
 
     static function getData($productsData, $filteredId = null, $isDiscount = false): array
     {
-
-//        dump($isDiscount);
-
         $productsId = $filteredId ?? $productsData['productsId']->toArray();
 
         $discountMin = Products::whereIn('id', $productsId)->whereNotNull('discount')->select('discount')

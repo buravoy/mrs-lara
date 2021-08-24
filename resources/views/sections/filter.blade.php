@@ -19,7 +19,7 @@
                     @foreach($categoryFirst->allChild as $categorySecond)
                         @if($categorySecond->count > 0)
                             <a href="{{ route('category',['category' => $categorySecond->slug]) }}"
-                               class="btn-assoc justify-content-start ml-md-3 ml-2 @if($categorySecond->id == $category->id) cyan @endif">
+                               class="btn-assoc justify-content-start ml-md-3 ml-2 @if($categorySecond->id == $category->id) active @endif">
                                 <span>{{ $categorySecond->short_name }}</span>
                             </a>
                         @endif
@@ -54,7 +54,9 @@
                 @endforeach
             </div>
             @if(count($filter['active_attributes']) > 6)
-                <p class="show-all-filters">Показать все</p>
+                <div class="d-flex justify-content-center">
+                    <p class="show-all-filters d-flex align-items-center">Показать все <i class="ml-2 fas fa-chevron-down"></i></p>
+                </div>
             @endif
         </div>
     @endif

@@ -102,14 +102,9 @@ class Beautify
             'Шафрановый'            => ['bg'=>'#f4d03f', 'color'=>'#191919'],
             'Экрю'                  => ['bg'=>'#cdb891', 'color'=>'#4d4536'],
         ];
-
         if (isset($colors[$color]))
             return '<div class="filter-thumb" style="background:'. $colors[$color]['bg'] . '; color:'. $colors[$color]['color'].';"></div>';
 
-
-
-
         return null;
-//        return 'style="background: #ffffff; color: #191919; box-shadow: inset 0 0 0 1px #bdbdbd;"';
     }
 }

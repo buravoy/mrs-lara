@@ -2,16 +2,99 @@
 
 namespace App\Modules;
 
+use App\Models\Attributes;
 use App\Models\Categories;
 use App\Models\CategoryProduct;
 use App\Models\Groups;
 use App\Models\Products;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use phpDocumentor\Reflection\Types\This;
 
 class Functions
 {
+
+    static function sorting() {
+        $cookieSorting = $_COOKIE['sorting'] ?? null;
+
+        $sorting = [];
+
+        switch ($cookieSorting) {
+            case 'asc':
+                $sorting['column'] = 'price';
+                $sorting['direction'] = 'asc';
+                break;
+            case 'desc' :
+                $sorting['column'] = 'price';
+                $sorting['direction'] = 'desc';
+                break;
+
+            case 'discount-desc' :
+                $sorting['column'] = 'discount';
+                $sorting['direction'] = 'desc';
+                break;
+
+            case 'discount-asc' :
+                $sorting['column'] = 'discount';
+                $sorting['direction'] = 'asc';
+                break;
+
+            case 'abc' :
+                $sorting['column'] = 'name';
+                $sorting['direction'] = 'asc';
+                break;
+
+            default :
+                $sorting['column'] = 'name';
+                $sorting['direction'] = 'asc';
+        }
+
+        return $sorting;
+    }
+
+    static function generateBreadcrumbsArr($currantCategory)
+    {
+
+        $breadArr[] = $currantCategory;
+
+        $parent = $currantCategory->parent;
+
+        while ($parent->parent != null) {
+            $breadArr[] = $parent;
+
+            $parent = $parent->parent;
+
+
+
+        }
+        return array_reverse($breadArr);
+
+    }
+
+    static function convertAttributes($attrJSON)
+    {
+        $attributes = [];
+
+        foreach (json_decode($attrJSON) as $key => $values){
+            $name = Groups::where('slug', $key)->select('name', 'sort')->first();
+
+            foreach ($values as $value) {
+                $attribute = Attributes::where('id', $value)->pluck('name')->first();
+                $attributes[$name->name][] = $attribute;
+            }
+            $attributes[$name->name]['sort'] = $name->sort;
+        }
+
+        $sort  = array_column($attributes, 'sort');
+        array_multisort($sort, SORT_ASC, $attributes);
+
+        $attributes = array_map(function($item) {
+            unset ($item['sort']);
+            return implode(', ', $item);
+        }, $attributes);
+
+        return $attributes;
+    }
+
     static function getDiscountUrl($url)
     {
         $url = explode('/', $url);
@@ -93,7 +176,7 @@ class Functions
 
     static function productsData($category, $discount = false): Collection
     {
-        $catIdWithChild = Categories::where('slug', $category)->select('id', 'parent_id', 'slug', 'name', 'count', 'form', 'vinpad')->first();
+        $catIdWithChild = Categories::where('slug', $category)->select('id', 'parent_id', 'slug', 'name', 'count', 'form', 'vinpad', 'short_name' )->first();
         $idArray = Arr::flatten(Functions::collectId(collect([$catIdWithChild])));
         $productsId = CategoryProduct::whereIn('category_id', $idArray)->pluck('product_id')->unique();;
         $products = Products::whereIn('id', $productsId);

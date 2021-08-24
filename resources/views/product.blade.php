@@ -16,6 +16,10 @@
     <div class="container-xxl">
         @include('sections.categories')
 
+        <div class="my-5">
+            @include('sections.breadcrumbs')
+        </div>
+
         @dump($product)
     </div>
 

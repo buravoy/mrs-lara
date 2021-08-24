@@ -20,7 +20,7 @@
         @endif
     </div>
 
-    <a href="{{ route('away') }}/{{ $product->slug }}" target="_blank">
+    <a href="{{ route('away') }}/{{ $product->slug }}" target="_blank" style="max-width: 100%;">
         <div class="price">
             @if($product->old_price)
                 <p class="old">{{ $product->old_price }}</p>
@@ -33,7 +33,9 @@
         </div>
 
         <div class="description">
-            <p>{{ $product->description_1 }}</p>
+            @foreach(\App\Modules\Functions::convertAttributes($product->attributes) as $group => $attribute)
+                <span>{{ $group }} <strong>{{ $attribute }}</strong></span>
+            @endforeach
         </div>
     </a>
 

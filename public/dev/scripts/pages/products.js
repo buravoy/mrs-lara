@@ -4,12 +4,32 @@ import 'bootstrap'
 
 $(function (){
 
-    const $modal = $('#images-popup'), $allFilters = $('.show-all-filters');
+    const
+        $modal = $('#images-popup'),
+        $allFilters = $('.show-all-filters'),
+        $sorting = $('select[name=sort]'),
+        $paginate = $('select[name=paginate]');
+
+    $sorting.on('change', function () {
+        const val = $(this).val();
+        document.cookie = `sorting=${val}; path=/; max-age=315360000`
+        location=location;
+    })
+
+    $paginate.on('change', function () {
+        const val = $(this).val();
+        document.cookie = `pagination=${val}; path=/; max-age=315360000`
+        location=location;
+    })
+
 
     $allFilters.on('click', function (){
         const $t = $(this);
 
-        $t.closest('.filters-group').find('.filter-list').addClass('show')
+        $t.toggleClass('show').closest('.filters-group').find('.filters-list').toggleClass('show');
+
+        if($t.hasClass('show')) $t.html('Скрыть <i class="ml-2 fas fa-chevron-up"></i>');
+        else $t.html('Показать все <i class="ml-2 fas fa-chevron-down"></i>');
     })
 
     $('.img-popup').on('click', function (){
