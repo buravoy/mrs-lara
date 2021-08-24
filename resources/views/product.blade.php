@@ -16,7 +16,7 @@
     <div class="container-xxl">
         @include('sections.categories')
 
-        <div class="my-5">
+        <div class="mb-4">
             @include('sections.breadcrumbs')
         </div>
 

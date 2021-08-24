@@ -23,15 +23,16 @@
     @endphp
     <div class="container-xxl">
         @include('sections.categories')
-        <div class="py-3">
+        <div class="mb-4">
+            @include('sections.breadcrumbs')
+        </div>
+        <div class="pb-3">
             <div class="mb-3">
                 <h1 class="font-12 mb-3">{!! $meta['title'] ?? $category->name !!}</h1>
                 <div class="font-09 ucfirst">{!! $category->short_description ?? $meta['description1'] !!}</div>
             </div>
 
-            <div class="my-5">
-                @include('sections.breadcrumbs')
-            </div>
+
 
             <div class="row">
                 <div class="col-12 col-md-3">
