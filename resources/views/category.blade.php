@@ -58,7 +58,7 @@
                                 {{Functions::plural($products->links()->paginator->total(), ['товар', 'товара', 'товаров'])  }}
                             </p>
                             <div class="sorting-group ml-2">
-                                <select name="sort" id="" style="min-width: 180px;">
+                                <select name="sort" id="" style="min-width: 200px;">
                                     <option value="asc" @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'asc') selected @endif>Сначала подешевле</option>
                                     <option value="desc" @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'desc') selected @endif>Сначала подороже</option>
                                     <option value="discount-desc" @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'discount-desc') selected @endif>По убыванию скидки</option>
