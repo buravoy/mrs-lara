@@ -329,6 +329,8 @@
         background-color: rgba(144, 144, 144, .36);
         padding: 7px 8px;
         border-radius: 50%;
+        min-width: 32px;
+        min-height: 32px;
 
 
         &:hover {
@@ -350,6 +352,8 @@
         background-color: rgba(144, 144, 144, .36);
         padding: 7px 8px;
         border-radius: 50%;
+        min-width: 32px;
+        min-height: 32px;
 
 
         &:hover {
@@ -367,6 +371,7 @@
     img {
         margin: auto;
         max-height: 450px;
+        max-width: 100%;
         display: block;
     }
 }

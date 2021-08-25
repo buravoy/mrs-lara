@@ -74,7 +74,7 @@
                 <div class="mb-3 mb-md-5 wrapper">
                     <h1 class="mb-3 t-right">{{ $product->name }}</h1>
                     @if($product->description_1)
-                        <p class="description ucfirst t-right">{{ $product->description_1 }}</p>
+                        <p class="description ucfirst">{{ $product->description_1 }}</p>
                     @endif
                 </div>
 
@@ -94,22 +94,22 @@
                 </div>
 
                 <div class="w-100 t-center">
-                    <a href="{{ $product->href }}" class="btn btn-cyan " target="_blank">В МАГАЗИН</a>
+                    <a href="{{ $product->href }}" class="btn btn-cyan px-5 py-3 font-13" target="_blank">В МАГАЗИН</a>
                 </div>
 
-                @if($product->description_1)
-                    <p class="description ucfirst t-right">{{ $product->description_2 }}</p>
+                @if($product->description_2)
+                    <p class="description ucfirst">{{ $product->description_2 }}</p>
                 @endif
             </div>
         </div>
 
-        <div class="">
+        <div class="my-5">
 
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active" data-toggle="tab" href="#category">Вам понравятся эти подборки</a>
+                    <a class="nav-link active font-09" data-toggle="tab" href="#category">Подборки для вас</a>
                 </li>
-                <li class="nav-item" role="presentation">
+                <li class="nav-item font-09" role="presentation">
                     <a class="nav-link" data-toggle="tab" href="#reports">Отзывы</a>
                 </li>
             </ul>
@@ -119,9 +119,9 @@
                     @dump($category)
                 </div>
                 <div class="tab-pane fade " id="reports">
-                    <div class="p-5">
+                    <div class="p-md-5 p-3">
                         <h3 class="mb-4">Отзывы о товаре</h3>
-                        <p class="mb-5">У данного товара нет отзывов. Станьте первым!</p>
+                        <p class="mb-5 font-09">У данного товара пока нет отзывов.<br>Станьте первым!</p>
 
                         <form action="" class="base w-100" style="max-width: none">
                             <div class="input-group" style="max-width: 360px;">
@@ -132,7 +132,7 @@
 
                             <div class="input-group">
                                 <label for="password_confirmation">Отзыв:</label>
-                                <textarea rows="5"></textarea>
+                                <textarea rows="5" style="transition: none"></textarea>
                             </div>
 
                             <div class="d-flex w-100 justify-content-center">
