@@ -20,8 +20,10 @@
     <nav>
         <ul class="pagination">
 
-            <li class="page-item @if($paginator->currentPage() == 1) disabled @endif">
-                <a href="{{ $paginator->previousPageUrl() }}" class="page-link" aria-hidden="true">‹</a>
+            <li class="page-item mr-3 @if($paginator->currentPage() == 1) disabled @endif">
+                <a href="{{ $paginator->previousPageUrl() }}" class="page-link" aria-hidden="true">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
             </li>
 
             @if( !array_intersect($start, $range) )
@@ -55,8 +57,10 @@
                 @endforeach
             @endif
 
-            <li class="page-item @if($paginator->currentPage() == $paginator->lastPage()) disabled @endif">
-                <a href="{{ $paginator->nextPageUrl() }}" class="page-link" aria-hidden="true"> > </a>
+            <li class="page-item ml-3 @if($paginator->currentPage() == $paginator->lastPage()) disabled @endif">
+                <a href="{{ $paginator->nextPageUrl() }}" class="page-link" aria-hidden="true">
+                    <i class="fas fa-arrow-right"></i>
+                </a>
             </li>
 
         </ul>

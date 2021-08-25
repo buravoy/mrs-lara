@@ -1,8 +1,9 @@
-import $ from "jquery";
+import $
+    from "jquery";
 
 import 'bootstrap'
 
-$(function (){
+$(function () {
 
     const
         $modal = $('#images-popup'),
@@ -14,11 +15,10 @@ $(function (){
 
     const $selectedFilters = $filters.find('.btn-filter.active').clone()
 
-    $filtersList.each(function (){
-       const $t = $(this);
-       if(!$t.children().length) $t.closest('.filters-group').remove();
+    $filtersList.each(function () {
+        const $t = $(this);
+        if (!$t.children().length) $t.closest('.filters-group').remove();
     });
-
 
     $(document).on('click', '.add-more', function () {
         const
@@ -59,48 +59,52 @@ $(function (){
 
     })
 
-
     $('.selected-filters').append($selectedFilters)
 
     $sorting.on('change', function () {
         const val = $(this).val();
         document.cookie = `sorting=${val}; path=/; max-age=315360000`
-        location=location;
+        location = location;
     })
 
     $paginate.on('change', function () {
         const val = $(this).val();
         document.cookie = `pagination=${val}; path=/; max-age=315360000`
-        location=location;
+        location = location;
     })
 
-    $allFilters.on('click', function (){
+    $allFilters.on('click', function () {
         const $t = $(this);
 
         $t.toggleClass('show').closest('.filters-group').find('.filters-list').toggleClass('show');
 
-        if($t.hasClass('show')) $t.html('Скрыть <i class="ml-2 fas fa-chevron-up"></i>');
+        if ($t.hasClass('show')) $t.html('Скрыть <i class="ml-2 fas fa-chevron-up"></i>');
         else $t.html('Показать все <i class="ml-2 fas fa-chevron-down"></i>');
     })
 
-    $('.img-popup').on('click', function (){
+    $(document).on('click', '.img-popup', function () {
         $modal.modal('show', $(this))
     })
 
     $modal.on('show.bs.modal', function (e) {
         const target = e.relatedTarget;
         $modal.find('.modal-title').text(target.data('title'));
-
         $modal.find('.carousel-inner').html('');
         $modal.find('.carousel-indicators').html('');
-
+        const href = target.data('href').substr(0, target.data('href').indexOf('ulp='));
         if (target.data('source')) {
-            const images = target.data('source').map(function (item) {return '<div class="carousel-item" style="background-image: url('+item+')"></div>'});
-            const thumbs = target.data('source').map(function (item,key) {return '<li data-target="#carousel" data-slide-to="'+key+'" class="captions"><img src="'+item+'" class="thumb"></li>'});
+            const images = target.data('source').map(function (item) {
+                return `<div class="carousel-item" style="background-image: url('${item}')">
+                            <a href="${href}ulp=${item}" target="_blank"><i class="fas fa-search-plus"></i></a>
+                        </div>`
+            });
+            const thumbs = target.data('source').map(function (item, key) {
+                return `<li data-target="#carousel" data-slide-to="${key}" class="captions"><img src="${item}" class="thumb"></li>`
+            });
 
             $modal.find('.carousel-inner').html(images)
 
-            if (images.length > 1 ) {
+            if (images.length > 1) {
                 $modal.find('.carousel-inner')
                     .append('<a class="carousel-control-prev carousel-control" href="#carousel" role="button" data-slide="prev"><div class="carousel-control-icon"><i class="fas fa-chevron-left"></i></div></a>')
                     .append('<a class="carousel-control-next carousel-control" href="#carousel" role="button" data-slide="next"><div class="carousel-control-icon"><i class="fas fa-chevron-right"></i></div></a>');
@@ -119,7 +123,7 @@ $(function (){
         const data = new FormData();
 
         data.append('_token', $('input[name=_token]').first().val());
-        data.append('props',  JSON.stringify(target.data('attributes')));
+        data.append('props', JSON.stringify(target.data('attributes')));
 
         $.ajax({
             async: true,
@@ -130,11 +134,9 @@ $(function (){
             data: data,
             processData: false,
             success: function (response) {
-                console.log(response)
                 const attributes = response.map(function (item) {
                     return `<li><span>${item.name}</span><span>${item.value.join(', ')}</span></li>`;
                 });
-
                 $('.attributes').html(attributes);
             },
         })

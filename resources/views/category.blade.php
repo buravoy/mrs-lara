@@ -114,7 +114,7 @@
 
 @push('modals')
     <div class="modal fade" id="images-popup">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Modal title</h5>

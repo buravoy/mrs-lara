@@ -9,6 +9,7 @@
         data-title="{{ $product->name }}"
         data-attributes="{{ $product->attributes }}"
         data-url="{{ route('product-info') }}"
+        data-href="{{ $product->href }}"
         data-away="{{ route('away') }}/{{ $product->slug }}"
     >
         @include('sections.rating', ['value' => $product->rating])
