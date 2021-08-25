@@ -80,7 +80,6 @@
                                 </select>
                                 <p class="ml-2 d-none d-sm-block">на&nbsp;странице</p>
                             </div>
-
                         </div>
                     </div>
 

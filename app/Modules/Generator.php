@@ -6,6 +6,7 @@ use App\Models\Attributes;
 use App\Models\Groups;
 use App\Models\MetaGenerators;
 use App\Models\Products;
+use phpDocumentor\Reflection\Types\Integer;
 
 class Generator
 {
@@ -130,6 +131,14 @@ class Generator
 
         $templateRun = strrev($data['categoryId']);
         $templateLoop = 0;
+
+        if(isset($data['attributes'])) {
+            $rand = strlen(serialize($data['attributes']));
+            $templateRun  = (integer)$templateRun;
+            $templateRun = $templateRun * $rand;
+            $templateRun  = (string)$templateRun;
+        }
+
 
         while (strpos($template, '[')) {
             $from = strpos($template, '[');

@@ -6,6 +6,41 @@
 @import "~bootstrap/scss/transitions";
 @import "~bootstrap/scss/carousel";
 
+.price {
+    font-family: $condensed;
+    font-weight: 400;
+    display: flex;
+    padding: 5px 5px 0 5px;
+    justify-content: flex-end;
+
+    .old {
+        opacity: .5;
+        margin-right: 10px;
+        position: relative;
+        display: inline;
+        transform: scale(.9);
+
+        &:before {
+            content: '';
+            position: absolute;
+            width: calc(100% + 5px);
+            height: 1px;
+            right: -2px;
+            top: 8px;
+            transform: rotate(-15deg);
+            background-color: black;
+            box-shadow: 0 0 0 1px #fff;
+        }
+    }
+
+    .new {
+        i {
+            font-size: 75%;
+            margin-left: 2px;
+        }
+    }
+}
+
 .product {
     &-card {
         position: relative;
@@ -45,41 +80,6 @@
                 font-size: 1rem;
             }
 
-        }
-
-        .price {
-            font-family: $condensed;
-            font-weight: 400;
-            display: flex;
-            padding: 5px 5px 0 5px;
-            justify-content: flex-end;
-
-            .old {
-                opacity: .5;
-                margin-right: 10px;
-                position: relative;
-                display: inline;
-                transform: scale(.9);
-
-                &:before {
-                    content: '';
-                    position: absolute;
-                    width: calc(100% + 5px);
-                    height: 1px;
-                    right: -2px;
-                    top: 8px;
-                    transform: rotate(-15deg);
-                    background-color: black;
-                    box-shadow: 0 0 0 1px #fff;
-                }
-            }
-
-            .new {
-                i {
-                    font-size: 75%;
-                    margin-left: 2px;
-                }
-            }
         }
 
         &:hover {

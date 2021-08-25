@@ -16,12 +16,28 @@ class ProductsController extends Controller
         if(!$slug) abort(404);
 
         $product = Products::where('slug', $slug)->first();
-        $categoryId = CategoryProduct::where('product_id', $product->id)->first()->category_id;
-        $category = Categories::where('id',$categoryId)->first();
+        $categoryId = CategoryProduct::where('product_id', $product->id)->pluck('category_id');
+        $category = Categories::where('id', $categoryId)->first();
+        $relatedCategories = Categories::whereIn('id',$categoryId)->get();
+        $relatedProductsId = CategoryProduct::where('product_id', '<>', $product->id)->where('category_id', $categoryId)->get('product_id');
+        $relatedProductsUp = Products::whereIn('id', $relatedProductsId)
+            ->where('price', '>=', $product->price)
+            ->orderBy('price')
+            ->take(10)->get();
+
+        $relatedProductsDown = Products::whereIn('id', $relatedProductsId)
+            ->where('price', '<=', $product->price)
+            ->orderBy('price', 'desc')
+            ->take(10)->get();
 
         return view('product', [
             'product' => $product,
-            'category' => $category
+            'category' => $category,
+            'relatedCategories' => $relatedCategories,
+            'relatedProducts' => [
+                'up' => $relatedProductsUp,
+                'down' => $relatedProductsDown
+            ]
         ]);
     }
 

@@ -17,15 +17,15 @@
         <div class="filters-group">
             <div class="d-flex flex-wrap align-items-start filters-list" style="max-height: unset;">
                 @foreach($category->parent->parent->allChild->sortByDesc('count') as $categoryFirst)
-
-                    <a href="{{ route('category',['category' => $categoryFirst->slug]) }}"
-                       class="btn-assoc"
-                       style="order:@if($categoryFirst->child->contains('id', $category->id))  0 @else 1 @endif">
-                        <span>{{ $categoryFirst->short_name }}</span>
-                    </a>
+                    @if($categoryFirst->count > 0)
+                        <a href="{{ route('category',['category' => $categoryFirst->slug]) }}"
+                           class="btn-assoc"
+                           style="order:@if($categoryFirst->child->contains('id', $category->id))  0 @else 1 @endif">
+                            <span>{{ $categoryFirst->short_name }}</span>
+                        </a>
+                    @endif
 
                     @if($categoryFirst->child->contains('id', $category->id))
-
                         @foreach($categoryFirst->allChild as $categorySecond)
                             @if($categorySecond->count > 0)
                                 <a href="{{ route('category',['category' => $categorySecond->slug]) }}"
@@ -35,7 +35,6 @@
                             @endif
                         @endforeach
                     @endif
-
                 @endforeach
             </div>
         </div>

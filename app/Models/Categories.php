@@ -78,12 +78,12 @@ class Categories extends Model
 
     public function child()
     {
-        return $this->hasMany(self::class, 'parent_id')->orderBy('sort', 'asc');
+        return $this->hasMany(self::class, 'parent_id')->orderBy('sort')->orderBy('name');
     }
 
     public function allChild()
     {
-        return $this->hasMany(self::class, 'parent_id')->with('allChild');
+        return $this->hasMany(self::class, 'parent_id')->orderBy('sort')->orderBy('name')->with('allChild');
     }
 
     public function products()

@@ -218,7 +218,7 @@ class Parser
 
     function insertProductCategory($productCatsArr, $product) {
 
-        CategoryProduct::where('id', $product->id)->forceDelete();
+        CategoryProduct::where('product_id', $product->id)->forceDelete();
 
         foreach ($productCatsArr as $productCatEntry)
         {

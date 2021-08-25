@@ -122,18 +122,16 @@
                     count_to: $count.val(),
                     mode: !!$('input[name=mode]').prop("checked")
                 },
-                success: (response) => {
-                    console.log(response)
-                    if (response) {
-                        $t.attr('disabled', false);
-                    }
+                success: () => {
+                    $t.attr('disabled', false);
                 }
             })
                 .done(function () {
-
+                    $t.attr('disabled', false);
                 })
 
                 .catch(function (error) {
+                    $t.attr('disabled', false);
                     new Noty({
                         type: "error",
                         text: error.responseJSON.exception + '<br>' + error.responseJSON.message,

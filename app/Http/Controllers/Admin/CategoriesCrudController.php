@@ -444,7 +444,7 @@ class CategoriesCrudController extends CrudController
                 }
 
                 Categories::where('id', $category['id'])->update([
-                    'parent_id' => $parentId ? $parentId : null
+                    'parent_id' => $parentId ?? null
                 ]);
             }
         }
