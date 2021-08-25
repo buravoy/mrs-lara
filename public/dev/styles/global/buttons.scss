@@ -149,6 +149,11 @@ button {
     background-color: $red;
     color: $white;
     border-color: $red;
+
+    &:hover {
+      background-color: darken($red, 10%);
+      border-color: darken($red, 10%);
+    }
   }
 
   &-blue {

@@ -1,8 +1,14 @@
 @import "~bootstrap/dist/css/bootstrap-grid.min";
 @import "global/global";
+
 @import "styles/sections/top-menu";
 @import "styles/sections/categories-menu";
+@import "styles/sections/forms";
 @import "styles/sections/pagination";
+
+@import "pages/auth";
+@import "pages/home";
+@import "pages/products";
 
 .logo {
     &:hover {
@@ -91,6 +97,7 @@
 
 .filter-thumb {
     width: 20px;
+    min-width: 20px;
     height: 20px;
     margin-right: 7px;
     border-radius: 50%;
@@ -119,10 +126,12 @@
         a {
             font-family: $condensed;
             white-space: nowrap;
-            text-transform: uppercase;
             font-weight: 400;
             font-size: .9rem;
             transition: .2s;
+            @media (max-width: 576px) {
+                font-size: .7rem;
+            }
 
             &:hover {
                 color: $cyan;
@@ -130,12 +139,15 @@
         }
 
         &:after {
-            content: "\f101";
+            content: "\f054";
             font-family: 'Font Awesome 5 Free';
             font-weight: 900;
             color: $cyan;
             margin: 0 7px 0 2px;
             font-size: .8rem;
+            @media (max-width: 576px) {
+                font-size: .6rem;
+            }
         }
 
 
@@ -154,7 +166,7 @@
 
 .deep-category {
     background-color: #f7f7f7;
-    padding: 5px 16px 5px 5px;
+    padding: 5px 18px 5px 5px;
     font-family: $condensed;
     text-transform: uppercase;
     font-weight: 500;
@@ -164,6 +176,10 @@
     width: 100%;
     position: relative;
     overflow: hidden;
+    @media (max-width: 576px) {
+        font-size: .7rem;
+        height: 22px;
+    }
 
     span {
         z-index: 1;
@@ -184,10 +200,13 @@
         right: 5px;
         z-index: 0;
         transition: .2s;
+        @media (max-width: 576px) {
+            font-size: .8rem;
+            top: 5px;
+        }
     }
 
     &:hover {
-        //background-color: #eae9e9;
         color: $cyan;
         &:after {
             color: $cyan;
@@ -217,6 +236,71 @@
                 text-transform: none;
                 font-family: $normal;
                 font-size: .9rem;
+            }
+        }
+    }
+}
+
+.wrapper {
+    h1 {
+        font-size: 1.2rem;
+        @media (max-width: 768px) {
+            font-size: 1rem;
+        }
+    }
+
+    .description {
+        font-size: .9rem;
+        @media (max-width: 768px) {
+            font-size: .8rem;
+        }
+    }
+
+}
+
+.count-text {
+    font-size: .9rem;
+    @media (max-width: 576px) {
+        font-size: .7rem;
+    }
+}
+
+.selected {
+    &-filters {
+        display: flex;
+        flex-wrap: wrap;
+
+        .btn-filter {
+            opacity: .6;
+            margin: 0 5px 3px 0;
+            display: flex;
+            width: auto;
+            transition: .2s;
+
+            &:hover {
+                opacity: 1;
+                & span {
+                    font-size: .9rem;
+                }
+            }
+
+            &:before {
+                background-color: transparent;
+                box-shadow: none;
+                border: none;
+                content: "\f057";
+                font-family: Font Awesome\ 5 Free;
+                font-weight: 900;
+                color: $red;
+                font-size: .85rem;
+                position: absolute;
+                top: 6px;
+                left: 4px;
+                z-index: 0;
+            }
+
+            .filter-thumb {
+                display: none;
             }
         }
     }

@@ -1,23 +1,5 @@
 @extends('layouts.main')
 
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('css/products.css') }}">
-@endpush
-
-@push('scripts')
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let count = 3;
-            setInterval(function (){
-
-                console.log(document.getElementById('count'))
-                document.getElementById('count').innerText = (count > 0) ? --count : 0;
-            }, 1000)
-            setTimeout(function (){ document.location.href='{{ $href }}' }, 3000)
-        });
-    </script>
-@endpush
-
 @section('title')
     Mr. Shopper
 @endsection
@@ -35,3 +17,16 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let count = 3;
+            setInterval(function (){
+                console.log(document.getElementById('count'))
+                document.getElementById('count').innerText = (count > 0) ? --count : 0;
+            }, 1000)
+            setTimeout(function (){ document.location.href='{{ $href }}' }, 3000)
+        });
+    </script>
+@endpush

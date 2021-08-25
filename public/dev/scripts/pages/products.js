@@ -8,7 +8,59 @@ $(function (){
         $modal = $('#images-popup'),
         $allFilters = $('.show-all-filters'),
         $sorting = $('select[name=sort]'),
-        $paginate = $('select[name=paginate]');
+        $paginate = $('select[name=paginate]'),
+        $filters = $('.filter'),
+        $filtersList = $('.filters-list');
+
+    const $selectedFilters = $filters.find('.btn-filter.active').clone()
+
+    $filtersList.each(function (){
+       const $t = $(this);
+       if(!$t.children().length) $t.closest('.filters-group').remove();
+    });
+
+
+    $(document).on('click', '.add-more', function () {
+        const
+            $t = $(this),
+            href = $t.data('href'),
+            url = $t.data('url'),
+            current = $t.data('current'),
+            last = $t.data('last'),
+            next = +current + 1,
+            $paginationBlock = $('.pagination-block');
+
+
+        console.log(current)
+
+
+        $.ajax({
+            async: true,
+            type: "GET",
+            url: href,
+            processData: false,
+            success: function (response) {
+                const
+                    jQueryObj = $(response),
+                    products = jQueryObj.find('.product-list').children(),
+                    pagination = jQueryObj.find('.pagination-block').children();
+
+                $('.product-list').append(products);
+                $paginationBlock.children().remove();
+
+                if (next < last) $paginationBlock.append(pagination);
+
+                $t.attr('data-href', url + '?page=' + next);
+                $t.attr('data-current', next);
+
+                window.history.pushState(null, null, href);
+            },
+        })
+
+    })
+
+
+    $('.selected-filters').append($selectedFilters)
 
     $sorting.on('change', function () {
         const val = $(this).val();
@@ -21,7 +73,6 @@ $(function (){
         document.cookie = `pagination=${val}; path=/; max-age=315360000`
         location=location;
     })
-
 
     $allFilters.on('click', function (){
         const $t = $(this);

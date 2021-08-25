@@ -19,6 +19,9 @@ module.exports = {
             path.join(__dirname, './styles/')+'main.scss',
             path.join(__dirname, './scripts/')+'main.js'
         ],
+        backpack: [
+            path.join(__dirname, './styles/pages/')+'backpack.scss'
+        ],
     },
 
     optimization: {
@@ -135,38 +138,38 @@ module.exports = {
         }),
     ],
 }
-
-const chunks = {}
-
-Object.assign(chunks, ...js.map( file => {
-    const
-        key = file.replace(/\.js/, ''),
-        item = {};
-    item[key] = [null];
-    return item[key].length ? item : false;
-}))
-
-Object.assign(chunks, ...styles.map( file => {
-    const
-        key = file.replace(/\.scss/, ''),
-        item = [];
-    item[key] = [null];
-    return item[key].length ? item : false;
-}))
-
-Object.keys(chunks).forEach( key => { chunks[key] = [] });
-
-js.forEach( file => {
-    const key = file.replace(/\.js/, '');
-    chunks[key].push(jsDir + file);
-})
-
-styles.forEach( file => {
-    const key = file.replace(/\.scss/, '');
-    chunks[key].push(stylesDir + file);
-})
-
-module.exports.entry = Object.assign(module.exports.entry, chunks)
-
-console.log('Generated chunks', module.exports.entry)
+//
+// const chunks = {}
+//
+// Object.assign(chunks, ...js.map( file => {
+//     const
+//         key = file.replace(/\.js/, ''),
+//         item = {};
+//     item[key] = [null];
+//     return item[key].length ? item : false;
+// }))
+//
+// Object.assign(chunks, ...styles.map( file => {
+//     const
+//         key = file.replace(/\.scss/, ''),
+//         item = [];
+//     item[key] = [null];
+//     return item[key].length ? item : false;
+// }))
+//
+// Object.keys(chunks).forEach( key => { chunks[key] = [] });
+//
+// js.forEach( file => {
+//     const key = file.replace(/\.js/, '');
+//     chunks[key].push(jsDir + file);
+// })
+//
+// styles.forEach( file => {
+//     const key = file.replace(/\.scss/, '');
+//     chunks[key].push(stylesDir + file);
+// })
+//
+// module.exports.entry = Object.assign(module.exports.entry, chunks)
+//
+// console.log('Generated chunks', module.exports.entry)
 
