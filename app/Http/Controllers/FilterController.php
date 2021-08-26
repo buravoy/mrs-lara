@@ -6,11 +6,14 @@ use App\Models\Attributes;
 use App\Models\Products;
 use App\Modules\Functions;
 use App\Modules\Generator;
+use Illuminate\Http\Request;
 
 class FilterController extends Controller
 {
     public function query($params = null)
     {
+//        dump($params);
+
         $discount = false;
         $params = collect(explode('/', $params));
         $sorting = Functions::sorting();
@@ -22,7 +25,10 @@ class FilterController extends Controller
             $discount = true;
         }
 
+
         $productsData = Functions::productsData($params->first(), $discount);
+
+        dd($params);
         $params->forget($params->keys()->first());
         $filteredProductsQuery = $productsData['query'];
 
@@ -46,7 +52,6 @@ class FilterController extends Controller
             'page' => 'filter'
         ]);
     }
-
 
     public function availableFilters($params, $productsData, $filteredProductsQuery, $discount): array
     {
@@ -111,5 +116,37 @@ class FilterController extends Controller
             foreach($seekId as $id)
                 $query->orWhereJsonContains('attributes->' . $groupSlug , $id);
         });
+    }
+
+    public function ajaxQuery(Request $request)
+    {
+        $url =  explode('/', $request->href);
+        unset($url[0]);
+        $url = implode( '/', $url);
+        $discount = false;
+        $params = collect(explode('/', $url));
+
+        if ($params->last() == 'discount') {
+            $params->forget($params->keys()->last());
+            $discount = true;
+        }
+
+        $productsData = Functions::productsData($params->first(), $discount);
+
+        $params->forget($params->keys()->first());
+        $filteredProductsQuery = $productsData['query'];
+
+        foreach ($params as $param) $filteredProductsQuery = self::createFilterQuery($param, $filteredProductsQuery);
+        if ($discount) $filteredProductsQuery->where('discount','<>', null);
+
+        $availableFilters = self::availableFilters($params->toArray(), $productsData, $filteredProductsQuery, $discount);
+
+        return view('sections.filter-ajax', [
+            'discountAvailable' => $filteredProductsQuery->where('discount','<>' , null)->first(),
+            'category' => $productsData['category'],
+            'filters' => $availableFilters,
+            'discountSet' => $discount,
+            'url' => $url
+        ]);
     }
 }

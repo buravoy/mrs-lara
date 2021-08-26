@@ -35,6 +35,8 @@ Route::get('/category/{category?}', [CategoriesController::class, 'index'])->nam
 
 Route::get('/filter/{params?}', [FilterController::class, 'query'])->where('params', '(.*)')->name('filter');
 
+Route::post('/filter-ajax', [FilterController::class, 'ajaxQuery'])->name('filter-ajax');
+
 
 //Route::get('/filter/{category?}/{params?}/{discount?}', [FilterController::class, 'index'])->name('filter');
 

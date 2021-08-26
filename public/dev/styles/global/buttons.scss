@@ -10,6 +10,7 @@ button {
 
 .btn {
   font-family: $normal;
+  font-size: 1rem;
   border: 1px solid;
   display: inline-flex;
   align-items: center;
@@ -30,7 +31,7 @@ button {
     align-items: center;
     justify-content: space-between;
     width: 90%;
-    max-width: 260px;
+    max-width: 220px;
     padding: 3px 4px 2px 20px;
     min-height: 25px;
 

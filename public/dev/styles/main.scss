@@ -99,6 +99,23 @@
     }
 }
 
+.filter-href {
+    color: #e6e4e4;
+    transition: .2s;
+
+    &:hover {
+        color: #c1bfbf;
+    }
+}
+
+.filter-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-right: 5px;
+}
+
 .filter-thumb {
     width: 20px;
     min-width: 20px;
@@ -146,7 +163,7 @@
             transition: .2s;
             line-height: 26px;
             @media (max-width: 576px) {
-                font-size: .7rem;
+                font-size: .8rem;
                 line-height: 16px;
             }
 
@@ -183,22 +200,19 @@
     text-transform: uppercase;
     font-weight: 500;
     transition: .2s;
-    font-size: .9rem;
     height: 44px;
     width: 100%;
     position: relative;
     overflow: hidden;
-    @media (max-width: 576px) {
-        font-size: .7rem;
-        height: 22px;
-    }
 
-    span {
+
+    span, h3 {
         z-index: 1;
         position: relative;
         display: block;
         overflow: hidden;
         height: 100%;
+        font-size: .9rem;
     }
 
     &:after {
@@ -208,13 +222,12 @@
         color: #cccccc;
         font-size: 1rem;
         position: absolute;
-        top: 15px;
+        top: 5px;
         right: 5px;
         z-index: 0;
         transition: .2s;
         @media (max-width: 576px) {
             font-size: .8rem;
-            top: 5px;
         }
     }
 
@@ -257,15 +270,12 @@
     h1 {
         font-size: 1.2rem;
         @media (max-width: 768px) {
-            font-size: 1rem;
+            font-size: 1.1rem;
         }
     }
 
     .description {
         font-size: .9rem;
-        @media (max-width: 768px) {
-            font-size: .8rem;
-        }
     }
 
 }
@@ -273,7 +283,7 @@
 .count-text {
     font-size: .9rem;
     @media (max-width: 576px) {
-        font-size: .7rem;
+        font-size: .8rem;
     }
 }
 
@@ -341,6 +351,8 @@
 
 .single-product-image {
     position: relative;
+    overflow: hidden;
+    text-align: center;
 
     & > a {
         position: absolute;
@@ -363,9 +375,22 @@
 
     .discount {
         position: absolute;
-        top: 0;
-        left: 0;
         z-index: 1;
+        background-color: #ff4c41;
+        color: $white;
+        padding: 2px;
+        font-size: 1.5rem;
+        font-weight: 600;
+        transform: rotate(315deg);
+        width: 220px;
+        text-align: center;
+        top: 12px;
+        left: -80px;
+        @media (max-width: 576px) {
+            font-size: 1rem;
+            top: 9px;
+            left: -90px;
+        }
     }
 
     img {

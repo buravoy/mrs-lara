@@ -20,8 +20,9 @@ class ProductsController extends Controller
         $category = Categories::where('id', $categoryId)->first();
         $relatedCategories = Categories::whereIn('id',$categoryId)->get();
         $relatedProductsId = CategoryProduct::where('product_id', '<>', $product->id)->where('category_id', $categoryId)->get('product_id');
+
         $relatedProductsUp = Products::whereIn('id', $relatedProductsId)
-            ->where('price', '>=', $product->price)
+            ->where('price', '>', $product->price)
             ->orderBy('price')
             ->take(10)->get();
 
@@ -52,7 +53,6 @@ class ProductsController extends Controller
         ]);
     }
 
-
     public function getInfo(Request $request)
     {
         $productAttributes = json_decode($request->input('props'));
@@ -70,8 +70,13 @@ class ProductsController extends Controller
                 'value' => $values,
                 'sort' => $group->sort
             ];
+
             unset($values);
         }
+
+        $sort  = array_column($currentAttributes, 'sort');
+        array_multisort($sort, SORT_ASC, $currentAttributes);
+
         return json_encode($currentAttributes);
     }
 }

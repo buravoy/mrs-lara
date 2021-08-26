@@ -29,19 +29,20 @@
                     @include('sections.filter')
                 </div>
                 <div class="col-12 col-md-9">
-                    <div class="row px-2 mb-3">
+
+                    <div class="row px-2 my-4">
                         @foreach($category->allChild->sortByDesc('count') as $cat)
                             @if($cat->count)
                                 <div class="col-6 col-sm-3 col-lg-2 px-sm-2 px-1 mb-1">
                                     <a href="{{ route('category',['category' => $cat->slug]) }}" class="deep-category mb-1">
-                                        <span>{{ $cat->short_name }}</span>
+                                        <h3>{{ $cat->short_name }}</h3>
                                     </a>
                                 </div>
                             @endif
                         @endforeach
                     </div>
 
-                    <div class="d-flex d-md-none justify-content-center mb-3">
+                    <div class="d-flex d-md-none justify-content-center mb-4">
                         <button type="button" class="btn btn-cyan uppercase" data-toggle="modal" data-target="#filters-popup">
                             <i class="fas fa-filter mr-2"></i>Фильтр товаров
                         </button>
@@ -111,30 +112,7 @@
     </div>
 @endsection
 
-@push('modals')
-    <div class="modal fade" id="images-popup">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="modal-body p-0">
-                    <div id="carousel" class="carousel slide">
-                        <div class="carousel-inner border-bottom"></div>
-                        <ol class="carousel-indicators justify-content-start my-2 mx-3"></ol>
-                    </div>
 
-                    <div class="d-flex justify-content-center">
-                        <ul class="attributes p-3"></ul>
-                    </div>
-                </div>
-                <div class="modal-footer align-items-center justify-content-center">
-                    <a href="#" class="btn btn-cyan condensed uppercase away-link" target="_blank">В МАГАЗИН</a>
-                </div>
-            </div>
-        </div>
-    </div>
+@push('modals')
+    @include('sections.img-popup')
 @endpush

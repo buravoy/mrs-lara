@@ -1,4 +1,3 @@
-{{--@dump($variable)--}}
 <nav class="row relative my-3 categories-menu">
     @foreach($categories as $categoryFirst)
 
@@ -17,7 +16,7 @@
                         <div class="w-100 h-100 row pt-3 pb-0 px-0 m-0 wrapper-bg"
                              @if($categoryFirst->image)
                              style="background-image: url('{{ asset($categoryFirst->image) }}')"
-                             @endif>
+                                @endif>
                             @php
                                 $firstChildren = $categoryFirst->child;
                                 $key = 0;
@@ -36,10 +35,10 @@
                                         @if($firstChild->child && $firstChild->count)
                                             <div class="sector mb-3">
 
-                                            <a href="{{ route('category').'/'.$firstChild->slug }}" class="f-w-6 child-title d-flex align-items-center justify-content-between uppercase condensed px-3 py-1 mb-1">
-                                                {{ $firstChild->short_name ?? $firstChild->name }}
-                                                <i class="fas fa-angle-double-right"></i>
-                                            </a>
+                                                <a href="{{ route('category').'/'.$firstChild->slug }}" class="f-w-6 child-title d-flex align-items-center justify-content-between uppercase condensed px-3 py-1 mb-1">
+                                                    {{ $firstChild->short_name ?? $firstChild->name }}
+                                                    <i class="fas fa-angle-double-right"></i>
+                                                </a>
 
 
                                                 <div class="d-flex flex-column">
@@ -52,7 +51,7 @@
                                                     @endforeach
                                                 </div>
 
-                                        </div>
+                                            </div>
                                         @endif
                                     @endforeach
                                 </div>

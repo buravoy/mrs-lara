@@ -15,7 +15,7 @@
         @include('sections.rating', ['value' => $product->rating])
 
         @if (!empty($product->image))
-            <img src="{{ $product->image[0] }}" alt="">
+            <img src="{{ $product->image[0] }}" alt="{{ $product->name }}">
         @else
             <i class="far fa-image font-30 grey-light"></i>
         @endif
@@ -30,7 +30,11 @@
         </div>
 
         <div class="title">
-            <h2>{{ $product->name }}</h2>
+            @if(isset($related))
+                <h3>{{ $product->name }}</h3>
+            @else
+                <h2>{{ $product->name }}</h2>
+            @endif
         </div>
 
         <div class="description">

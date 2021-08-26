@@ -53,21 +53,13 @@ class Functions
 
     static function generateBreadcrumbsArr($currantCategory)
     {
-
         $breadArr[] = $currantCategory;
-
         $parent = $currantCategory->parent;
-
         while ($parent->parent != null) {
             $breadArr[] = $parent;
-
             $parent = $parent->parent;
-
-
-
         }
         return array_reverse($breadArr);
-
     }
 
     static function convertAttributes($attrJSON)
@@ -108,14 +100,8 @@ class Functions
             return $item;
         }, $url));
 
-
         if(end($url) == 'discount') $isActive = true;
         if(end($url) != 'discount') $generatedUrl[] = 'discount';
-//        if($url[0] == 'category') $generatedUrl[] = 'discount';
-
-
-
-//        dump($generatedUrl);
 
         return [
             'link' => implode('/', $generatedUrl),

@@ -11,7 +11,9 @@ $(function () {
         $sorting = $('select[name=sort]'),
         $paginate = $('select[name=paginate]'),
         $filters = $('.filter'),
-        $filtersList = $('.filters-list');
+        $filtersList = $('.filters-list'),
+        $filterButton = $('.btn-filter');
+
 
     const $selectedFilters = $filters.find('.btn-filter.active').clone()
 
@@ -29,10 +31,6 @@ $(function () {
             last = $t.data('last'),
             next = +current + 1,
             $paginationBlock = $('.pagination-block');
-
-
-        console.log(current)
-
 
         $.ajax({
             async: true,
@@ -87,11 +85,15 @@ $(function () {
     })
 
     $modal.on('show.bs.modal', function (e) {
+        const $mod = $(this);
+
         const target = e.relatedTarget;
-        $modal.find('.modal-title').text(target.data('title'));
-        $modal.find('.carousel-inner').html('');
-        $modal.find('.carousel-indicators').html('');
+        $mod.find('.modal-title').text(target.data('title'));
+        $mod.find('.carousel-inner').html('');
+        $mod.find('.carousel-indicators').html('');
+
         const href = target.data('href').substr(0, target.data('href').indexOf('ulp='));
+
         if (target.data('source')) {
             const images = target.data('source').map(function (item) {
                 return `<div class="carousel-item" style="background-image: url('${item}')">
@@ -102,23 +104,23 @@ $(function () {
                 return `<li data-target="#carousel" data-slide-to="${key}" class="captions"><img src="${item}" class="thumb"></li>`
             });
 
-            $modal.find('.carousel-inner').html(images)
+            $mod.find('.carousel-inner').html(images)
 
             if (images.length > 1) {
-                $modal.find('.carousel-inner')
+                $mod.find('.carousel-inner')
                     .append('<a class="carousel-control-prev carousel-control" href="#carousel" role="button" data-slide="prev"><div class="carousel-control-icon"><i class="fas fa-chevron-left"></i></div></a>')
                     .append('<a class="carousel-control-next carousel-control" href="#carousel" role="button" data-slide="next"><div class="carousel-control-icon"><i class="fas fa-chevron-right"></i></div></a>');
-                $modal.find('.carousel-indicators').html(thumbs);
+                $mod.find('.carousel-indicators').html(thumbs);
             }
 
-            $('.carousel-item').first().addClass('active');
-            $('.captions').first().addClass('active');
-            $('.carousel').carousel({interval: false});
+            $mod.find('.carousel-item').first().addClass('active');
+            $mod.find('.captions').first().addClass('active');
+            $mod.find('.carousel').carousel({interval: false});
         } else {
-            $modal.find('.carousel-inner').html('<div class="w-100 t-center pb-2 pt-5 px-5"><i class="far fa-image font-30 grey-light"></i></div>');
+            $mod.find('.carousel-inner').html('<div class="w-100 t-center pb-2 pt-5 px-5"><i class="far fa-image font-30 grey-light"></i></div>');
         }
 
-        $modal.find('.away-link').attr('href', target.data('away'));
+        $mod.find('.away-link').attr('href', target.data('away'));
 
         const data = new FormData();
 
@@ -140,5 +142,34 @@ $(function () {
                 $('.attributes').html(attributes);
             },
         })
+    })
+
+    $(document).on('click', '.btn-filter', function () {
+        const
+            $t = $(this),
+            href = $t.data('href'),
+            url = $t.closest('.filters-list').data('url'),
+            slug = $t.data('slug'),
+            token = $('input[name=_token]').val();
+
+        const data = new FormData();
+
+        data.append('href', href)
+        data.append('slug', slug)
+        data.append('_token', token)
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            contentType: false,
+            url: url,
+            data: data,
+            processData: false,
+            success: function (response) {
+
+            },
+        })
+
     })
 })

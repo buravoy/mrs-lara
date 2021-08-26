@@ -8,7 +8,7 @@
 
 .price {
     font-family: $condensed;
-    font-weight: 400;
+    font-weight: 500;
     display: flex;
     padding: 5px 5px 0 5px;
     justify-content: flex-end;
@@ -64,7 +64,6 @@
             background-color: #ff4c41;
             color: $white;
             font-family: $condensed;
-            font-weight: 400;
             position: absolute;
             min-width: 100px;
             text-align: center;
@@ -73,6 +72,7 @@
             top: 13px;
             right: -27px;
             font-size: 1.1rem;
+            font-weight: 600;
 
             @media (max-width: 420px) {
                 top: 7px;
@@ -98,7 +98,7 @@
 
         .title {
             width: 100%;
-            height: 43px;
+            height: 44px;
             overflow: hidden;
             padding: 5px 0;
             display: flex;
@@ -106,29 +106,29 @@
             transition: .2s;
             color: darken($cyan, 9%);
             @media (max-width: 420px) {
-                height: 35px;
+                height: 40px;
             }
 
-            h2 {
+            h2, h3 {
                 font-family: $condensed;
                 font-weight: 500;
                 text-transform: uppercase;
                 font-size: 1rem;
                 @media (max-width: 420px) {
-                    font-size: .8rem;
+                    font-size: .9rem;
                 }
             }
         }
 
         .description {
-            font-size: .7rem;
+            font-size: .8rem;
             font-family: $condensed;
             padding: 3px 0 0;
             margin: 0 -2px;
-            height: 41px;
             overflow: hidden;
             opacity: .7;
             transition: .2s;
+            height: 50px;
 
             p, span {
                 margin: 0 3px;
@@ -185,8 +185,6 @@
             max-width: 100%;
             max-height: 100%;
         }
-
-
     }
 
     &-rating {
@@ -252,8 +250,11 @@
 
             &:last-child {
                 font-size: 1rem;
-                font-weight: 400;
+                font-weight: 500;
                 text-transform: uppercase;
+                @media (max-width: 576px) {
+                    font-size: .9rem;
+                }
             }
 
         }
@@ -327,5 +328,45 @@
                 height: 35px;
             }
         }
+    }
+}
+
+.related-products {
+    .product-img{
+        height: 215px;
+        @media (max-width: 420px) {
+            height: 180px;
+        }
+    }
+}
+
+.rating-wrapper {
+    margin-left: -6px;
+    @media (max-width: 768px) {
+        margin-left: -6px;
+        margin-top: -6px;
+        padding-bottom: 20px;
+    }
+}
+
+.related-category {
+    .deep-category {
+        @media (max-width: 576px) {
+            height: 46px;
+        }
+    }
+}
+
+.description-product {
+    font-size: .9rem;
+    line-height: 32px;
+    @media (max-width: 992px) {
+        line-height: 24px;
+    }
+    @media (max-width: 768px) {
+        font-size: .8rem;
+    }
+    @media (max-width: 576px) {
+        line-height: 16px;
     }
 }
