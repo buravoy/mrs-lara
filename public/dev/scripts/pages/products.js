@@ -148,14 +148,12 @@ $(function () {
         const
             $t = $(this),
             href = $t.data('href'),
-            url = $t.closest('.filters-list').data('url'),
-            slug = $t.data('slug'),
+            url = $t.closest('.filter').data('url'),
             token = $('input[name=_token]').val();
 
         const data = new FormData();
 
         data.append('href', href)
-        data.append('slug', slug)
         data.append('_token', token)
 
         $.ajax({
@@ -168,12 +166,28 @@ $(function () {
             processData: false,
             success: function (response) {
 
+                $('.ajax-filters').html(response)
+
+                console.log(response)
+
                 const $html = $(response);
+                const $filters = $html.find('.filters-group');
 
-                const $filters = $html.find('.filters-group')
 
-                $filters.each(function(group) {
-                    const id = group.attr('id');
+                $filters.each(function() {
+                    const $t = $(this);
+
+
+                        // .find('.filters-list')
+                        // .children()
+                        // .remove()
+
+                    // $(`#${$t.attr('id')}.filters-group`)
+                    //     .find('.filters-list')
+                    //     .append($t.find('.filters-list').children())
+
+
+
                 })
             },
         })

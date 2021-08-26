@@ -13,6 +13,11 @@ use Illuminate\Support\Collection;
 class Functions
 {
 
+    static function selectParallel($category)
+    {
+        return Categories::where('parent_id', $category->parent_id)->get();
+    }
+
     static function sorting() {
         $cookieSorting = $_COOKIE['sorting'] ?? null;
 
@@ -55,10 +60,14 @@ class Functions
     {
         $breadArr[] = $currantCategory;
         $parent = $currantCategory->parent;
-        while ($parent->parent != null) {
+        while (isset($parent->parent)) {
             $breadArr[] = $parent;
             $parent = $parent->parent;
+
         }
+        if($parent->show) $breadArr[] = $parent;
+
+
         return array_reverse($breadArr);
     }
 

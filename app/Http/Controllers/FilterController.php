@@ -12,8 +12,6 @@ class FilterController extends Controller
 {
     public function query($params = null)
     {
-//        dump($params);
-
         $discount = false;
         $params = collect(explode('/', $params));
         $sorting = Functions::sorting();
@@ -24,7 +22,6 @@ class FilterController extends Controller
             $params->forget($params->keys()->last());
             $discount = true;
         }
-
 
         $productsData = Functions::productsData($params->first(), $discount);
 
@@ -96,9 +93,13 @@ class FilterController extends Controller
             ];
         }
 
+
+
         foreach ($merged as $key => $filter)
             if (!array_key_exists($key, $availableFilters))
                 $merged[$key] = $currentFilters[$key];
+
+
 
         return $merged;
     }
@@ -119,6 +120,12 @@ class FilterController extends Controller
 
     public function ajaxQuery(Request $request)
     {
+
+        $href = $request->href;
+//        $path = $request->path;
+//        $slug = $request->slug;
+//        $attribute = $request->attribute;
+
         $url =  explode('/', $request->href);
         unset($url[0]);
         $url = implode( '/', $url);
@@ -138,15 +145,21 @@ class FilterController extends Controller
         foreach ($params as $param) $filteredProductsQuery = self::createFilterQuery($param, $filteredProductsQuery);
         if ($discount) $filteredProductsQuery->where('discount','<>', null);
 
-        $availableFilters = self::availableFilters($params->toArray(), $productsData, $filteredProductsQuery, $discount);
+        if(explode('/', $href)[0] == 'filter') {
+            $availableFilters = self::availableFilters($params->toArray(), $productsData, $filteredProductsQuery, $discount);
+        } else {
+            $availableFilters = Functions::collectFilters($productsData['productsId']);
+        }
 
-        return view('sections.filter-ajax', [
+        $filters =  view('sections.filter-ajax', [
             'products' => $filteredProductsQuery->count(),
             'discountAvailable' => $filteredProductsQuery->where('discount','<>' , null)->first(),
             'category' => $productsData['category'],
             'filters' => $availableFilters,
             'discountSet' => $discount,
-            'url' => $url
-        ]);
+            'path' => $href
+        ])->render();
+
+        return json_encode($filters);
     }
 }

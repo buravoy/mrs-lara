@@ -136,9 +136,9 @@
         <div class="mb-5">
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active font-09" data-toggle="tab" href="#category">Описание</a>
+                    <a class="nav-link active font-09 rounded-0" data-toggle="tab" href="#category">Описание</a>
                 </li>
-                <li class="nav-item font-09" role="presentation">
+                <li class="nav-item font-09 rounded-0" role="presentation">
                     <a class="nav-link" data-toggle="tab" href="#reports">Отзывы</a>
                 </li>
             </ul>
