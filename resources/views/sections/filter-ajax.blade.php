@@ -8,7 +8,7 @@
 
     @foreach($filters as $filter)
         @if(!empty($filter['active_attributes']))
-            <div class="filters-group">
+            <div class="filters-group" id="{{ $filter['slug'] }}">
                 <h4 class="my-2">{{ $filter['filter_name'] ?? $filter['name'] }}</h4>
 
                 <div class="d-flex flex-column align-items-start filters-list" data-url="{{ route('filter-ajax') }}">
@@ -22,7 +22,6 @@
 
                             <div class="filter-row">
                                 <div class="btn-filter @if($filterUrlData['isActive']) active @endif"
-                                     data-slug="{{ $attribute['slug'] }}"
                                      data-href="{{ $filterUrlData['link'] }}">
 
                                     <span>{{ $attribute['name'] }}</span>
@@ -51,7 +50,7 @@
         @php
             $discount = Functions::getDiscountUrl(Request::path());
         @endphp
-        <div class="filters-group">
+        <div class="filters-group" id="rasprodazha">
             <div class="d-flex flex-wrap align-items-start filters-list">
                 <a href="{{ route('index') }}/{{ $discount['link'] }}"
                    class="btn-filter btn-sale @if($discount['isActive']) active @endif">
@@ -62,4 +61,4 @@
     @endif
 </div>
 
-
+<a href="">Показать {{ $products }} товаров</a>

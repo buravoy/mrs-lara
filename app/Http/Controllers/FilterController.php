@@ -28,7 +28,6 @@ class FilterController extends Controller
 
         $productsData = Functions::productsData($params->first(), $discount);
 
-        dd($params);
         $params->forget($params->keys()->first());
         $filteredProductsQuery = $productsData['query'];
 
@@ -142,6 +141,7 @@ class FilterController extends Controller
         $availableFilters = self::availableFilters($params->toArray(), $productsData, $filteredProductsQuery, $discount);
 
         return view('sections.filter-ajax', [
+            'products' => $filteredProductsQuery->count(),
             'discountAvailable' => $filteredProductsQuery->where('discount','<>' , null)->first(),
             'category' => $productsData['category'],
             'filters' => $availableFilters,

@@ -168,6 +168,13 @@ $(function () {
             processData: false,
             success: function (response) {
 
+                const $html = $(response);
+
+                const $filters = $html.find('.filters-group')
+
+                $filters.each(function(group) {
+                    const id = group.attr('id');
+                })
             },
         })
 
