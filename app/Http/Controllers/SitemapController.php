@@ -10,9 +10,11 @@ class SitemapController extends Controller
 {
     public function index()
     {
+
+
         $content =  view('sitemap', [
             'type' => 'sitemap',
-            'links' => ['products', 'categories'],
+            'links' => ['categories', 'products'],
         ]);
         return response($content)->header('Content-Type', 'text/xml;charset=utf-8');
     }
@@ -27,24 +29,16 @@ class SitemapController extends Controller
         return response($content)->header('Content-Type', 'text/xml;charset=utf-8');
     }
 
-    public function products()
+    public function products($count = null)
     {
         $products = Products::all()->pluck('slug');
         $content =  view('sitemap', [
             'type' => 'product',
             'links' => $products
         ]);
+
+
+
         return response($content)->header('Content-Type', 'text/xml;charset=utf-8');
     }
-
-//    public function filters()
-//    {
-//        $filters = Categories::all()->pluck('slug');
-//
-//        $content =  view('sitemap', [
-//            'type' => 'product',
-//            'links' => $products
-//        ]);
-//        return response($content)->header('Content-Type', 'text/xml;charset=utf-8');
-//    }
 }
