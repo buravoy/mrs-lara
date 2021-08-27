@@ -239,7 +239,11 @@
     width: 100%;
     position: relative;
     overflow: hidden;
-    border: 1px solid $cyan;
+    border: 1px solid #cccccc;
+
+    &:hover {
+        border-color: $cyan;
+    }
 
 
     span, h3 {
