@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MainController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\FilterController;
+use App\Http\Controllers\MainController;
 
 
 /*
@@ -18,30 +19,24 @@ use App\Http\Controllers\FilterController;
 |
 */
 
-Route::get('/', [MainController::class, 'index'])->name('index');
+
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/favorites', function () {
     return view('favorites');
 })->name('favorites');
 
-
-//Route::name('category')->namespace('category')->prefix('category')->group(function () {
-//    Route::get('/', [CategoriesController::class, 'index'])->name('index');
-//    Route::get('{reviewSlug}', [Front\NewsResearch\ReviewController::class, 'show'])->name('show');
-//});
-
+Route::get('/', [MainController::class, 'index'])->name('index');
 Route::get('/category/{category?}', [CategoriesController::class, 'index'])->name('category');
-
-
 Route::get('/filter/{params?}', [FilterController::class, 'query'])->where('params', '(.*)')->name('filter');
-
 Route::post('/filter-ajax', [FilterController::class, 'ajaxQuery'])->name('filter-ajax');
-
-
-//Route::get('/filter/{category?}/{params?}/{discount?}', [FilterController::class, 'index'])->name('filter');
-
-
-
 Route::get('/away/{slug?}', [ProductsController::class, 'away'])->name('away');
 Route::get('/product/{slug?}', [ProductsController::class, 'index'])->name('product');
 Route::post('/product-info', [ProductsController::class, 'getInfo'])->name('product-info');
+
+
+Route::prefix('sitemap')->name('sitemap.')->group(function () {
+    Route::get('/', [SitemapController::class, 'index'])->name('index');
+    Route::get('/categories', [SitemapController::class, 'categories'])->name('categories');
+    Route::get('/products', [SitemapController::class, 'products'])->name('products');
+    Route::get('/filters', [SitemapController::class, 'filters'])->name('filters');
+});

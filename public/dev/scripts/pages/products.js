@@ -10,7 +10,8 @@ $(function () {
         $allFilters = $('.show-all-filters'),
         $sorting = $('select[name=sort]'),
         $paginate = $('select[name=paginate]'),
-        $filters = $('.filter'),
+        $filters = $('.filter.common'),
+        $filterField = $('.filter'),
         $filtersList = $('.filters-list'),
         $filterButton = $('.btn-filter');
 
@@ -59,6 +60,10 @@ $(function () {
 
     $('.selected-filters').append($selectedFilters)
 
+    $(document).on('click', '.selected-filters > .btn-filter', function () {
+        location = window.location.origin + '/' +$(this).data('href');
+    })
+
     $sorting.on('change', function () {
         const val = $(this).val();
         document.cookie = `sorting=${val}; path=/; max-age=315360000`
@@ -71,7 +76,7 @@ $(function () {
         location = location;
     })
 
-    $allFilters.on('click', function () {
+    $(document).on('click', '.show-all-filters', function () {
         const $t = $(this);
 
         $t.toggleClass('show').closest('.filters-group').find('.filters-list').toggleClass('show');
@@ -156,6 +161,8 @@ $(function () {
         data.append('href', href)
         data.append('_token', token)
 
+        $filterField.addClass('loader').fadeTo("fast", 0.3 );
+
         $.ajax({
             async: true,
             type: "POST",
@@ -166,31 +173,44 @@ $(function () {
             processData: false,
             success: function (response) {
 
-                $('.ajax-filters').html(response)
-
-                console.log(response)
-
                 const $html = $(response);
-                const $filters = $html.find('.filters-group');
+
+                const $ajaxFilters = $('.ajax-filters');
+                const $groups = $ajaxFilters.find('.filters-group')
 
 
-                $filters.each(function() {
+                $html.find('.filters-list').each(function () {
                     const $t = $(this);
+                    $t.attr('data-all', true)
+                    if (!$t.children().length) $t.closest('.filters-group').remove();
+                });
 
+                const $modalHref = $html.find('a.filter-modal-href');
 
-                        // .find('.filters-list')
-                        // .children()
-                        // .remove()
+                $groups.each(function() {
+                    const $t = $(this);
+                    const slug = $t.attr('id');
+                    const isShow = $t.find('.filters-list').hasClass('show')
 
-                    // $(`#${$t.attr('id')}.filters-group`)
-                    //     .find('.filters-list')
-                    //     .append($t.find('.filters-list').children())
-
-
+                    if ( isShow ) {
+                        $html.find(`#${slug}.filters-group`).find('.filters-list').addClass('show')
+                        $html.find(`#${slug}.filters-group`).find('.show-all-filters').html('Скрыть <i class="ml-2 fas fa-chevron-up"></i>')
+                    }
 
                 })
+
+                $ajaxFilters.html('').html($html.children())
+
+                $ajaxFilters.closest('.modal-content').find('.filter-modal-button').html('').html($modalHref)
+
+                $filterField.removeClass('loader').fadeTo("fast", 1 );
+
+
             },
         })
+    })
 
+    $('.filter-show-categories').on('click', function (){
+        $('.filter-categories').slideToggle(200);
     })
 })

@@ -48,18 +48,12 @@
                         </button>
                     </div>
 
-                    @if (strpos(Request::path(), 'filter') !== false)
-                        <div class="selected mb-3 d-md-none d-block">
-                            <div class="selected-filters"></div>
-                            <a href="{{ route('category', ['category' => $category->slug]) }}" class="btn mt-2 btn-red font-08 uppercase">Сбросить</a>
-                        </div>
-                    @endif
 
                     <div class="mb-3 d-flex justify-content-between align-items-end">
                         <div class="d-flex align-items-center flex-wrap">
                             <p class="count-text mr-2 py-2">
                                 В каталоге <b>{{ $products->links()->paginator->total() }}</b>
-                                {{Functions::plural($products->links()->paginator->total(), ['товар', 'товара', 'товаров'])  }}
+                                {{ Functions::plural($products->links()->paginator->total(), ['товар', 'товара', 'товаров']) }}
                             </p>
                             <div class="sorting-group">
                                 <select name="sort" id="" style="min-width: 200px;">

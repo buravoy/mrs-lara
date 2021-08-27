@@ -132,10 +132,14 @@ class FilterController extends Controller
         $discount = false;
         $params = collect(explode('/', $url));
 
+//        dump($params);
+
         if ($params->last() == 'discount') {
             $params->forget($params->keys()->last());
             $discount = true;
         }
+
+
 
         $productsData = Functions::productsData($params->first(), $discount);
 

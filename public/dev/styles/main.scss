@@ -14,6 +14,41 @@
 @import "pages/home";
 @import "pages/products";
 
+.filter.loader {
+    &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
+        pointer-events: none;
+    }
+}
+
+.ajax-search {
+    position: sticky;
+    bottom: 0;
+    padding: 10px 30px;
+    justify-content: center;
+    box-shadow: 0 0 11px 6px #bfbfbf;
+    z-index: 1;
+    margin-left: 5%;
+    width: calc(100% - 40px);
+    flex-wrap: wrap;
+    @media (max-width: 768px) {
+        display: none;
+    }
+}
+
+.filter-modal-href {
+    display: none;
+    @media (max-width: 768px) {
+        display: block;
+    }
+}
+
 .logo {
     &:hover {
         filter: brightness(0.9);
@@ -204,6 +239,7 @@
     width: 100%;
     position: relative;
     overflow: hidden;
+    border: 1px solid $cyan;
 
 
     span, h3 {
@@ -395,7 +431,7 @@
 
     img {
         margin: auto;
-        max-height: 450px;
+        max-height: 100%;
         max-width: 100%;
         display: block;
     }

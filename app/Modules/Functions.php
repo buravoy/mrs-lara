@@ -65,8 +65,7 @@ class Functions
             $parent = $parent->parent;
 
         }
-        if($parent->show) $breadArr[] = $parent;
-
+        if(isset($parent->show) && $parent->show) $breadArr[] = $parent;
 
         return array_reverse($breadArr);
     }
@@ -101,10 +100,10 @@ class Functions
         $url = explode('/', $url);
         $isActive = false;
 
+        if ($url[0] == 'category' && count($url) <= 2) $url[0] = 'filter';
+        elseif ($url[0] == 'filter' && count($url) == 3 && end($url) == 'discount') $url[0] = 'category';
 
         $generatedUrl = array_filter(array_map(function($item) use($url) {
-            if ($item == 'category' && count($url) <= 2) return 'filter';
-            if ($item == 'filter' && count($url) <= 2) return 'category';
             if ($item == 'discount') return null;
             return $item;
         }, $url));
@@ -125,6 +124,19 @@ class Functions
         unset($urlArr[0], $urlArr[1]);
         $isActive = false;
         $isThisGroup = false;
+//        $isDiscount = null;
+
+//        if (in_array('discount', $urlArr)) {
+//            $isDiscount = '/discount';
+//        }
+
+//        $urlArr = array_filter(array_map(function($item) use($url) {
+//            if ($item == 'discount') return null;
+//            return $item;
+//        }, $urlArr));
+
+
+
 
         foreach ($urlArr as $item) {
             $seek = explode('_', $item);
@@ -162,6 +174,14 @@ class Functions
         }
 
         asort($cleanUrlArr);
+
+        $key = array_search('discount', $cleanUrlArr);
+
+        if($key) {
+            $pushItem = $cleanUrlArr[$key];
+            unset($cleanUrlArr[$key]);
+            $cleanUrlArr[] = $pushItem;
+        }
 
         return [
             'link' => 'filter/' . $category . '/' . implode('/', $cleanUrlArr),

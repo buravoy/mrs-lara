@@ -181,13 +181,13 @@ button {
   }
 
   &-cyan {
-    background-color: $cyan;
+    background-color: darken($cyan, 7%);
     color: $white;
-    border-color: $cyan;
+    border-color: darken($cyan, 7%);
 
     &:hover {
-      background-color: darken($cyan, 7%);
-      border-color: darken($cyan, 7%);
+      background-color: $cyan;
+      border-color: $cyan;
     }
 
     &-outline {

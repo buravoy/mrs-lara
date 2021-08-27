@@ -97,14 +97,19 @@
                     @if ($product->old_price)
                         <p class="old font-12 red">{{ $product->old_price }}</p>
                     @endif
-                    <p class="new font-13 f-w-5">{{ $product->price }}<i class="fas fa-ruble-sign"></i></p>
+                    <p class="new font-13 f-w-5">{{ $product->price }}
+                        <i class="fas fa-ruble-sign"></i>
+                    </p>
                 </div>
 
                 <div class="single-attributes mb-3 mb-md-5">
                     <h2 class="mb-2 font-10">Характеристики:</h2>
                     <ul class="attributes w-100">
                         @foreach(\App\Modules\Functions::convertAttributes($product->attributes) as $group => $attribute)
-                            <li><span>{{ $group }}:</span> <span style="font-weight:500">{{ $attribute }}</span></li>
+                            <li>
+                                <span>{{ $group }}:</span>
+                                <span style="font-weight:500">{{ $attribute }}</span>
+                            </li>
                         @endforeach
                     </ul>
                 </div>
@@ -115,23 +120,24 @@
 
             </div>
         </div>
-
-        <div class="mb-5 pt-4">
-            <p class="font-11 f-w-5 t-center mb-4">
-                <i class="fas red fa-heart mr-2"></i>
-                Вам понравятся эти подборки
-            </p>
-            <div class="row px-2 related-category">
-                @foreach($relatedCategories as $category)
-                    <div class="col-6 col-sm-4 col-lg-3 px-sm-2 px-1 mb-1">
-                        <a href="{{ route('category',['category' => $category->slug]) }}" class="deep-category mb-1">
-                            <h3>{{ $category->name }}</h3>
-                        </a>
-                    </div>
-                @endforeach
+        @if(!empty($relatedCategories))
+            <div class="mb-5 pt-4">
+                <p class="font-11 f-w-5 t-center mb-4">
+                    <i class="fas red fa-heart mr-2"></i>
+                    Вам понравятся эти подборки
+                </p>
+                <div class="row px-2 related-category">
+                    @foreach($relatedCategories as $category)
+                        <div class="col-6 col-sm-4 col-lg-3 px-sm-2 px-1 mb-1">
+                            <a href="{{ route('category',['category' => $category->slug]) }}" class="deep-category mb-1">
+                                <h3>{{ $category->name }}</h3>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
             </div>
-        </div>
 
+        @endif
 
         <div class="mb-5">
             <ul class="nav nav-tabs" role="tablist">
@@ -159,7 +165,8 @@
                 <div class="tab-pane fade " id="reports">
                     <div class="p-md-5 p-sm-3 p-1 pt-4">
                         <h2 class="mb-4 font-11">Отзывы о товаре</h2>
-                        <p class="mb-5 description-product ucfirst">У данного товара пока нет отзывов.<br>Станьте первым!</p>
+                        <p class="mb-5 description-product ucfirst">У данного товара пока нет отзывов.<br>Станьте первым!
+                        </p>
 
                         <form action="" class="base w-100" style="max-width: none">
                             <div class="input-group" style="max-width: 360px;">
@@ -183,34 +190,36 @@
             </div>
         </div>
 
-        <div class="mb-5">
-            <p class="font-11 f-w-5 t-center mb-4">
-                Похожие товары
-            </p>
+        @if(!empty($relatedProducts['up']) || !empty($relatedProducts['down']))
+            <div class="mb-5">
+                <p class="font-11 f-w-5 t-center mb-4">
+                    Похожие товары
+                </p>
 
-            <div class="row related-products justify-content-center">
-                @php
-                    $lengthUp = 3;
-                    $lengthDown = 3;
-                    if(count($relatedProducts['up']) < 3) $lengthDown = $lengthUp + 3 - count($relatedProducts['up']);
-                    if(count($relatedProducts['down']) < 3) $lengthUp = $lengthDown + 3 - count($relatedProducts['down']);
-                @endphp
+                <div class="row related-products justify-content-center">
+                    @php
+                        $lengthUp = 3;
+                        $lengthDown = 3;
+                        if(count($relatedProducts['up']) < 3) $lengthDown = $lengthUp + 3 - count($relatedProducts['up']);
+                        if(count($relatedProducts['down']) < 3) $lengthUp = $lengthDown + 3 - count($relatedProducts['down']);
+                    @endphp
 
-                @foreach($relatedProducts['down'] as $key => $product)
-                    @break($loop->iteration > $lengthDown)
-                    <div class="col-6 col-md-4 col-xl-2 px-0 mb-1" style="order: {{ -$key }}">
-                        @include('sections.product-card', ['product' => $product, 'related' => true])
-                    </div>
-                @endforeach
+                    @foreach($relatedProducts['down'] as $key => $product)
+                        @break($loop->iteration > $lengthDown)
+                        <div class="col-6 col-md-4 col-xl-2 px-0 mb-1" style="order: {{ -$key }}">
+                            @include('sections.product-card', ['product' => $product, 'related' => true])
+                        </div>
+                    @endforeach
 
-                @foreach($relatedProducts['up'] as $product)
-                    @break($loop->iteration > $lengthUp)
-                    <div class="col-6 col-md-4 col-xl-2 px-0 mb-1">
-                        @include('sections.product-card', ['product' => $product, 'related' => true])
-                    </div>
-                @endforeach
+                    @foreach($relatedProducts['up'] as $product)
+                        @break($loop->iteration > $lengthUp)
+                        <div class="col-6 col-md-4 col-xl-2 px-0 mb-1">
+                            @include('sections.product-card', ['product' => $product, 'related' => true])
+                        </div>
+                    @endforeach
+                </div>
             </div>
-        </div>
+        @endif
     </div>
 @endsection
 
