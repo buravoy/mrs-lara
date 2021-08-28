@@ -58,12 +58,13 @@
         </div>
     @endif
 
-    <a class="ajax-search btn btn-cyan" href="{{ route('index').'/'.$path }}">
+    <a class="ajax-search filter-result btn btn-cyan" href="{{ route('index').'/'.$path }}">
         Показать<span class="pr-2"><b class="px-2">{{ $products }}</b>{{ Functions::plural($products, ['товар', 'товара', 'товаров']) }}</span>
     </a>
 
-    <a class="filter-modal-href btn btn-cyan" href="{{ route('index').'/'.$path }}">
+    <a class="filter-modal-href filter-result btn btn-cyan" href="{{ route('index').'/'.$path }}">
         Показать<span class="pr-2"><b class="px-2">{{ $products }}</b>{{ Functions::plural($products, ['товар', 'товара', 'товаров']) }}</span>
     </a>
+
 </div>
 

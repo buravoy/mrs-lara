@@ -51,12 +51,8 @@ class FilterController extends Controller
 
     public function availableFilters($params, $productsData, $filteredProductsQuery, $discount): array
     {
-        $availableFilters = [];
         $currentFilters = Functions::collectFilters($filteredProductsQuery->pluck('id')->toArray(), $discount);
-
-
         if ($discount && empty($params)) return $currentFilters;
-
         if (count($params) == 1) {
             $categoryFilters = Functions::collectFilters($productsData['productsId'], $discount);
             $singleParam = explode('_', $params[1])[0];
@@ -65,13 +61,24 @@ class FilterController extends Controller
 
             return $currentFilters;
         }
+        $productsQuery = Products::whereIn('id', $productsData['productsId']);
 
-        foreach ($params as $param) {
-            $groupSlug = explode('_', $param)[0];
-            $productsQuery = Products::whereIn('id', $productsData['productsId']);
-            $query = self::createFilterQuery($param, $productsQuery);
-            $filteredProductsId = Functions::collectId($query->get('id'));
-            $availableFilters[$groupSlug] = Functions::collectFilters($filteredProductsId, $discount);
+        $availableFilters = [];
+
+        foreach ($currentFilters as $group => $filter) {
+            foreach ($params as $key => $param) {
+                if (strpos($param, $group) !== false) {
+                    $paramId = $key;
+                    if (isset($paramId)) {
+                        $croppedParams = $params;
+                        unset($croppedParams[$paramId]);
+                        $fProdQuery = $productsQuery;
+                        foreach ($croppedParams as $croppedParam) $fProdQuery = self::createFilterQuery($croppedParam, $fProdQuery);
+                        if ($discount) $fProdQuery->where('discount','<>', null);
+                        $availableFilters[$group] = Functions::collectFilters($fProdQuery->pluck('id')->toArray(), $discount);
+                    }
+                }
+            }
         }
 
         $merged = array_map(function() { return []; }, $currentFilters);
@@ -79,10 +86,9 @@ class FilterController extends Controller
         foreach ($availableFilters as $availableFilter)
             foreach ($availableFilter as $group => $attribute)
                 if(array_key_exists($group, $merged))
-                    $merged[$group] = array_merge_recursive($merged[$group], $attribute );
+                    $merged[$group] = array_merge_recursive($merged[$group], $attribute);
 
         foreach ($merged as $key => $group) {
-
             $merged[$key] = [
                 'id' => $group['id'][0],
                 'name' => $group['name'][0],
@@ -93,13 +99,9 @@ class FilterController extends Controller
             ];
         }
 
-
-
         foreach ($merged as $key => $filter)
             if (!array_key_exists($key, $availableFilters))
                 $merged[$key] = $currentFilters[$key];
-
-
 
         return $merged;
     }
@@ -120,11 +122,7 @@ class FilterController extends Controller
 
     public function ajaxQuery(Request $request)
     {
-
         $href = $request->href;
-//        $path = $request->path;
-//        $slug = $request->slug;
-//        $attribute = $request->attribute;
 
         $url =  explode('/', $request->href);
         unset($url[0]);
@@ -132,14 +130,10 @@ class FilterController extends Controller
         $discount = false;
         $params = collect(explode('/', $url));
 
-//        dump($params);
-
         if ($params->last() == 'discount') {
             $params->forget($params->keys()->last());
             $discount = true;
         }
-
-
 
         $productsData = Functions::productsData($params->first(), $discount);
 
@@ -155,15 +149,30 @@ class FilterController extends Controller
             $availableFilters = Functions::collectFilters($productsData['productsId']);
         }
 
-        $filters =  view('sections.filter-ajax', [
-            'products' => $filteredProductsQuery->count(),
-            'discountAvailable' => $filteredProductsQuery->where('discount','<>' , null)->first(),
-            'category' => $productsData['category'],
-            'filters' => $availableFilters,
-            'discountSet' => $discount,
-            'path' => $href
-        ])->render();
+        $filteredProductsCount = $filteredProductsQuery->count();
 
-        return json_encode($filters);
+        if ($filteredProductsCount) {
+            $filters =  view('sections.filter-ajax', [
+                'products' => $filteredProductsQuery->count(),
+                'discountAvailable' => $filteredProductsQuery->where('discount','<>' , null)->first(),
+                'category' => $productsData['category'],
+                'filters' => $availableFilters,
+                'discountSet' => $discount,
+                'path' => $href
+            ])->render();
+
+            $request->session()->put('filters', $filters);
+
+            return json_encode([
+                'view' => $filters
+            ]);
+        }
+
+        $filters = $request->session()->get('filters');
+
+        return json_encode([
+            'view' => $filters,
+            'message' => 'Нет товаров, выберите другие фильтры'
+        ]);
     }
 }

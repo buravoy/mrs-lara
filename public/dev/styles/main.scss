@@ -14,17 +14,15 @@
 @import "pages/home";
 @import "pages/products";
 
-.filter.loader {
-    &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 1;
-        pointer-events: none;
-    }
+.ajax-filters {
+    position: relative;
+}
+
+.error-message {
+    pointer-events: none !important;
+    background-color: $red !important;
+    border-color: $red;
+    text-align: center;
 }
 
 .ajax-search {
@@ -45,7 +43,9 @@
 .filter-modal-href {
     display: none;
     @media (max-width: 768px) {
-        display: block;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 }
 
@@ -393,6 +393,7 @@
     position: relative;
     overflow: hidden;
     text-align: center;
+    min-height: 200px;
 
     & > a {
         position: absolute;

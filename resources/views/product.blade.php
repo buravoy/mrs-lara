@@ -75,7 +75,10 @@
                             <img src="{{ $product->image[0] }}" alt="{{ $product->name .' фотография' }}">
                         @endif
                     @else
-                        <i class="far fa-image font-30 grey-light"></i>
+                        <div class="d-flex flex-column align-items-center justify-content-center" style="width: 100%; min-height: 200px">
+                            <i class="far fa-image font-30 grey-light"></i>
+                            <span class="mt-3">Нет картинки</span>
+                        </div>
                     @endif
                 </div>
             </div>

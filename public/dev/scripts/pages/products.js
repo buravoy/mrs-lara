@@ -173,10 +173,15 @@ $(function () {
             processData: false,
             success: function (response) {
 
-                const $html = $(response);
-
+                const $html = $(response.view);
                 const $ajaxFilters = $('.ajax-filters');
                 const $groups = $ajaxFilters.find('.filters-group')
+
+
+                if (response.message) {
+                    console.log('error')
+                    $html.find('a.filter-result').addClass('error-message').html(response.message);
+                }
 
 
                 $html.find('.filters-list').each(function () {
@@ -196,16 +201,11 @@ $(function () {
                         $html.find(`#${slug}.filters-group`).find('.filters-list').addClass('show')
                         $html.find(`#${slug}.filters-group`).find('.show-all-filters').html('Скрыть <i class="ml-2 fas fa-chevron-up"></i>')
                     }
-
                 })
 
                 $ajaxFilters.html('').html($html.children())
-
                 $ajaxFilters.closest('.modal-content').find('.filter-modal-button').html('').html($modalHref)
-
                 $filterField.removeClass('loader').fadeTo("fast", 1 );
-
-
             },
         })
     })
