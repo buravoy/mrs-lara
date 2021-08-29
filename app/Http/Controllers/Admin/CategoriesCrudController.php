@@ -146,8 +146,14 @@ class CategoriesCrudController extends CrudController
 
         CRUD::addColumn([
             'name' => 'name',
-            'type' => 'text',
+            'type' => 'closure',
             'label' => 'Название',
+            'function' => function($entry) {
+                return '<a href="'.route('category',['category'=>$entry->slug]).'" target="_blank">'.substr($entry->name, 0, 40) .'</a>';
+            },
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhere('name', 'like', '%'.$searchTerm.'%');
+            }
         ]);
 
         CRUD::addColumn([

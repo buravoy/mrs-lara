@@ -88,8 +88,14 @@ class ProductsCrudController extends CrudController
 
         CRUD::addColumn([
             'name' => 'name',
-            'type' => 'text',
             'label' => 'Название',
+            'type' => 'closure',
+            'function' => function($entry) {
+                return '<a href="'.route('product',['slug'=>$entry->slug]).'" target="_blank">'.substr($entry->name, 0, 40) .'</a>';
+            },
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhere('name', 'like', '%'.$searchTerm.'%');
+            }
         ]);
 
         CRUD::addColumn([
@@ -156,6 +162,13 @@ class ProductsCrudController extends CrudController
             'wrapperAttributes' => [
                 'class' => 'form-group col-md-6',
             ],
+        ]);
+
+        CRUD::addField([
+            'name' => '',
+            'type' => 'goto-product',
+            'data' => $entry,
+            'tab' => 'Информация',
         ]);
 
         CRUD::addField([
@@ -237,6 +250,17 @@ class ProductsCrudController extends CrudController
             'tab' => 'Информация',
             'wrapperAttributes' => [
                 'class' => 'form-group col-md-8',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'href',
+            'label' => 'Партнерская ссылка',
+            'type' => 'textarea',
+            'tab' => 'Информация',
+            'attributes'=>[ 'readonly' => true ],
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-12',
             ],
         ]);
 
@@ -323,6 +347,22 @@ class ProductsCrudController extends CrudController
     {
         Products::withTrashed()->find($id)->forceDelete();
         return back();
+    }
+
+    public function bulkDelete()
+    {
+        $this->crud->hasAccessOrFail('bulkDelete');
+
+        $entries = request()->input('entries', []);
+        $deletedEntries = [];
+
+        foreach ($entries as $key => $id) {
+            if ($entry = $this->crud->model->find($id)) {
+                $deletedEntries[] = $entry->forceDelete();
+            }
+        }
+
+        return $deletedEntries;
     }
 
 }

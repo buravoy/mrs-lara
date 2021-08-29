@@ -1,7 +1,7 @@
 <div class="categories">
     <div class="d-flex align-items-center">
         @if($entry->parent)
-            <i class="las la-long-arrow-alt-left mr-1"></i>
+            <i class="small las la-arrow-left  mr-1"></i>
             <p class="small"><b>{{ $entry->parent->name ?? null }}</b></p>
         @endif
     </div>
@@ -21,7 +21,6 @@
         </p>
     </div>
     <div class="d-flex align-items-center">
-        <p class="mb-0 mr-5 count-goods" style="cursor: pointer" data-slug="{{ $entry->slug }}">Товаров: <b>{{ $entry->count }}</b></p>
-        <a href="{{ route('category') }}/{{ $entry->slug }}" target="_blank">Перейти</a>
+        <p class="mb-0 small mr-5 count-goods" style="cursor: pointer" data-slug="{{ $entry->slug }}">Товаров: <b>{{ $entry->count }}</b></p>
     </div>
 </div>

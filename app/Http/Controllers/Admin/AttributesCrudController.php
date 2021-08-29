@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\AttributesRequest;
 use App\Models\Attributes;
+use App\Models\Products;
 use App\Models\Groups;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -286,5 +287,22 @@ class AttributesCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function destroy($id)
+    {
+        $group = Attributes::with('group')->where('id', $id)->first()->group->slug;
+
+        $products = Products::withTrashed()->whereJsonContains('attributes->'.$group, (integer)$id)->get();
+
+        foreach ($products as $product) {
+            $attributes = json_decode($product->attributes);
+            if(($key = array_search($id, $attributes->$group)) !== false) unset($attributes->$group[$key]);
+            $attributes = json_encode($attributes);
+
+            Products::withTrashed()->where('id', $product->id)->update(['attributes' => $attributes]);
+        }
+
+        return Attributes::find($id)->delete();
     }
 }
