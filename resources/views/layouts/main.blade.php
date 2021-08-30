@@ -14,8 +14,7 @@
     <link rel="stylesheet" href="{{ asset('css/main.css') }}?v={{ File::lastModified('css/main.css') }}">
     @stack('styles')
 
-    @yield('meta_title')
-    @yield('meta_description')
+    @yield('meta')
 </head>
 
 <body>
@@ -37,5 +36,25 @@
 <script src="{{ asset('js/vendors.js') }}?v={{ File::lastModified('js/vendors.js') }}"></script>
 <script src="{{ asset('js/main.js') }}?v={{ File::lastModified('js/main.js') }}"></script>
 @stack('scripts')
+
+@if(config('app.name') == 'Mr.Shopper')
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+    ym(84694141, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+    });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/84694141" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+@endif
+
+
 </body>
 </html>

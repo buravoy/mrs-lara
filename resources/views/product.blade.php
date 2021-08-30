@@ -1,13 +1,10 @@
 @extends('layouts.main')
 
-@section('meta_title')
+@section('meta')
     <title>{{ $product->name }}</title>
+    <meta name="description" content="{{ $product->description }}">
 @endsection
 
-@section('meta_description')
-    <meta name="description"
-          content="{{ $product->description }}">
-@endsection
 
 @section('content')
     <div class="container-xxl">

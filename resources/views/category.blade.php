@@ -1,12 +1,14 @@
 @extends('layouts.main')
 
-@section('meta_title')
-    <title>{{ $category->meta_title ?? $meta['meta_title'] ?? $category->name }}</title>
-@endsection
+@section('meta')
+    <title>{{ $category->meta_title ?? $meta['meta_title'] ?? $category->name }}@if($products->links()->paginator->currentPage() > 1) - страница {{ $products->links()->paginator->currentPage() }}@endif</title>
 
-@section('meta_description')
-    <meta name="description"
-          content="{{ $category->meta_description ?? $meta['meta_description'] ?? 'Выбирайте - '. $category->name . ' в интернет каталоге Mr.Shopper' }}">
+    @if($products->links()->paginator->total() > 1 && $products->links()->paginator->currentPage() !== 1)
+        <link rel="canonical" href="{{ url()->current() }}"/>
+    @else
+        <meta name="description"
+              content="{{ $category->meta_description ?? $meta['meta_description'] ?? 'Выбирайте - '. $category->name . ' в интернет каталоге Mr.Shopper' }}">
+    @endif
 @endsection
 
 @section('content')
@@ -56,7 +58,8 @@
                     <div class="mb-3 d-flex justify-content-between align-items-end">
                         <div class="d-flex align-items-center flex-wrap">
                             <p class="count-text mr-2 py-2">
-                                В каталоге <b>{{ $products->links()->paginator->total() }}</b>
+                                В каталоге
+                                <b>{{ $products->links()->paginator->total() }}</b>
                                 {{ Functions::plural($products->links()->paginator->total(), ['товар', 'товара', 'товаров']) }}
                             </p>
                             <div class="sorting-group">
@@ -100,7 +103,7 @@
             </div>
 
             <div class="py-3 pagination-block">
-                {{ $products->onEachSide(1)->links() }}
+                {{ $products->links() }}
             </div>
 
             <div class="my-5 wrapper">

@@ -48,7 +48,7 @@
         <div class="filters-group" id="rasprodazha">
             <div class="d-flex flex-wrap align-items-start filters-list">
 
-                <div class="filter-row" @if(isset($filterUrlData['isActive']) && $filterUrlData['isActive']) style="order: -1" @endif>
+                <div class="filter-row">
                     <div class="btn-filter btn-sale @if($discount['isActive']) active @endif"
                          data-href="{{ $discount['link'] }}">
 

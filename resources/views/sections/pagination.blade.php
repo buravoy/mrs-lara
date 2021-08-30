@@ -25,12 +25,17 @@
                     <i class="fas fa-arrow-left"></i>
                 </a>
             </li>
-
             @if( !array_intersect($start, $range) )
                 @foreach($start as $page => $link)
-                    <li class="page-item @if($paginator->currentPage() == $page) active @endif" aria-current="page">
-                        <a class="page-link" href="{{ $link }}">{{ $page }}</a>
-                    </li>
+                    @if($page == 1)
+                        <li class="page-item @if($paginator->currentPage() == $page) active @endif" aria-current="page">
+                            <a class="page-link" href="{{ url()->current() }}">{{ $page }}</a>
+                        </li>
+                    @else
+                        <li class="page-item @if($paginator->currentPage() == $page) active @endif" aria-current="page">
+                            <a class="page-link" href="{{ $link }}">{{ $page }}</a>
+                        </li>
+                    @endif
                 @endforeach
                 <li class="page-item disabled" aria-disabled="true">
                     <span class="page-link">...</span>
@@ -40,9 +45,20 @@
 
             @foreach($range as $page => $link)
                 @continue($page <= 0)
-                <li class="page-item @if($paginator->currentPage() == $page) active @endif" aria-current="page">
-                    <a class="page-link" href="{{ $link }}">{{ $page }}</a>
-                </li>
+
+                @if($page == 1)
+                    <li class="page-item @if($paginator->currentPage() == $page) active @endif" aria-current="page">
+                        <a class="page-link" href="{{ url()->current() }}">{{ $page }}</a>
+                    </li>
+                @else
+                    <li class="page-item @if($paginator->currentPage() == $page) active @endif" aria-current="page">
+                        <a class="page-link" href="{{ $link }}">{{ $page }}</a>
+                    </li>
+                @endif
+
+{{--                <li class="page-item @if($paginator->currentPage() == $page) active @endif" aria-current="page">--}}
+{{--                    <a class="page-link" href="{{ $link }}">{{ $page }}</a>--}}
+{{--                </li>--}}
                 @break($page >= $paginator->lastPage())
             @endforeach
 
