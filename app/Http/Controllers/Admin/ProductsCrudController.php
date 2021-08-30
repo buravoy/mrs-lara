@@ -91,7 +91,7 @@ class ProductsCrudController extends CrudController
             'label' => 'Название',
             'type' => 'closure',
             'function' => function($entry) {
-                return '<a href="'.route('product',['slug'=>$entry->slug]).'" target="_blank">'.substr($entry->name, 0, 40) .'</a>';
+                return '<a href="'.route('product',['slug'=>$entry->slug]).'" target="_blank">'. $entry->name .'</a>';
             },
             'searchLogic' => function ($query, $column, $searchTerm) {
                 $query->orWhere('name', 'like', '%'.$searchTerm.'%');

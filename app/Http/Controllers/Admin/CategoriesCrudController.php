@@ -149,9 +149,9 @@ class CategoriesCrudController extends CrudController
             'type' => 'closure',
             'label' => 'Название',
             'function' => function($entry) {
-                return '<a href="'.route('category',['category'=>$entry->slug]).'" target="_blank">'.substr($entry->name, 0, 40) .'</a>';
+                return '<a href="'.route('category',['category'=>$entry->slug]).'" target="_blank">'. $entry->name .'</a>';
             },
-            'searchLogic' => function ($query, $column, $searchTerm) {
+            'searchLogic' => function ($query, $searchTerm) {
                 $query->orWhere('name', 'like', '%'.$searchTerm.'%');
             }
         ]);

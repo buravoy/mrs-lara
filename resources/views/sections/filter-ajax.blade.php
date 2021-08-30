@@ -18,11 +18,13 @@
 
                         @if(count($filter['active_attributes']) > 1 || $filterUrlData['isActive'])
 
-                            <div class="filter-row" @if($filterUrlData['isActive']) style="order: -1" @endif>
-                                <div class="btn-filter @if($filterUrlData['isActive']) active @endif"
+                            <div class="filter-row" @if(isset($filterUrlData['isActive']) && $filterUrlData['isActive']) style="order: -1" @endif>
+                                <div class="btn-filter @if(isset($filterUrlData['isActive']) && $filterUrlData['isActive']) active @endif"
                                      data-href="{{ $filterUrlData['link'] }}">
                                     <span>{{ $attribute['name'] }}</span>
-                                    {!! Beautify::setThubm($attribute['name']) !!}
+                                    @if(isset($attribute['name']))
+                                        {!! Beautify::setThubm($attribute['name']) !!}
+                                    @endif
                                 </div>
                             </div>
                         @endif
@@ -46,12 +48,14 @@
         <div class="filters-group" id="rasprodazha">
             <div class="d-flex flex-wrap align-items-start filters-list">
 
-                <div class="filter-row" @if($filterUrlData['isActive']) style="order: -1" @endif>
+                <div class="filter-row" @if(isset($filterUrlData['isActive']) && $filterUrlData['isActive']) style="order: -1" @endif>
                     <div class="btn-filter btn-sale @if($discount['isActive']) active @endif"
                          data-href="{{ $discount['link'] }}">
 
                         <span>распродажа  <span class="red"> SALE</span></span>
-                        {!! Beautify::setThubm($attribute['name']) !!}
+                        @if(isset($attribute['name']))
+                            {!! Beautify::setThubm($attribute['name']) !!}
+                        @endif
                     </div>
                 </div>
             </div>

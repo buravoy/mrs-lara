@@ -35,7 +35,11 @@
                             @if($cat->count)
                                 <div class="col-6 col-sm-3 col-lg-2 px-sm-2 px-1 mb-1">
                                     <a href="{{ route('category',['category' => $cat->slug]) }}" class="deep-category mb-1">
-                                        <h3>{{ $cat->short_name ?? $cat->name }}</h3>
+                                        @if($cat->short_name == 'true')
+                                            <h3>{{ $cat->short_name }}</h3>
+                                        @else
+                                            <h3>{{ $cat->name }}</h3>
+                                        @endif
                                     </a>
                                 </div>
                             @endif
