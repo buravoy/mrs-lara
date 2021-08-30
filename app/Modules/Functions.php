@@ -43,9 +43,9 @@ class Functions
                 $sorting['direction'] = 'asc';
                 break;
 
-            case 'abc' :
-                $sorting['column'] = 'name';
-                $sorting['direction'] = 'asc';
+            case 'created' :
+                $sorting['column'] = 'created_at';
+                $sorting['direction'] = 'desc';
                 break;
 
             default :

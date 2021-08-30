@@ -1,2 +1,25 @@
+User-agent: Yandex
+Disallow: /login
+Disallow: /admin
+Disallow: /filter-ajax
+Disallow: /away
+Disallow: /product-info
+Disallow: *?*
+
+User-agent: Googlebot
+Disallow: /login
+Disallow: /admin
+Disallow: /filter-ajax
+Disallow: /away
+Disallow: /product-info
+Disallow: *?*
+
 User-agent: *
-Disallow: /
+Disallow: /login
+Disallow: /admin
+Disallow: /filter-ajax
+Disallow: /away
+Disallow: /product-info
+Disallow: *?*
+
+Sitemap: https://mrshopper.ru/sitemap

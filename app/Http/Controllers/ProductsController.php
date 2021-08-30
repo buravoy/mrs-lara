@@ -16,6 +16,9 @@ class ProductsController extends Controller
         if(!$slug) abort(404);
 
         $product = Products::where('slug', $slug)->first();
+
+        if(!$product) abort(404);
+
         $categoryId = CategoryProduct::where('product_id', $product->id)->pluck('category_id');
         $category = Categories::where('id', $categoryId)->first();
         $relatedCategories = Categories::whereIn('id',$categoryId)->get();

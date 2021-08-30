@@ -1,14 +1,10 @@
 @extends('layouts.main')
 
 @section('meta')
-    <title>{{ $category->meta_title ?? $meta['meta_title'] ?? $category->name }}@if($products->links()->paginator->currentPage() > 1) - страница {{ $products->links()->paginator->currentPage() }}@endif</title>
 
-    @if($products->links()->paginator->total() > 1 && $products->links()->paginator->currentPage() !== 1)
-        <link rel="canonical" href="{{ url()->current() }}"/>
-    @else
-        <meta name="description"
-              content="{{ $category->meta_description ?? $meta['meta_description'] ?? 'Выбирайте - '. $category->name . ' в интернет каталоге Mr.Shopper' }}">
-    @endif
+    <title>@if($products->links()->paginator->currentPage() > 1)Страница {{ $products->links()->paginator->currentPage() }} - @endif{{ $category->meta_title ?? $meta['meta_title'] ?? $category->name }}</title>
+    <meta name="description"
+          content="@if($products->links()->paginator->currentPage() > 1)Страница {{ $products->links()->paginator->currentPage() }} - @endif{{ $category->meta_description ?? $meta['meta_description'] ?? 'Выбирайте - '. $category->name . ' в интернет каталоге Mr.Shopper' }}">
 @endsection
 
 @section('content')
@@ -23,7 +19,11 @@
         <div class="pb-3">
             <div class="mb-3 mb-md-5 wrapper">
                 <h1 class="mb-3">{!! $meta['title'] ?? $category->name !!}</h1>
-                <div class="description ucfirst">{!! $category->short_description ?? $meta['description1'] !!}</div>
+                @if($products->links()->paginator->currentPage() == 1)
+                    <div class="description ucfirst">{!! $category->short_description ?? $meta['description1'] !!}</div>
+                @endif
+
+
             </div>
 
             <div class="row">
@@ -54,8 +54,7 @@
                         </button>
                     </div>
 
-
-                    <div class="mb-3 d-flex justify-content-between align-items-end">
+                    <div class="mb-3 d-flex justify-content-between align-items-end" style="margin: 0 -5px;">
                         <div class="d-flex align-items-center flex-wrap">
                             <p class="count-text mr-2 py-2">
                                 В каталоге
@@ -66,9 +65,8 @@
                                 <select name="sort" id="" style="min-width: 200px;">
                                     <option value="asc" @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'asc') selected @endif>Сначала подешевле</option>
                                     <option value="desc" @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'desc') selected @endif>Сначала подороже</option>
-                                    <option value="discount-desc" @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'discount-desc') selected @endif>По убыванию скидки</option>
-                                    <option value="discount-asc" @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'discount-asc') selected @endif>По возрастанию скидки</option>
-                                    <option value="abc" @if(!isset($_COOKIE['sorting']) || $_COOKIE['sorting'] == 'abc') selected @endif>По алфавиту</option>
+                                    <option value="created" @if(!isset($_COOKIE['sorting']) || $_COOKIE['sorting'] == 'created') selected @endif>Сначала новинки</option>
+                                    <option value="discount-desc" @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'discount-desc') selected @endif>По размеру скидки</option>
                                 </select>
                             </div>
                         </div>
@@ -85,7 +83,7 @@
                         </div>
                     </div>
 
-                    <div class="row product-list">
+                    <div class="row product-list" style="margin: 0 -10px;">
                         @if(!empty($products->items()))
                             @foreach($products as $product)
                                 <div class="col-6 col-sm-4 col-lg-3 pb-2 px-0">
@@ -106,9 +104,13 @@
                 {{ $products->links() }}
             </div>
 
-            <div class="my-5 wrapper">
-                <div class="description ucfirst">{!! $category->description ?? $meta['description2'] !!}</div>
-            </div>
+            @if($products->links()->paginator->currentPage() == 1)
+                <div class="my-5 wrapper">
+                    <div class="description ucfirst">{!! $category->description ?? $meta['description2'] !!}</div>
+                </div>
+            @endif
+
+
         </div>
     </div>
 @endsection
