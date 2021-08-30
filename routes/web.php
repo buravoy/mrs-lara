@@ -36,6 +36,6 @@ Route::post('/product-info', [ProductsController::class, 'getInfo'])->name('prod
 
 Route::prefix('sitemap')->name('sitemap.')->group(function () {
     Route::get('/', [SitemapController::class, 'index'])->name('index');
-    Route::get('/categories', [SitemapController::class, 'categories'])->name('categories');
-    Route::get('/products/{count?}', [SitemapController::class, 'products'])->name('products');
+    Route::get('/categories/{page?}', [SitemapController::class, 'categories'])->name('categories');
+    Route::get('/products/{page?}', [SitemapController::class, 'products'])->name('products');
 });
