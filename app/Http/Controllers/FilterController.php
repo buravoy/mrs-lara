@@ -53,11 +53,12 @@ class FilterController extends Controller
     {
         $currentFilters = Functions::collectFilters($filteredProductsQuery->pluck('id')->toArray(), $discount);
         if ($discount && empty($params)) return $currentFilters;
+
         if (count($params) == 1) {
             $categoryFilters = Functions::collectFilters($productsData['productsId'], $discount);
             $singleParam = explode('_', $params[1])[0];
 
-            $currentFilters[$singleParam] = $categoryFilters[$singleParam];
+            $currentFilters[$singleParam] = $categoryFilters[$singleParam] ?? null;
 
             return $currentFilters;
         }

@@ -35,28 +35,36 @@ class Generator
                     $name = Groups::where('slug', $value)->select('name', 'show', 'description_name')->first();
                     $data['attributes'][$param[0]][] = $name->show ? $name->description_name ?? $name->name : null;
                 }
+
                 if ($key > 0) {
                     $value = Attributes::where('slug', $value)->select('name', 'form')->first();
 
-                    switch ($productsData['category']->form) {
-                        case 'жен': {
-                            $data['attributes'][$param[0]][] = json_decode($value->form)->form_female ?? $value->name;
-                            break;
-                        }
-                        case 'муж': {
-                            $data['attributes'][$param[0]][] = json_decode($value->form)->form_male ?? $value->name;
-                            break;
-                        }
-                        case 'сред': {
-                            $data['attributes'][$param[0]][] = json_decode($value->form)->form_neutral ?? $value->name;
-                            break;
-                        }
-                        case 'множ': {
-                            $data['attributes'][$param[0]][] = json_decode($value->form)->form_many ?? $value->name;
-                            break;
-                        }
-                        default: {
-                            $data['attributes'][$param[0]][] = $value->name;
+                    if($value) {
+                        switch ($productsData['category']->form) {
+                            case 'жен':
+                            {
+                                $data['attributes'][$param[0]][] = json_decode($value->form)->form_female ?? $value->name;
+                                break;
+                            }
+                            case 'муж':
+                            {
+                                $data['attributes'][$param[0]][] = json_decode($value->form)->form_male ?? $value->name;
+                                break;
+                            }
+                            case 'сред':
+                            {
+                                $data['attributes'][$param[0]][] = json_decode($value->form)->form_neutral ?? $value->name;
+                                break;
+                            }
+                            case 'множ':
+                            {
+                                $data['attributes'][$param[0]][] = json_decode($value->form)->form_many ?? $value->name;
+                                break;
+                            }
+                            default:
+                            {
+                                $data['attributes'][$param[0]][] = $value->name;
+                            }
                         }
                     }
                 }
