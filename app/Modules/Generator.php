@@ -121,7 +121,7 @@ class Generator
                 return $name. ' ' . implode(', ', $item);
             }, $data['attributes']);
 
-            $template = str_replace('$attributes$', implode(' ', $attributes), $template);
+            $template = str_replace('$attributes$', implode(', ', $attributes), $template);
         }
 
         foreach ($data['groups'] as $group => $count)

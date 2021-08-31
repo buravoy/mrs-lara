@@ -144,8 +144,8 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link active font-09 rounded-0" data-toggle="tab" href="#category">Описание</a>
                 </li>
-                <li class="nav-item font-09 rounded-0" role="presentation">
-                    <a class="nav-link" data-toggle="tab" href="#reports">Отзывы</a>
+                <li class="nav-item font-09" role="presentation">
+                    <a class="nav-link rounded-0" data-toggle="tab" href="#reports">Отзывы</a>
                 </li>
             </ul>
 

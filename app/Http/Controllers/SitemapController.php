@@ -9,7 +9,6 @@ class SitemapController extends Controller
 {
     public function index()
     {
-
         $categoriesCount = Categories::all()->count();
         $categoriesSitemapCount = ceil($categoriesCount / 10000);
 

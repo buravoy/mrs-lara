@@ -151,10 +151,11 @@ class CategoriesCrudController extends CrudController
             'function' => function($entry) {
                 return '<a href="'.route('category',['category'=>$entry->slug]).'" target="_blank">'. $entry->name .'</a>';
             },
-            'searchLogic' => function ($query, $searchTerm) {
+            'searchLogic' => function ($query, $column ,$searchTerm) {
                 $query->orWhere('name', 'like', '%'.$searchTerm.'%');
             }
         ]);
+
 
         CRUD::addColumn([
             'label' => 'Информация',

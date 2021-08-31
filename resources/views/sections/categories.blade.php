@@ -22,7 +22,7 @@
                                 $key = 0;
                                 $cols = collect([ collect([]), collect([]), collect([]), collect([]) ]);
                                 foreach( $firstChildren as $item ) {
-                                    if($item->count !== false) {
+                                    if($item->count !== null && $item->count > 0) {
                                         $cols[$key]->push($item);
                                         if (++$key > 3) $key = 0;
                                     }

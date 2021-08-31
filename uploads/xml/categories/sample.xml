@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE yml_categories>
+<yml_categories date="11.05.2021 08:05:00">
+    <shop>
+        <categories>
+            <category id="1">
+                <name>Без категории</name>
+                <short>Short name</short>
+                <form>муж</form>
+            </category>
+
+            <category id="2">
+                <name>Одежда</name>
+                <short></short>
+                <form>жен</form>
+            </category>
+
+            <category id="3" parent="2">
+                <name>Верхняя одежда</name>
+                <short></short>
+                <form>сред</form>
+            </category>
+
+            <category id="4" parent="2">
+                <name>Нижняя одежда</name>
+                <short></short>
+                <form>множ</form>
+            </category>
+
+            <category id="5">
+                <name>Обувь</name>
+                <short></short>
+                <form></form>
+            </category>
+
+            <category id="6" parent="5">
+                <name>Зимняя обувь</name>
+                <short></short>
+                <form></form>
+            </category>
+
+            <category id="7" parent="5">
+                <name>Летняя обувь</name>
+                <short></short>
+                <form></form>
+            </category>
+
+
+        </categories>
+    </shop>
+</yml_categories>
