@@ -21,7 +21,7 @@
         @endif
     </div>
 
-    <a href="{{ route('away') }}/{{ $product->slug }}" target="_blank" style="max-width: 100%;">
+    <a href="{{ route('away') }}/{{ $product->slug }}" target="_blank" rel="nofollow" style="max-width: 100%;">
         <div class="price">
             @if($product->old_price)
                 <p class="old">{{ $product->old_price }}</p>

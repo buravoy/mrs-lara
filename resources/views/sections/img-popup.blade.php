@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="modal-footer align-items-center justify-content-center">
-                <a href="#" class="btn btn-cyan condensed uppercase away-link" target="_blank">ПОДРОБНЕЕ</a>
+                <a href="#" class="btn btn-cyan condensed uppercase away-link" rel="nofollow" target="_blank">ПОДРОБНЕЕ</a>
             </div>
         </div>
     </div>
