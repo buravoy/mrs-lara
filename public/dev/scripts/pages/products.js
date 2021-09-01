@@ -7,13 +7,11 @@ $(function () {
 
     const
         $modal = $('#images-popup'),
-        $allFilters = $('.show-all-filters'),
         $sorting = $('select[name=sort]'),
         $paginate = $('select[name=paginate]'),
         $filters = $('.filter.common'),
         $filterField = $('.filter'),
-        $filtersList = $('.filters-list'),
-        $filterButton = $('.btn-filter');
+        $filtersList = $('.filters-list');
 
 
     const $selectedFilters = $filters.find('.btn-filter.active').clone()

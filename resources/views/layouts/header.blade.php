@@ -1,5 +1,5 @@
 <div class="container-xxl">
-    <div class="d-flex align-items-center py-3">
+    <div class="d-flex align-items-center py-sm-3 py-2 flex-wrap">
         <a href="/" class="d-flex align-items-center justify-content-center decoration-none">
             <div class="logo-img mr-2">
                 <img src="{{ asset('images/logo.png') }}" alt="Mr.Shopper">
@@ -8,26 +8,19 @@
             </p>
         </a>
 
-        <div class="d-flex align-items-center ml-5 w-100 justify-content-end ">
+        @include('sections.search-form')
 
-            <button type="button" class="btn btn-cyan-outline main-menu-toggle d-sm-none">
-                <span class="menu-button-text">
-                    <i class="fas fa-bars"></i>
-                    <span>КАТЕГОРИИ</span>
-                </span>
+        <button type="button" class="btn btn-cyan-outline main-menu-toggle d-sm-none ml-auto">
+            <span class="menu-button-text">
+                <i class="fas fa-bars"></i>
+                <span>КАТЕГОРИИ</span>
+            </span>
 
-                <span class="menu-button-text" style="display: none">
-                    <i class="fas fa-times"></i>
-                    <span>ЗАКРЫТЬ</span>
-                </span>
-
-
-            </button>
-
-            @auth
-                @include('layouts.menu.dashboard-menu')
-            @endauth
-        </div>
+            <span class="menu-button-text" style="display: none">
+                <i class="fas fa-times"></i>
+                <span>ЗАКРЫТЬ</span>
+            </span>
+        </button>
     </div>
 </div>
 

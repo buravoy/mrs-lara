@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\FilterController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\SearchController;
 
 
 /*
@@ -32,7 +33,7 @@ Route::post('/filter-ajax', [FilterController::class, 'ajaxQuery'])->name('filte
 Route::get('/away/{slug?}', [ProductsController::class, 'away'])->name('away');
 Route::get('/product/{slug?}', [ProductsController::class, 'index'])->name('product');
 Route::post('/product-info', [ProductsController::class, 'getInfo'])->name('product-info');
-
+Route::post('/ajax-search', [SearchController::class, 'query'])->name('ajax-search');
 
 Route::prefix('sitemap')->name('sitemap.')->group(function () {
     Route::get('/', [SitemapController::class, 'index'])->name('index');
