@@ -10,12 +10,11 @@ use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
-    public function query(Request $request)
+    public function query($string)
     {
         $results = [];
-        $query = $request->string;
 
-        $separateString = explode(' ', $query);
+        $separateString = explode(' ', $string);
         $resultsCategories = collect();
         $resultsAttributes = collect();
 
@@ -56,10 +55,30 @@ class SearchController extends Controller
         $sort  = array_column($results, 'text');
         array_multisort($sort, SORT_ASC, $results);
 
+        return $results;
+    }
+
+    public function ajaxSearch(Request $request)
+    {
+        $query = $request->string;
+
         return json_encode(
             view('sections.search-ajax', [
-                'results' => $results
-                ])->render()
+                'results' => self::query($query)
+            ])->render()
         );
+    }
+
+    public function search()
+    {
+
+
+
+        return view('sections.search-ajax', [
+            'results' => self::query($query),
+            'query' => 'asdasd'
+
+        ]);
+
     }
 }

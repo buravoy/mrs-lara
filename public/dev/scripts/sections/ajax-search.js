@@ -39,6 +39,7 @@ $(function (){
                 data.append('_token', $('input[name=_token]').first().val());
                 data.append('string', $t.val());
 
+
                 $.ajax({
                     async: true,
                     type: "POST",
@@ -48,13 +49,14 @@ $(function (){
                     data: data,
                     processData: false,
                     success: function (response) {
-                        if(response) {
+                        if(response && $input.is(':focus')) {
                             const $html = $(response);
                             $results.children().remove();
                             $results.append($html)
                         }
                     },
                 })
+
         }
     })
 
