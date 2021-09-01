@@ -33,7 +33,6 @@ $(function (){
 
                 if  ($t.val().length < 3) {
                     $results.children().remove();
-                    $results.html('<ul><li class="p-2 t-center">Минимум 3 символа</li></ul>')
                     return false;
                 }
 
