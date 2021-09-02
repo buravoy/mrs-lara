@@ -410,10 +410,8 @@ class CategoriesCrudController extends CrudController
             $xmlId = $category->attributes()->id ? (string)$category->attributes()->id : null;
             $xmlParent = $category->attributes()->parent ? (string)$category->attributes()->parent : null;
 
-            if ($id = Categories::where('xml_id', $xmlId)->withTrashed()->pluck('id')->first()) {
-                $updatedCategory = [
-                    'deleted_at' => null
-                ];
+            if ($id = Categories::where('xml_id', $xmlId)->where('name', $name)->withTrashed()->pluck('id')->first()) {
+                $updatedCategory = [ 'deleted_at' => null ];
 
                 if($upd_name != null) $updatedCategory['name'] = $name;
                 if($upd_short != null) $updatedCategory['short_name'] = $short;

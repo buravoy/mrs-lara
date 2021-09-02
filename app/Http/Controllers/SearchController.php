@@ -18,7 +18,7 @@ class SearchController extends Controller
         $results = ['categories'=>[], 'products'=>[]];
 
         foreach ($separateString as $part) {
-            $seekCategories = Categories::where('name', 'LIKE', '%' . $part . '%')->where('count', '>', 0 )->get();
+            $seekCategories = Categories::where('name', 'LIKE', '%' . $part . '%')->where('count', '>', 0 )->orderBy('count')->get();
             $seekAttributes = Attributes::with('group')->where('name', 'LIKE', '%' . $part . '%')->get();
 
             if ($seekCategories->isNotEmpty())
@@ -54,20 +54,28 @@ class SearchController extends Controller
         }
 
         if ($resultsAttributes->isNotEmpty() && $resultsCategories->isEmpty()) {
-            $allCategories = Categories::whereHas('products', function ($query) use ($resultsAttributes) {
-                foreach($resultsAttributes as $attribute)
-                    $query->orWhereJsonContains('attributes->' . $attribute->group->slug, $attribute->id);
-            })->where('count', '>', 0 )->get();
+            $allCategories = Categories::where('count', '>', 0 )->get();
 
-            foreach ($allCategories as $category) {
-                foreach ($resultsAttributes as $attribute) {
-                    $group = Groups::where('id', $attribute->group_id)->first();
+
+            foreach ($resultsAttributes as $attribute) {
+                $group = Groups::where('id', $attribute->group_id)->first();
+
+                $products = Products::with('category')->where(function($query) use($attribute, $group) {
+                    $query->whereJsonContains('attributes->' . $group->slug , $attribute->id);
+                })->get();
+
+                dd($products);
+                foreach ($products as $product) {
+
+//                    if($category->products->attributes)
+
                     $results['categories'][] = [
                         'text' => mb_strtolower($group->name) . ' '. mb_strtolower($attribute->name) . ' ' . mb_strtolower($category->name),
                         'link' => 'filter/'.$category->slug . '/' . $group->slug . '_' . $attribute->slug
                     ];
                 }
             }
+
         }
 
         foreach ($results['categories'] as $key => $result) {
@@ -78,8 +86,8 @@ class SearchController extends Controller
             }
         }
 
-        $sort  = array_column($results['categories'], 'text');
-        array_multisort($sort, SORT_ASC, $results['categories']);
+//        $sort  = array_column($results['categories'], 'text');
+//        array_multisort($sort, SORT_ASC, $results['categories']);
 
         return $results;
     }

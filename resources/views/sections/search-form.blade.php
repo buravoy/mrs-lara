@@ -2,7 +2,8 @@
     <div class="input-group mb-0">
         <label for="password">Поиск:</label>
         <input id="search" type="text" name="search" autocomplete="off" placeholder="Например: Обувь TAMARIS"/>
-        <i class="fas fa-search cyan"></i>
+        <i class="fas fa-search icon-search cyan"></i>
+        <i class="fas fa-spinner icon-search cyan" style="display: none"></i>
         <div class="results results-list"></div>
     </div>
 </form>
