@@ -11,7 +11,7 @@ form.base {
     label {
       position: absolute;
       font-size: .8rem;
-      font-weight: 400;
+      font-weight: 300;
       font-family: $condensed;
       top: 2px;
       left: 6px;
@@ -51,6 +51,7 @@ form.search {
 
     &::placeholder {
       transition: .2s;
+      color: darken($cyan, 7%);
     }
 
     &:focus {
@@ -77,19 +78,30 @@ form.search {
       list-style: none;
       z-index: 99;
       position: relative;
-      max-height: 270px;
+      max-height: 400px;
       overflow-y: auto;
       background-color: $white;
       border: 1px solid #e2e2e2;
 
-      a {
-        font-size: .9rem;
-        padding: 5px 10px;
-        transition: .2s;
-        &:hover {
-          color: $cyan;
+      li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid black;
+
+        a {
+          font-size: .9rem;
+          padding: 5px 10px;
+          transition: .2s;
+        }
+
+        .type {
+          font-size: .75rem;
+          color: grey;
         }
       }
+
+
 
       &::-webkit-scrollbar {
         width: 12px;

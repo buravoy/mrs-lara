@@ -91,6 +91,7 @@ class Categories extends Model
         return $this->belongsToMany(Products::class, 'category_product', 'category_id', 'product_id');
     }
 
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

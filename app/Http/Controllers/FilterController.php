@@ -116,8 +116,7 @@ class FilterController extends Controller
         $seekId = Attributes::whereIn('slug', $param)->pluck('id');
 
         return $productsQuery->where(function($query) use($seekId, $groupSlug) {
-            foreach($seekId as $id)
-                $query->orWhereJsonContains('attributes->' . $groupSlug , $id);
+            foreach($seekId as $id) $query->orWhereJsonContains('attributes->' . $groupSlug , $id);
         });
     }
 

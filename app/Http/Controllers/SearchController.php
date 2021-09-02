@@ -12,16 +12,14 @@ class SearchController extends Controller
 {
     public function query($string)
     {
-        $results = [];
-
         $separateString = explode(' ', mb_strtolower($string));
         $resultsCategories = collect();
         $resultsAttributes = collect();
-        $results = [];
+        $results = ['categories'=>[], 'products'=>[]];
 
         foreach ($separateString as $part) {
             $seekCategories = Categories::where('name', 'LIKE', '%' . $part . '%')->where('count', '>', 0 )->get();
-            $seekAttributes = Attributes::where('name', 'LIKE', '%' . $part . '%')->get();
+            $seekAttributes = Attributes::with('group')->where('name', 'LIKE', '%' . $part . '%')->get();
 
             if ($seekCategories->isNotEmpty())
                 foreach ($seekCategories as $seekCategory)
@@ -34,35 +32,54 @@ class SearchController extends Controller
         $resultsCategories = $resultsCategories->unique();
         $resultsAttributes = $resultsAttributes->unique();
 
-        if($resultsAttributes->isNotEmpty()) {
+        if($resultsAttributes->isNotEmpty() && $resultsCategories->isNotEmpty()) {
             foreach ($resultsCategories as $category) {
                 foreach ($resultsAttributes as $attribute) {
                     $group = Groups::where('id', $attribute->group_id)->first();
-                    $results[] = [
+                    $results['categories'][] = [
                         'text' => mb_strtolower($group->name) . ' '. mb_strtolower($attribute->name) . ' ' . mb_strtolower($category->name),
                         'link' => 'filter/'.$category->slug . '/' . $group->slug . '_' . $attribute->slug
                     ];
                 }
             }
-        } else {
+        }
+
+        if ($resultsAttributes->isEmpty() && $resultsCategories->isNotEmpty()) {
             foreach ($resultsCategories as $category) {
-                $results[] = [
+                $results['categories'][] = [
                     'text' => mb_strtolower($category->name),
                     'link' => 'category/' . mb_strtolower($category->slug)
                 ];
             }
         }
 
-        foreach ($results as $key => $result) {
-            foreach ($separateString as $word) {
-                if (strpos($result['text'], $word)) {
-                    $results[$key]['text'] = str_replace($word, '<span>'.$word.'</span>', $results[$key]['text']);
+        if ($resultsAttributes->isNotEmpty() && $resultsCategories->isEmpty()) {
+            $allCategories = Categories::whereHas('products', function ($query) use ($resultsAttributes) {
+                foreach($resultsAttributes as $attribute)
+                    $query->orWhereJsonContains('attributes->' . $attribute->group->slug, $attribute->id);
+            })->where('count', '>', 0 )->get();
+
+            foreach ($allCategories as $category) {
+                foreach ($resultsAttributes as $attribute) {
+                    $group = Groups::where('id', $attribute->group_id)->first();
+                    $results['categories'][] = [
+                        'text' => mb_strtolower($group->name) . ' '. mb_strtolower($attribute->name) . ' ' . mb_strtolower($category->name),
+                        'link' => 'filter/'.$category->slug . '/' . $group->slug . '_' . $attribute->slug
+                    ];
                 }
             }
         }
 
-        $sort  = array_column($results, 'text');
-        array_multisort($sort, SORT_ASC, $results);
+        foreach ($results['categories'] as $key => $result) {
+            foreach ($separateString as $word) {
+                if (strpos($result['text'], $word)) {
+                    $results['categories'][$key]['text'] = str_replace($word, '<span>'.$word.'</span>', $results['categories'][$key]['text']);
+                }
+            }
+        }
+
+        $sort  = array_column($results['categories'], 'text');
+        array_multisort($sort, SORT_ASC, $results['categories']);
 
         return $results;
     }

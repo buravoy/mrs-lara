@@ -72,9 +72,9 @@ $(function (){
         if ($(this).val().length > 2) $(this).trigger('keyup');
     })
 
-    $input.on('blur', function () {
-        setTimeout(function (){
-            $results.html('')
-        }, 100)
-    })
+    // $input.on('blur', function () {
+    //     setTimeout(function (){
+    //         $results.html('')
+    //     }, 100)
+    // })
 })

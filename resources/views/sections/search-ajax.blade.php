@@ -1,12 +1,9 @@
 @if(!empty($results))
     <ul>
-        @foreach($results as $result)
-
-            @php
-            @endphp
-
+        @foreach($results['categories'] as $result)
             <li>
                 <a class="capitalize" href="{{ route('index')}}/{{ $result['link'] }}">{!! $result['text'] !!}</a>
+                <span class="type">Категория</span>
             </li>
         @endforeach
     </ul>
