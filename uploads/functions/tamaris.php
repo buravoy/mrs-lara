@@ -14,7 +14,7 @@ function newArticle($offer) {
 function colorDesc($offer) {
   if (isset($offer['params']['Цвет']['val_'])) {
     $newColor = $offer['params']['Цвет']['val_'];
-    if ($newColor == 'Не задано') $newColor = 'не указан';
+    if ($newColor == 'Не задано') $newColor = 'насыщенный';
     return $newColor;
   } else return null;
 }
@@ -267,6 +267,6 @@ function descSecond($offer) {
   if (isset($offer['name'])) {
     $name = $offer['name'];
   } else $name = 'Товар';
-  $text = $name .' от бренда Tamaris. Артикул модели - ' . newArticle($offer) . ', цвет ' . colorDesc($offer) . ', дизайн разработан специально для девушек и женщин. В этом каталоге цена указана уже со скидкой. Обратите внимание, что в нашем интернет-магазине можно купить с доставкой по Москве и России, либо самовывозом из магазина. ' . countryDesc($offer);
+  $text = $name .' от бренда Tamaris. Артикул модели - ' . newArticle($offer) . '. Цвет ' . colorDesc($offer) . ', а дизайн разработан специально для девушек и женщин. ' . category($offer)[0] . ' в каталоге по цене распродажи, учитывая скидку. Обратите внимание, что в нашем интернет-магазине можно купить с доставкой по Москве и России. К тому же, можно оформить самовывоз из магазина. ' . countryDesc($offer);
   return $text;
 }
