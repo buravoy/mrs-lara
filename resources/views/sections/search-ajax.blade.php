@@ -1,8 +1,12 @@
 @if(!empty($results))
     <ul>
         @foreach($results as $result)
+
+            @php
+            @endphp
+
             <li>
-                <a href="{{ route('index')}}/{{ $result['link'] }}">{{ $result['text'] }}</a>
+                <a class="capitalize" href="{{ route('index')}}/{{ $result['link'] }}">{!! $result['text'] !!}</a>
             </li>
         @endforeach
     </ul>

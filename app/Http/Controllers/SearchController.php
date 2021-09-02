@@ -14,9 +14,10 @@ class SearchController extends Controller
     {
         $results = [];
 
-        $separateString = explode(' ', $string);
+        $separateString = explode(' ', mb_strtolower($string));
         $resultsCategories = collect();
         $resultsAttributes = collect();
+        $results = [];
 
         foreach ($separateString as $part) {
             $seekCategories = Categories::where('name', 'LIKE', '%' . $part . '%')->where('count', '>', 0 )->get();
@@ -38,7 +39,7 @@ class SearchController extends Controller
                 foreach ($resultsAttributes as $attribute) {
                     $group = Groups::where('id', $attribute->group_id)->first();
                     $results[] = [
-                        'text' => ucfirst($group->name) . ' '. ucfirst($attribute->name) . ' ' . $category->name,
+                        'text' => mb_strtolower($group->name) . ' '. mb_strtolower($attribute->name) . ' ' . mb_strtolower($category->name),
                         'link' => 'filter/'.$category->slug . '/' . $group->slug . '_' . $attribute->slug
                     ];
                 }
@@ -46,9 +47,17 @@ class SearchController extends Controller
         } else {
             foreach ($resultsCategories as $category) {
                 $results[] = [
-                    'text' => $category->name,
-                    'link' => 'category/' . $category->slug
+                    'text' => mb_strtolower($category->name),
+                    'link' => 'category/' . mb_strtolower($category->slug)
                 ];
+            }
+        }
+
+        foreach ($results as $key => $result) {
+            foreach ($separateString as $word) {
+                if (strpos($result['text'], $word)) {
+                    $results[$key]['text'] = str_replace($word, '<span>'.$word.'</span>', $results[$key]['text']);
+                }
             }
         }
 
@@ -64,20 +73,18 @@ class SearchController extends Controller
 
         return json_encode(
             view('sections.search-ajax', [
-                'results' => self::query($query)
+                'results' => self::query($query),
             ])->render()
         );
     }
 
-    public function search()
+    public function search(Request $request)
     {
+        $query = $request->search;
 
-
-
-        return view('sections.search-ajax', [
+        return view('search', [
             'results' => self::query($query),
-            'query' => 'asdasd'
-
+            'query' => $query
         ]);
 
     }

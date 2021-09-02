@@ -441,3 +441,13 @@
         display: block;
     }
 }
+
+.results-list {
+    ul li a span {
+        color: darken($red, 7%);
+    }
+}
+
+.capitalize {
+    text-transform: capitalize;
+}

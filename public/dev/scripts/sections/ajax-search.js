@@ -6,7 +6,15 @@ $(function (){
         $results = $('.results');
 
     $('form.search').on('submit', function (e) {
-        e.preventDefault();
+        const
+            $form = $(this),
+            val = $form.find('input').val();
+
+        if (val.length < 3) {
+            e.preventDefault();
+            $results.html('<ul><li class="p-2 t-center">Минимум 3 символа</li></ul>');
+        }
+
     })
 
     $input.on('keyup', function (e){
@@ -28,11 +36,11 @@ $(function (){
             default:
                 const
                     $t = $(this),
-                    url = $t.closest('form').attr('action'),
+                    url = $t.closest('form').data('ajax'),
                     data = new FormData();
 
                 if  ($t.val().length < 3) {
-                    $results.children().remove();
+                    // $results.children().remove();
                     return false;
                 }
 
