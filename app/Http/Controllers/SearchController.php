@@ -20,8 +20,9 @@ class SearchController extends Controller
 
         foreach ($separateString as $part) {
             if (mb_strlen($part) > 3) {
-                $seekCategories = Categories::where('name', 'LIKE', '%' . $part . '%')->where('count', '>', 0)
-                    ->orderBy('count')->orderBy('name')
+                $seekCategories = Categories::where('name', 'LIKE', '%' . $part . '%')
+                    ->where('count', '>', 0)
+                    ->orderBy('count', 'desc')->orderBy('name')
                     ->get();
 
                 $seekAttributes = Attributes::with(['group' => function ($query) {
