@@ -6,6 +6,7 @@ use App\Models\Attributes;
 use App\Models\Categories;
 use App\Models\Groups;
 use App\Models\Products;
+use App\Modules\Functions;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -61,13 +62,16 @@ class SearchController extends Controller
 
         if($resultsAttributes->isNotEmpty() && $resultsCategories->isNotEmpty()) {
             foreach ($resultsCategories as $category) {
+
                 foreach ($resultsAttributes as $attribute) {
                     $group = Groups::where('id', $attribute->group_id)->first();
+
                     $results['categories'][] = [
                         'text' => mb_strtolower($attribute->name) . ' ' . mb_strtolower($category->name),
                         'link' => 'filter/'.$category->slug . '/' . $group->slug . '_' . $attribute->slug
                     ];
                 }
+
             }
         }
 
