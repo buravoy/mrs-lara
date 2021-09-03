@@ -4,18 +4,11 @@ $(function (){
     const
         $input = $('#search'),
         $results = $('.results'),
-        $searchIcon = $('.icon-search');
+        $searchIcon = $('.fa-search'),
+        $spinner = $('.fa-spinner');
 
     $('form.search').on('submit', function (e) {
-        const
-            $form = $(this),
-            val = $form.find('input').val();
-
-        if (val.length < 3) {
-            e.preventDefault();
-            $results.html('<ul><li class="p-2 t-center">Минимум 3 символа</li></ul>');
-        }
-
+        e.preventDefault();
     })
 
     $input.on('keydown', function (e) {
@@ -31,24 +24,30 @@ $(function (){
                 e.stopImmediatePropagation();
                 break;
             case 13:
-                console.log('enter')
+
+
+                const href = $results.find('a').first().attr('href')
+                console.log($results.find('a'))
+                if (href) window.location = href;
+
                 e.stopImmediatePropagation();
                 break;
         }
     })
 
     $input.on('input', delay(function (e){
+            $results.fadeIn(100);
+            $searchIcon.fadeOut(200);
+            $spinner.fadeIn(200);
 
-            $searchIcon.fadeToggle(200);
             const
                 $t = $(this),
                 url = $t.closest('form').data('ajax'),
                 data = new FormData();
 
-
-
             if ($t.val().length < 3) {
-                // $results.children().remove();
+                $searchIcon.fadeIn(200);
+                $spinner.fadeOut(200);
                 return false;
             }
 
@@ -68,15 +67,23 @@ $(function (){
                         const $html = $(response);
                         $results.children().remove();
                         $results.append($html)
-                        $searchIcon.fadeToggle(200);
                     }
                 },
+            }).done(function() {
+                $searchIcon.fadeIn(200);
+                $spinner.fadeOut(200);
+            }).catch(function () {
+                $searchIcon.fadeIn(200);
+                $spinner.fadeOut(200);
             })
 
     }, 1000))
 
     $input.on('focus', function () {
-        if ($(this).val().length > 2) $(this).trigger('keyup');
+        if ($(this).val().length > 2) {
+            $results.fadeIn(100);
+            $(this).trigger('keyup');
+        }
     })
 
     function delay(fn, ms) {
@@ -87,9 +94,9 @@ $(function (){
         }
     }
 
-    // $input.on('blur', function () {
-    //     setTimeout(function (){
-    //         $results.html('')
-    //     }, 100)
-    // })
+    $input.on('blur', function () {
+        setTimeout(function (){
+            $results.fadeOut(100);
+        }, 200)
+    })
 })

@@ -15,29 +15,55 @@ class SearchController extends Controller
         $separateString = explode(' ', mb_strtolower($string));
         $resultsCategories = collect();
         $resultsAttributes = collect();
+        $resultsProducts = collect();
         $results = ['categories'=>[], 'products'=>[]];
 
         foreach ($separateString as $part) {
-            $seekCategories = Categories::where('name', 'LIKE', '%' . $part . '%')->where('count', '>', 0 )->orderBy('count')->get();
-            $seekAttributes = Attributes::with('group')->where('name', 'LIKE', '%' . $part . '%')->get();
+            if (mb_strlen($part) > 3) {
+                $seekCategories = Categories::where('name', 'LIKE', '%' . $part . '%')->where('count', '>', 0)
+                    ->orderBy('count')->orderBy('name')
+                    ->get();
 
-            if ($seekCategories->isNotEmpty())
-                foreach ($seekCategories as $seekCategory)
-                    $resultsCategories->push($seekCategory);
+                $seekAttributes = Attributes::with(['group' => function ($query) {
+                    $query->orderBy('sort');
+                }])->where('name', 'LIKE', '%' . $part . '%')->get();
 
-            if ($seekAttributes->isNotEmpty())
-                foreach ($seekAttributes as $seekAttribute)
-                    $resultsAttributes->push($seekAttribute);
+                $seekProducts = Products::where('name', 'LIKE', '%' . $part . '%')->take(10)->get();
+
+                if ($seekProducts->isNotEmpty())
+                    foreach ($seekProducts as $seekProduct)
+                        $resultsProducts->push($seekProduct);
+
+
+                if ($seekCategories->isNotEmpty())
+                    foreach ($seekCategories as $seekCategory)
+                        $resultsCategories->push($seekCategory);
+
+                if ($seekAttributes->isNotEmpty())
+                    foreach ($seekAttributes as $seekAttribute)
+                        $resultsAttributes->push($seekAttribute);
+            }
         }
-        $resultsCategories = $resultsCategories->unique();
-        $resultsAttributes = $resultsAttributes->unique();
+
+        $resultsCategories = $resultsCategories->unique('id');
+        $resultsAttributes = $resultsAttributes->unique('name');
+        $resultsProducts = $resultsProducts->unique('id');
+
+        if ($resultsProducts->isNotEmpty()) {
+            foreach ($resultsProducts as $resultsProduct) {
+                $results['products'][] = [
+                    'text' => mb_strtolower($resultsProduct->name),
+                    'link' => 'product/' . mb_strtolower($resultsProduct->slug)
+                ];
+            }
+        }
 
         if($resultsAttributes->isNotEmpty() && $resultsCategories->isNotEmpty()) {
             foreach ($resultsCategories as $category) {
                 foreach ($resultsAttributes as $attribute) {
                     $group = Groups::where('id', $attribute->group_id)->first();
                     $results['categories'][] = [
-                        'text' => mb_strtolower($group->name) . ' '. mb_strtolower($attribute->name) . ' ' . mb_strtolower($category->name),
+                        'text' => mb_strtolower($attribute->name) . ' ' . mb_strtolower($category->name),
                         'link' => 'filter/'.$category->slug . '/' . $group->slug . '_' . $attribute->slug
                     ];
                 }
@@ -54,23 +80,19 @@ class SearchController extends Controller
         }
 
         if ($resultsAttributes->isNotEmpty() && $resultsCategories->isEmpty()) {
-            $allCategories = Categories::where('count', '>', 0 )->get();
-
-
             foreach ($resultsAttributes as $attribute) {
                 $group = Groups::where('id', $attribute->group_id)->first();
 
-                $products = Products::with('category')->where(function($query) use($attribute, $group) {
+                $allCategories = Categories::where('count', '>', 0 )->with(['products' => function($query) use($attribute, $group){
                     $query->whereJsonContains('attributes->' . $group->slug , $attribute->id);
-                })->get();
+                }])->orderBy('count', 'desc')->get();
 
-                dd($products);
-                foreach ($products as $product) {
-
-//                    if($category->products->attributes)
-
+                $allCategories = $allCategories->filter(function ($value) {
+                    return $value->products->isNotEmpty();
+                });
+                foreach ($allCategories as $category) {
                     $results['categories'][] = [
-                        'text' => mb_strtolower($group->name) . ' '. mb_strtolower($attribute->name) . ' ' . mb_strtolower($category->name),
+                        'text' => mb_strtolower($attribute->name) . '&nbsp;' . mb_strtolower($category->name),
                         'link' => 'filter/'.$category->slug . '/' . $group->slug . '_' . $attribute->slug
                     ];
                 }
@@ -80,14 +102,19 @@ class SearchController extends Controller
 
         foreach ($results['categories'] as $key => $result) {
             foreach ($separateString as $word) {
-                if (strpos($result['text'], $word)) {
+                if (strpos($result['text'], $word) !== false) {
                     $results['categories'][$key]['text'] = str_replace($word, '<span>'.$word.'</span>', $results['categories'][$key]['text']);
                 }
             }
         }
 
-//        $sort  = array_column($results['categories'], 'text');
-//        array_multisort($sort, SORT_ASC, $results['categories']);
+        foreach ($results['products'] as $key => $result) {
+            foreach ($separateString as $word) {
+                if (strpos($result['text'], $word) !== false) {
+                    $results['products'][$key]['text'] = str_replace($word, '<span>'.$word.'</span>', $results['products'][$key]['text']);
+                }
+            }
+        }
 
         return $results;
     }

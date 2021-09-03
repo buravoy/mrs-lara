@@ -104,17 +104,24 @@ form.search {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                border-bottom: 1px solid black;
+                border-bottom: 1px solid #e2e2e2;
+                transition: .2s;
+                &:hover {
+                    background-color: #eefcff
+                }
+
+                &:last-child {
+                    border-bottom: none;
+                }
 
                 a {
                     font-size: .9rem;
                     padding: 5px 10px;
-                    transition: .2s;
                 }
 
                 .type {
                     font-size: .75rem;
-                    color: grey;
+                    color: #b9b8b8;
                 }
             }
 

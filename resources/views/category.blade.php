@@ -18,7 +18,7 @@
 
         <div class="pb-3">
             <div class="mb-3 mb-md-5 wrapper">
-                <h1 class="mb-3">{!! $meta['title'] ?? $category->name !!}</h1>
+                <h1 class="mb-3 capitalize">{!! $meta['title'] ?? $category->name !!}</h1>
                 @if($products->links()->paginator->currentPage() == 1)
                     <div class="description ucfirst">{!! $category->short_description ?? $meta['description1'] !!}</div>
                 @endif
