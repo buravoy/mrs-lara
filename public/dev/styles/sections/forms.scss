@@ -12,6 +12,7 @@ form.base {
     max-width: 310px;
     margin: 0 auto;
 
+
     .input-group {
         position: relative;
         margin-bottom: 30px;
@@ -51,13 +52,29 @@ form.base {
 }
 
 form.search {
+    order: 99;
+    max-width: 400px;
+    transition: .2s;
+
+
+    @media (max-width: 576px) {
+        overflow: hidden;
+        height: 0;
+
+        &.show {
+            height: 40px;
+            overflow: unset;
+            padding-bottom: 45px;
+        }
+    }
+
     input {
         font-size: .85rem !important;
-        padding-right: 35px !important;
         background-color: $white;
         border: none !important;
         z-index: 1;
         transition: .2s;
+        padding: 15px 35px 15px 5px  !important;
 
         &:hover,
         &:focus {
@@ -67,7 +84,7 @@ form.search {
 
         &::placeholder {
             transition: .2s;
-            color: darken($cyan, 7%);
+            color: $grey-light;
         }
 
         &:focus {

@@ -1,12 +1,14 @@
 @import "styles/global/vars";
 
-.main-menu-toggle {
+.main-menu-toggle,
+.search-toggle {
     position: relative;
-    width: 90px;
+    width: 40px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: none !important;
 }
 
 .menu-button-text {

@@ -51,7 +51,15 @@ class Parser
         $mode = $request->mode;
 
         $slug = $request->name;
+
+        $filenameXML = $request->name . '.xml';
+
+        $link = Feeds::where('slug', $slug)->pluck('xml_url')->first();
+
+        file_put_contents( base_path('uploads/xml/feeds/') . $filenameXML, fopen($link, 'r'));
+
         $xml = simplexml_load_file(base_path('uploads/xml/feeds/') . $slug . '.xml');
+
         $offers = $xml->shop->offers->offer;
 
         $parserFields = Feeds::where('slug', $slug)->first();
@@ -153,9 +161,7 @@ class Parser
                 'deleted_at' => null
             ];
 
-            if(isset($productAvailable) && !$productAvailable) {
-                $product['deleted_at'] = now();
-            }
+            if(isset($productAvailable) && !$productAvailable) $product['deleted_at'] = now();
 
             if (Products::where('uniq_id', $uniqId)->exists()) {
                 $productExistAttributes = json_decode(Products::where('uniq_id', $uniqId)->pluck('attributes')->first());
@@ -183,6 +189,15 @@ class Parser
                 if ($countIteration > $countTo) break;
             }
         }
+
+        $date = new \DateTime();
+        $date->modify('-120 minutes');
+        $formatted_date = $date->format('Y-m-d H:i:s');
+
+        Products::where('parser_slug', $slug)
+            ->where('updated_at','<=', $formatted_date)
+            ->update(['deleted_at' => now()]);
+
 
         return true;
     }

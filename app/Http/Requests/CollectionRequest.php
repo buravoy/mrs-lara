@@ -27,13 +27,10 @@ class CollectionRequest extends FormRequest
     {
         return [
             'name' => 'bail|required|string|max:255',
-            'tab' => 'bail|required|string|max:255',
             'description' => 'bail|nullable|string|max:65535',
 
 
             'slug' => 'bail|nullable|string|max:255|unique:collections,slug,'.request()->id,
-            'meta_title' => 'bail|nullable|string|max:255',
-            'meta_description' => 'bail|nullable|string|max:65535',
             'sort' => 'bail|integer|max:99999',
         ];
     }

@@ -42,7 +42,28 @@ class CollectionCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // columns
+        CRUD::addColumn([
+            'name' => 'name',
+            'type' => 'text',
+            'label' => 'Заголовок'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'description',
+            'type' => 'text',
+            'label' => 'XML ID'
+        ]);
+
+        CRUD::addColumn([
+            'name'  => 'content',
+            'label' => 'Элементы',
+            'type'  => 'table',
+            'columns' => [
+                'title'        => 'Name',
+                'description' => 'Описание',
+                'link'       => 'Ссылка',
+            ]
+        ]);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -73,25 +94,6 @@ class CollectionCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'group_id',
-            'label' => 'Группа',
-            'entity' => 'group',
-            'type' => 'select2',
-            'wrapperAttributes' => [
-                'class' => 'form-group col-md-6',
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'tab',
-            'label' => 'Вкладка',
-            'type' => 'text',
-            'wrapperAttributes' => [
-                'class' => 'form-group col-md-4',
-            ],
-        ]);
-
-        CRUD::addField([
             'name' => 'sort',
             'label' => 'Порядок',
             'type' => 'text',
@@ -108,12 +110,6 @@ class CollectionCrudController extends CrudController
             'wrapperAttributes' => [
                 'class' => 'form-group col-md-4 ml-auto',
             ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'image',
-            'label' => 'Фоновая картинка',
-            'type' => 'browse',
         ]);
 
         CRUD::addField([
@@ -138,9 +134,9 @@ class CollectionCrudController extends CrudController
                     'type'    => 'select2_from_array',
                     'label'   => 'Размер',
                     'options' => [
-                        'col-3' => '25%',
-                        'col-4' => '33.3%',
-                        'col-6' => '50%',
+                        'col-12 col-md-6 col-lg-3' => '25%',
+                        'col-12 col-md-6 col-lg-4' => '33.3%',
+                        'col-12 col-lg-6' => '50%',
                         'col-12' => '100%'
                     ],
                     'default'     => 'one',

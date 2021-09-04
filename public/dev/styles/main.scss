@@ -14,6 +14,45 @@
 @import "pages/home";
 @import "pages/products";
 
+.collection-card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    min-height: 250px;
+
+    &:hover {
+        .background {
+            opacity: 0.5;
+        }
+    }
+
+    .background {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        opacity: 1;
+        transition: .2s;
+    }
+
+    h3 {
+        font-size: 1.4rem;
+    }
+
+    h3, p {
+        z-index: 1;
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+}
+
 .ajax-filters {
     position: relative;
 }

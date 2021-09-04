@@ -17,7 +17,6 @@
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('meta-generators') }}'><i class="las la-money-check-alt"></i> Генераторы</a></li>
 
 <li class="nav-title mt-3">Подборки на главной</li>
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('compilation-groups') }}'><i class='nav-icon la la-copy'></i> Группы подборок</a></li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('collection') }}'><i class='nav-icon la la-file-alt'></i> Подборки</a></li>
 
 

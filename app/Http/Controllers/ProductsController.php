@@ -15,7 +15,7 @@ class ProductsController extends Controller
     {
         if(!$slug) abort(404);
 
-        $product = Products::where('slug', $slug)->first();
+        $product = Products::where('slug', $slug)->withTrashed()->first();
 
         if(!$product) abort(404);
 
@@ -49,7 +49,7 @@ class ProductsController extends Controller
     {
         if(!$slug) abort(404);
 
-        $href = Products::where('slug', $slug)->value('href');
+        $href = Products::where('slug', $slug)->withTrashed()->value('href');
 
         return view('away', [
             'href' => $href

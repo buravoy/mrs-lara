@@ -15,12 +15,9 @@ class CreateCollectionsTable extends Migration
     {
         Schema::create('collections', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('group_id');
             $table->string('slug');
-            $table->string('tab');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->text('image')->nullable();
             $table->jsonb('content')->nullable();
 
             $table->integer('sort')->default(500);

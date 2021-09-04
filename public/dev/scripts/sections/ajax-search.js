@@ -7,6 +7,13 @@ $(function (){
         $searchIcon = $('.fa-search'),
         $spinner = $('.fa-spinner');
 
+    $('.search-toggle').on('click', function (){
+        console.log('jklkjh');
+        $('form.search').toggleClass('show');
+    })
+
+
+
     $('form.search').on('submit', function (e) {
         e.preventDefault();
     })

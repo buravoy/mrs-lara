@@ -10,37 +10,26 @@
     <div class="container-xxl">
         @include('sections.categories')
 
-        <div class="compilation pt-5">
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link active font-09 rounded-0" data-toggle="tab" href="#females">Женщинам</a>
-                </li>
-                <li class="nav-item font-09" role="presentation">
-                    <a class="nav-link rounded-0" data-toggle="tab" href="#males">Мужчинам</a>
-                </li>
-                <li class="nav-item font-09" role="presentation">
-                    <a class="nav-link rounded-0" data-toggle="tab" href="#kids">Детям</a>
-                </li>
-            </ul>
+        <div class="compilation my-5">
+            @foreach($collections as $collection)
+                <div class="mb-5">
+                    <h2 class="mb-3">{{ $collection->name }}</h2>
 
-            <div class="tab-content">
-                <div class="tab-pane fade show active" id="females">
-                    <a href="{{ url('filter/zhenskaya-obuv/brend_bridget/discount') }}">Женская обувь bridget - распродажа</a>
-                    <a href="{{ url('filter/zhenskaya-obuv/brend_instreet/discount') }}">Женская обувь bridget - распродажа</a>
-                    <a href="{{ url('filter/zhenskaya-obuv/brend_bridget/discount') }}">Женская обувь bridget - распродажа</a>
-                    <a href="{{ url('filter/zhenskaya-obuv/brend_bridget/discount') }}">Женская обувь bridget - распродажа</a>
-                    <a href="{{ url('filter/zhenskaya-obuv/brend_bridget/discount') }}">Женская обувь bridget - распродажа</a>
-                    <a href="{{ url('filter/zhenskaya-obuv/brend_bridget/discount') }}">Женская обувь bridget - распродажа</a>
+                    <div class="row">
+                        @foreach(json_decode($collection->content) as $element)
+                            <div class="mb-4 {{ $element->size }}" style="order: {{ $element->sort }}">
+                                <a class="w-100" href="{{ route('index').$element->link }}">
+                                    <div class="collection-card">
+                                        <div class="background" style="background-image: url('{{ asset($element->image) }}')"></div>
+                                        <h3 class="p-2">{!! $element->title !!}</h3>
+                                        <p class="p-2 w-100 f-w-5">{!! $element->description !!}</p>
+                                    </div>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
-
-                <div class="tab-pane fade " id="males">
-                    <h2>Предложения для мужчин</h2>
-                </div>
-
-                <div class="tab-pane fade " id="kids">
-                    <h2>Предложения для детей</h2>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 @endsection

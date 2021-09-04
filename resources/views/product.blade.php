@@ -114,6 +114,10 @@
                     </ul>
                 </div>
 
+                @if($product->deleted_at)
+                    <p class="t-center mb-1 red">Нет в наличии</p>
+                @endif
+
                 <div class="w-100 t-center">
                     <a href="{{ route('away', ['slug'=>$product->slug]) }}" class="btn btn-cyan px-5 py-3 font-13" rel="nofollow" target="_blank">ПОДРОБНЕЕ</a>
                 </div>

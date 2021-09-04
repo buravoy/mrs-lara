@@ -9,10 +9,10 @@ class SitemapController extends Controller
 {
     public function index()
     {
-        $categoriesCount = Categories::all()->count();
+        $categoriesCount = Categories::where('count', '>', 0)->count();
         $categoriesSitemapCount = ceil($categoriesCount / 10000);
 
-        $productCount = Products::all()->count();
+        $productCount = Products::withTrashed()->count();
         $productSitemapCount = ceil($productCount / 10000);
 
         $content =  view('sitemap', [
@@ -29,7 +29,7 @@ class SitemapController extends Controller
     {
         $skip = 10000 * ($page - 1);
 
-        $categories = Categories::all()->pluck('slug')->skip($skip)->take(10000);
+        $categories = Categories::where('count', '>', 0)->pluck('slug')->skip($skip)->take(10000);
         $content =  view('sitemap', [
             'type' => 'category',
             'links' => $categories
@@ -41,14 +41,11 @@ class SitemapController extends Controller
     {
         $skip = 10000 * ($page - 1);
 
-        $products = Products::all()->pluck('slug')->skip($skip)->take(10000);
+        $products = Products::withTrashed()->pluck('slug')->skip($skip)->take(10000);
         $content =  view('sitemap', [
             'type' => 'product',
             'links' => $products
         ]);
-
-
-
         return response($content)->header('Content-Type', 'text/xml;charset=utf-8');
     }
 }
