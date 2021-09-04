@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Modules\Parser;
 use App\Http\Controllers\Admin\MetaGeneratorController;
+use App\Http\Controllers\Admin\CollectionCrudController;
 
 // --------------------------
 // Custom Backpack Routes
@@ -21,6 +22,10 @@ Route::get('admin/products/delete/{id}', [ProductsCrudController::class, 'delete
 Route::get('admin/category/restore/{id}', [CategoriesCrudController::class, 'restore']);
 Route::get('admin/category/disable/{id}', [CategoriesCrudController::class, 'disable']);
 Route::get('admin/category/delete/{id}', [CategoriesCrudController::class, 'delete']);
+
+Route::get('admin/collection/restore/{id}', [CollectionCrudController::class, 'restore']);
+Route::get('admin/collection/disable/{id}', [CollectionCrudController::class, 'disable']);
+Route::get('admin/collection/delete/{id}', [CollectionCrudController::class, 'delete']);
 
 Route::group([
     'prefix'     => config('backpack.base.route_prefix', 'admin'),
@@ -41,6 +46,8 @@ Route::group([
     Route::crud('groups', 'GroupsCrudController');
     Route::crud('feeds', 'FeedsCrudController');
     Route::crud('feeds', 'FeedsCrudController');
+    Route::crud('collection', 'CollectionCrudController');
+    Route::crud('compilation-groups', 'CollectionGroupsCrudController');
 
     Route::post('count-goods', [CategoriesController::class, 'RequestCountProductsInCategory'])->name('count-goods');
     Route::post('count-goods-in-menu', [CategoriesController::class, 'countAllProductsInCategories'])->name('count-goods-in-menu');
@@ -60,4 +67,5 @@ Route::group([
     Route::post('parse-xml', [Parser::class, 'parseXml'])->name('parse-xml');
     Route::post('save-function', [Parser::class, 'saveFunction'])->name('save-function');
     Route::post('delete-all-goods', [Parser::class, 'deleteAllGoods'])->name('delete-all-goods');
+
 }); // this should be the absolute last line of this file

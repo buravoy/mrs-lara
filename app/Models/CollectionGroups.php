@@ -3,12 +3,11 @@
 namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 
-class Groups extends Model
+class CollectionGroups extends Model
 {
-    use CrudTrait, Sluggable;
+    use CrudTrait;
 
     /*
     |--------------------------------------------------------------------------
@@ -16,7 +15,7 @@ class Groups extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'groups';
+    protected $table = 'collections_groups';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
@@ -29,32 +28,13 @@ class Groups extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-    public function sluggable(): array
-    {
-        if(!$this->slug) {
-            return [
-                'slug' => [
-                    'source' => 'name'
-                ]
-            ];
-        }
 
-        return [];
-    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function active_attributes()
-    {
-        return $this->hasMany(Attributes::class, 'group_id')->where('show', true)->orderBy('sort')->orderBy('name');
-    }
 
-    public function attributes()
-    {
-        return $this->hasMany(Attributes::class, 'group_id');
-    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

@@ -22,7 +22,7 @@ form.base {
             font-weight: 300;
             font-family: $condensed;
             top: 2px;
-            left: 6px;
+            left: 4px;
             transition: .2s;
             color: $grey-light;
         }
@@ -55,7 +55,15 @@ form.search {
         font-size: .85rem !important;
         padding-right: 35px !important;
         background-color: $white;
+        border: none !important;
         z-index: 1;
+        transition: .2s;
+
+        &:hover,
+        &:focus {
+            background-color: #eefcff;
+            cursor: pointer;
+        }
 
         &::placeholder {
             transition: .2s;

@@ -110,7 +110,7 @@ class Generator
                     unset ($attribute[0]);
                     if (strpos($template, '$' . $key))
                         unset ($data['attributes'][$key]);
-                    $merged = $name . ' ' . implode(', ', $attribute);
+                    $merged = $name ? $name . ' ' . implode(', ', $attribute) : implode(', ', $attribute);
                     $template = str_replace('$' . $key . '$', $merged, $template);
                 }
             }
@@ -118,7 +118,8 @@ class Generator
             $attributes = array_map(function ($item) {
                 $name = $item[0];
                 unset($item[0]);
-                return $name. ' ' . implode(', ', $item);
+                if ($name) return $name. ' ' . implode(', ', $item);
+                else return implode(', ', $item);
             }, $data['attributes']);
 
             $template = str_replace('$attributes$', implode(', ', $attributes), $template);
@@ -159,11 +160,13 @@ class Generator
             $template = str_replace($part, $word[$wordPos], $template);
         }
 
-        $template = mb_strtolower(preg_replace('/\$.*?\$/is', '', $template));
+        $template = preg_replace('/\$.*?\$/is', '', $template);
 
-        return preg_replace_callback('#((?:[.!?]|^)\s*)(\w)#us', function($matches) {
-            return $matches[1] . mb_strtoupper($matches[2]);
-        }, $template);
+//        return preg_replace_callback('#((?:[.!?]|^)\s*)(\w)#us', function($matches) {
+//            return $matches[1] . mb_strtoupper($matches[2]);
+//        }, $template);
+
+        return $template;
     }
 
     static function getData($productsData, $filteredId = null, $isDiscount = false): array

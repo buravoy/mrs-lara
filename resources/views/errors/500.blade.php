@@ -1,16 +1,19 @@
-@extends('errors.layout')
+@extends('layouts.main')
 
-@php
-	$error_number = 500;
-@endphp
-
-@section('title')
-	It's not you, it's me.
+@section('meta')
+    <title>Внутреняя ошибка :( - {{ config('app.name') }}</title>
+    <meta name="description"
+          content="Все Скидки и Акции здесь! Огромный интернет-каталог товаров от известных брендов. Выбирай и сравнивай.">
 @endsection
 
-@section('description')
-	@php
-	  $default_error_message = "An internal server error has occurred. If the error persists please contact the development team.";
-	@endphp
-	{!! isset($exception)? ($exception->getMessage()?$exception->getMessage():$default_error_message): $default_error_message !!}
+@section('content')
+    <div class="container-xxl">
+        @include('sections.categories')
+
+        <div class="pt-5">
+            <p class="t-center mb-3">Внутреняя ошибка</p>
+            <p class="t-center mb-5">Мы уже исправляем</p>
+            <p class="t-center font-13">Пожалуйста, посмотрите другие разделы</p>
+        </div>
+    </div>
 @endsection

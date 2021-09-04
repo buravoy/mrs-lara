@@ -84,26 +84,25 @@ class SearchController extends Controller
             }
         }
 
-        if ($resultsAttributes->isNotEmpty() && $resultsCategories->isEmpty()) {
-            foreach ($resultsAttributes as $attribute) {
-                $group = Groups::where('id', $attribute->group_id)->first();
-
-                $allCategories = Categories::where('count', '>', 0 )->with(['products' => function($query) use($attribute, $group){
-                    $query->whereJsonContains('attributes->' . $group->slug , $attribute->id);
-                }])->orderBy('count', 'desc')->get();
-
-                $allCategories = $allCategories->filter(function ($value) {
-                    return $value->products->isNotEmpty();
-                });
-                foreach ($allCategories as $category) {
-                    $results['categories'][] = [
-                        'text' => mb_strtolower($attribute->name) . '&nbsp;' . mb_strtolower($category->name),
-                        'link' => 'filter/'.$category->slug . '/' . $group->slug . '_' . $attribute->slug
-                    ];
-                }
-            }
-
-        }
+//        if ($resultsAttributes->isNotEmpty() && $resultsCategories->isEmpty()) {
+//            foreach ($resultsAttributes as $attribute) {
+//                $group = Groups::where('id', $attribute->group_id)->first();
+//
+//                $allCategories = Categories::where('count', '>', 0 )->with(['products' => function($query) use($attribute, $group){
+//                    $query->whereJsonContains('attributes->' . $group->slug , $attribute->id);
+//                }])->orderBy('count', 'desc')->get();
+//
+//                $allCategories = $allCategories->filter(function ($value) {
+//                    return $value->products->isNotEmpty();
+//                });
+//                foreach ($allCategories as $category) {
+//                    $results['categories'][] = [
+//                        'text' => mb_strtolower($attribute->name) . '&nbsp;' . mb_strtolower($category->name),
+//                        'link' => 'filter/'.$category->slug . '/' . $group->slug . '_' . $attribute->slug
+//                    ];
+//                }
+//            }
+//        }
 
         foreach ($results['categories'] as $key => $result) {
             foreach ($separateString as $word) {

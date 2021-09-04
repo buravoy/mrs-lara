@@ -5,10 +5,11 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Groups extends Model
+class Collection extends Model
 {
-    use CrudTrait, Sluggable;
+    use CrudTrait, Sluggable, SoftDeletes;
 
     /*
     |--------------------------------------------------------------------------
@@ -16,7 +17,7 @@ class Groups extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'groups';
+    protected $table = 'collections';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
@@ -46,14 +47,9 @@ class Groups extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function active_attributes()
+    public function group()
     {
-        return $this->hasMany(Attributes::class, 'group_id')->where('show', true)->orderBy('sort')->orderBy('name');
-    }
-
-    public function attributes()
-    {
-        return $this->hasMany(Attributes::class, 'group_id');
+        return $this->belongsTo(CollectionGroups::class, 'group_id');
     }
     /*
     |--------------------------------------------------------------------------

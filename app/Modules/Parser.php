@@ -115,10 +115,9 @@ class Parser
                 $attributeReturnedArray = $function['function']($offerObj);
                 $groupId = Groups::where('slug', $function['slug'])->first()->id;
 
-                if (!is_array($attributeReturnedArray)) $attributeReturnedArray = [mb_strtolower($attributeReturnedArray)];
+                if (!is_array($attributeReturnedArray)) $attributeReturnedArray = [$attributeReturnedArray];
 
                 foreach ($attributeReturnedArray as $attributeReturnedValue) {
-                    $attributeReturnedValue = mb_strtolower($attributeReturnedValue);
 
                     $attributeInBase = Attributes::where('group_id', $groupId)
                         ->where('name', $attributeReturnedValue)

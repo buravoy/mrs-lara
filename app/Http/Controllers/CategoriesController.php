@@ -11,7 +11,7 @@ class CategoriesController extends Controller
 {
     public function index($category = null)
     {
-        if(!$category) abort(404);
+        if(!$category || !Categories::where('slug', $category)->exists()) abort(404);
 
         $productsData = Functions::productsData($category);
         $productsQuery = $productsData['query'];

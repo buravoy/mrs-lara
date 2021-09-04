@@ -1,16 +1,19 @@
-@extends('errors.layout')
+@extends('layouts.main')
 
-@php
-  $error_number = 404;
-@endphp
-
-@section('title')
-  Page not found.
+@section('meta')
+    <title>Страница не найдена :( - {{ config('app.name') }}</title>
+    <meta name="description"
+          content="Все Скидки и Акции здесь! Огромный интернет-каталог товаров от известных брендов. Выбирай и сравнивай.">
 @endsection
 
-@section('description')
-  @php
-    $default_error_message = "Please <a href='javascript:history.back()''>go back</a> or return to <a href='".url('')."'>our homepage</a>.";
-  @endphp
-  {!! isset($exception)? ($exception->getMessage()?$exception->getMessage():$default_error_message): $default_error_message !!}
+@section('content')
+    <div class="container-xxl">
+        @include('sections.categories')
+
+        <div class="pt-5">
+            <p class="t-center mb-3">Страницы не существует</p>
+            <p class="t-center font-20 mb-5">404</p>
+            <p class="t-center font-13">Пожалуйста, посмотрите другие разделы</p>
+        </div>
+    </div>
 @endsection

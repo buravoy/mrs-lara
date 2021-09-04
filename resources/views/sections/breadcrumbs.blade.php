@@ -4,7 +4,6 @@
     </a>
 
 <ul class="breadcrumbs">
-
     @foreach(\App\Modules\Functions::generateBreadcrumbsArr($category) as $item)
         <li>
             <a href="{{ route('category',['category' => $item->slug]) }}" title="{{ $item->short_name ?? $item->name }}">
@@ -20,7 +19,6 @@
             </a>
         </li>
     @endif
-
 </ul>
 
 </div>
