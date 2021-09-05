@@ -128,6 +128,7 @@ function category($offer) {
   if ($catId == '236' && $prefix == 'Куртки') return ['Мужские толстовки', 'Толстовки', 'Мужские спортивные толстовки', 'Спортивные толстовки'];
   if ($catId == '236' && $prefix == 'Брюки') return ['Мужские брюки', 'Брюки', 'Мужские спортивные брюки', 'Спортивные брюки'];
   if ($catId == '240' && $prefix == 'Платья') return ['Женские платья', 'Платья', 'Женские спортивные платья', 'Спортивные платья'];
+  if ($catId == '244' && $prefix == 'Кепки') return ['Женские кепки', 'Кепки', 'Женские спортивные кепки', 'Спортивные кепки'];
 
   return ['Ошибки New Balance'];
 }
@@ -136,8 +137,9 @@ function category($offer) {
 
 function cvet($offer) {
   if (isset($offer['params']['Цвет']['val_'])) {
-    $newCvet = $offer['params']['Цвет']['val_'];
-    if ($newCvet == 'Мульти') $newCvet = 'Разноцветный';
+    $newCvet = mb_strtolower($offer['params']['Цвет']['val_']);
+    if ($newCvet == 'мульти') $newCvet = 'разноцветный';
+    if ($newCvet == 'персик') $newCvet = 'персиковый';
   return $newCvet;
   } else return 'Не определено New Balance';
 }
@@ -186,7 +188,7 @@ function pol($offer) {
   // Поэтому там, где None - указываем как для девочек, так и для мальчиков
   if (isset($offer['params']['gender']['val_'])) {
     $newPol = 'Не определено New Balance';
-    if ($offer['params']['gender']['val_'] == 'Мужской') $newPol = 'Для мужчинww';
+    if ($offer['params']['gender']['val_'] == 'Мужской') $newPol = 'Для мужчин';
     if ($offer['params']['gender']['val_'] == 'Женский') $newPol = 'Для женщин';
     if ($offer['params']['gender']['val_'] == 'None') $newPol = ['Для девочек', 'Для мальчиков'];
   return $newPol;

@@ -161,7 +161,6 @@ class AttributesCrudController extends CrudController
         CRUD::setValidation(AttributesRequest::class);
 
         $entry = CRUD::getCurrentEntry();
-        $attributeGroups = Groups::select('name')->get();
 
 //        CRUD::setFromDb(); // fields
 

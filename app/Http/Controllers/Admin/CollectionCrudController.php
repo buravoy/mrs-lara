@@ -42,6 +42,7 @@ class CollectionCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+
         CRUD::addColumn([
             'name' => 'name',
             'type' => 'text',
@@ -51,7 +52,7 @@ class CollectionCrudController extends CrudController
         CRUD::addColumn([
             'name' => 'description',
             'type' => 'text',
-            'label' => 'XML ID'
+            'label' => 'Подзаголовок'
         ]);
 
         CRUD::addColumn([
@@ -60,7 +61,6 @@ class CollectionCrudController extends CrudController
             'type'  => 'table',
             'columns' => [
                 'title'        => 'Name',
-                'description' => 'Описание',
                 'link'       => 'Ссылка',
             ]
         ]);

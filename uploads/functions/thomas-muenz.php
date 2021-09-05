@@ -75,6 +75,7 @@ function category($offer) {
     $cat = $offer['params']['Тип']['val_'];
     
   if ($cat == 'Балетки женские') return ['Женские балетки', 'Балетки'];
+  if ($cat == 'Берет женский') return ['Женские береты', 'Береты'];
   if ($cat == 'Босоножки женские') return ['Женские босоножки', 'Босоножки'];
   if ($cat == 'Ботильоны женские') return ['Женские ботильоны', 'Ботильоны'];
   if ($cat == 'Ботинки девичьи') return ['Ботинки для девочек', 'Ботинки'];
@@ -160,9 +161,9 @@ function category($offer) {
 
 function cvet($offer) {
   if (isset($offer['params']['Цвет']['val_'])) {
-    $newCvet = $offer['params']['Цвет']['val_'];
-    if ($newCvet == 'Мульти') $newCvet = 'Разноцветный';
-    if ($newCvet == 'Комбинированный') $newCvet = 'Разноцветный';
+    $newCvet = mb_strtolower($offer['params']['Цвет']['val_']);
+    if ($newCvet == 'мульти') $newCvet = 'разноцветный';
+    if ($newCvet == 'комбинированный') $newCvet = 'разноцветный';
   return $newCvet;
   } else return null;
 }
@@ -195,10 +196,10 @@ function vozrast($offer) {
   // В офеере у всех товаров указан Пол, от него и отталкиваемся
   if (isset($offer['params']['Пол']['val_'])) {
     $newVozrast = $offer['params']['Пол']['val_'];
-    if ($newVozrast == 'Жен.') $newVozrast = 'Для взрослых';
-    if ($newVozrast == 'Муж.') $newVozrast = 'Для взрослых';
-    if ($newVozrast == 'Девич.') $newVozrast = 'Для детей';
-    if ($newVozrast == 'Мальч.') $newVozrast = 'Для детей';
+    if ($newVozrast == 'Жен.') $newVozrast = 'для взрослых';
+    if ($newVozrast == 'Муж.') $newVozrast = 'для взрослых';
+    if ($newVozrast == 'Девич.') $newVozrast = 'для детей';
+    if ($newVozrast == 'Мальч.') $newVozrast = 'для детей';
   return $newVozrast;
   } else return 'Не определено Thomas Munz';
 }
@@ -207,10 +208,10 @@ function pol($offer) {
   // В офеере нет товаров для малышей и новорожденных, но у всех товаров указан Пол, от него и отталкиваемся
   if (isset($offer['params']['Пол']['val_'])) {
     $newPol = $offer['params']['Пол']['val_'];
-    if ($newPol == 'Жен.') $newPol = 'Для женщин';
-    if ($newPol == 'Муж.') $newPol = 'Для мужчин';
-    if ($newPol == 'Девич.') $newPol = 'Для девочек';
-    if ($newPol == 'Мальч.') $newPol = 'Для мальчиков';
+    if ($newPol == 'Жен.') $newPol = 'для женщин';
+    if ($newPol == 'Муж.') $newPol = 'для мужчин';
+    if ($newPol == 'Девич.') $newPol = 'для девочек';
+    if ($newPol == 'Мальч.') $newPol = 'для мальчиков';
   return $newPol;
   } else return 'Не определено Thomas Munz';
 }
@@ -227,13 +228,13 @@ function name($offer) {
 
 function sezon($offer) {
   if (isset($offer['params']['Сезон']['val_'])) {
-    $newSezon = $offer['params']['Сезон']['val_'];
-    if ($newSezon == 'Межсезонная') return 'Межсезон';
-    if ($newSezon == 'Демисезонная') return 'Демисезон';
-    if ($newSezon == 'Лето') return 'Лето';
-    if ($newSezon == 'Всесезонная') return 'Всесезон';
-    if ($newSezon == 'Весна-осень') return 'Весна-осень';
-    if ($newSezon == 'Зима') return 'Зима';
+    $newSezon = mb_strtolower($offer['params']['Сезон']['val_']);
+    if ($newSezon == 'межсезонная') return 'межсезон';
+    if ($newSezon == 'демисезонная') return 'демисезон';
+    if ($newSezon == 'лето') return 'лето';
+    if ($newSezon == 'всесезонная') return 'всесезон';
+    if ($newSezon == 'весна-осень') return 'весна-осень';
+    if ($newSezon == 'зима') return 'зима';
   return $newSezon;
   } else return null;
 }
@@ -248,15 +249,15 @@ function vysota_kabluka($offer) {
 
 function material_verha($offer) {
   if (isset($offer['params']['Материал верха']['val_'])) {
-    $newMaterial = $offer['params']['Материал верха']['val_'];
+    $newMaterial = mb_strtolower($offer['params']['Материал верха']['val_']);
     return $newMaterial;
   } else return null;
 }
 
 function material_podkladki($offer) {
   if (isset($offer['params']['Материал подкладки']['val_'])) {
-    $newMaterial = $offer['params']['Материал подкладки']['val_'];
-    if ($newMaterial == 'Нет') return null;
+    $newMaterial = mb_strtolower($offer['params']['Материал подкладки']['val_']);
+    if ($newMaterial == 'нет') return null;
     return $newMaterial;
   } else return null;
 }
