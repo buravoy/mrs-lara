@@ -18,7 +18,8 @@ class Functions
         return Categories::where('parent_id', $category->parent_id)->get();
     }
 
-    static function sorting() {
+    static function sorting(): array
+    {
         $cookieSorting = $_COOKIE['sorting'] ?? null;
 
         $sorting = [];
@@ -56,7 +57,7 @@ class Functions
         return $sorting;
     }
 
-    static function generateBreadcrumbsArr($currantCategory)
+    static function generateBreadcrumbsArr($currantCategory): array
     {
         $breadArr[] = $currantCategory;
         $parent = $currantCategory->parent;
@@ -70,7 +71,7 @@ class Functions
         return array_reverse($breadArr);
     }
 
-    static function convertAttributes($attrJSON)
+    static function convertAttributes($attrJSON): array
     {
         $attributes = [];
 
@@ -95,7 +96,7 @@ class Functions
         return $attributes;
     }
 
-    static function getDiscountUrl($url)
+    static function getDiscountUrl($url): array
     {
         $url = explode('/', $url);
         $isActive = false;
@@ -124,19 +125,6 @@ class Functions
         unset($urlArr[0], $urlArr[1]);
         $isActive = false;
         $isThisGroup = false;
-//        $isDiscount = null;
-
-//        if (in_array('discount', $urlArr)) {
-//            $isDiscount = '/discount';
-//        }
-
-//        $urlArr = array_filter(array_map(function($item) use($url) {
-//            if ($item == 'discount') return null;
-//            return $item;
-//        }, $urlArr));
-
-
-
 
         foreach ($urlArr as $item) {
             $seek = explode('_', $item);
@@ -217,7 +205,8 @@ class Functions
         return $arr;
     }
 
-    static function collectFilters($idArray, $discount = false) {
+    static function collectFilters($idArray, $discount = false): array
+    {
         $attributesGroups = Groups::with('active_attributes:group_id,id,name,slug,sort')
             ->select('id', 'name', 'slug', 'sort', 'show', 'filter_name', 'description_name')
             ->orderBy('sort')

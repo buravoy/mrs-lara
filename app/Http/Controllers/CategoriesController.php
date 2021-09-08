@@ -45,7 +45,7 @@ class CategoriesController extends Controller
         return $productsCount;
     }
 
-    public static function countAllProductsInCategories()
+    public static function countAllProductsInCategories(): bool
     {
         $categories = Categories::all()->pluck('slug');
         foreach ($categories as $category) {

@@ -10,11 +10,10 @@ use App\Models\Groups;
 use App\Models\Products;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class Parser
 {
-    public function handleOffers(Request $request)
+    public function handleOffers(Request $request): array
     {
         $filename = $request->name;
         $xml = simplexml_load_file(base_path('uploads/xml/feeds/') . $filename);
@@ -43,16 +42,11 @@ class Parser
         ];
     }
 
-    public function parseXml(Request $request)
+    public static function parse($slug, $mode, $countFrom, $countTo)
     {
-        $countIteration = 1;
-        $countFrom = $request->count_from ?? null;
-        $countTo = $request->count_to;
-        $mode = $request->mode;
+        $countIteration = 0;
 
-        $slug = $request->name;
-
-        $filenameXML = $request->name . '.xml';
+        $filenameXML = $slug . '.xml';
 
         $link = Feeds::where('slug', $slug)->pluck('xml_url')->first();
 
@@ -190,6 +184,8 @@ class Parser
             }
         }
 
+        Feeds::where('slug', $slug)->update(['last_update' => now()]);
+
         $date = new \DateTime();
         $date->modify('-120 minutes');
         $formatted_date = $date->format('Y-m-d H:i:s');
@@ -197,7 +193,17 @@ class Parser
         Products::where('parser_slug', $slug)
             ->where('updated_at','<=', $formatted_date)
             ->update(['deleted_at' => now()]);
+    }
 
+    public function parseXml(Request $request): bool
+    {
+        $countFrom = $request->count_from ?? 0;
+        $countTo = $request->count_to ?? 100;
+        $mode = $request->mode;
+
+        $slug = $request->name;
+
+        self::parse($slug, $mode, $countFrom, $countTo);
 
         return true;
     }
@@ -215,7 +221,7 @@ class Parser
         Products::where('parser_slug', $slug)->forceDelete();
     }
 
-    function offerToObject($offer){
+    static function offerToObject($offer){
         $offerArr = json_decode(json_encode($offer), true);
         $offerArr['attributes'] = $offerArr['@attributes'];
         unset($offerArr['@attributes'], $offerArr['param']);
@@ -232,7 +238,7 @@ class Parser
         return $offerArr;
     }
 
-    function insertProductCategory($productCatsArr, $product) {
+    static function insertProductCategory($productCatsArr, $product) {
 
         CategoryProduct::where('product_id', $product->id)->forceDelete();
 

@@ -2,7 +2,7 @@
 
 @section('meta')
     <title>{{ $product->name }}</title>
-    <meta name="description" content="{{ $product->description }}">
+    <meta name="description" content="{{ $product->description_2 ?? $product->description_1 }}">
 @endsection
 
 
@@ -140,10 +140,21 @@
                     @endforeach
                 </div>
             </div>
-
         @endif
 
-        <div class="mb-5">
+        @if(config('app.name') == 'Mr.Shopper')
+            <div class="my-3">
+                <div id="yandex_rtb_R-A-1281564-1"></div>
+                <script>window.yaContextCb.push(() => {
+                        Ya.Context.AdvManager.render({
+                            renderTo: 'yandex_rtb_R-A-1281564-1',
+                            blockId: 'R-A-1281564-1'
+                        })
+                    })</script>
+            </div>
+        @endif
+
+        <div class="my-5">
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item" role="presentation">
                     <a class="nav-link active font-09 rounded-0" data-toggle="tab" href="#category">Описание</a>
@@ -194,7 +205,7 @@
             </div>
         </div>
 
-        @if(!empty($relatedProducts['up']) || !empty($relatedProducts['down']))
+        @if($relatedProducts['up']->isNotEmpty() || $relatedProducts['down']->isNotEmpty())
             <div class="mb-5">
                 <p class="font-11 f-w-5 t-center mb-4">
                     Похожие товары
@@ -224,6 +235,7 @@
                 </div>
             </div>
         @endif
+
     </div>
 @endsection
 

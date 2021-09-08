@@ -6,6 +6,7 @@ use App\Http\Requests\FeedsRequest;
 use App\Models\Groups;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Carbon\Carbon;
 
 /**
  * Class FeedsCrudController
@@ -52,23 +53,25 @@ class FeedsCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
-            'name' => 'xml_url',
-            'type' => 'text',
+            'name' => 'last_update',
+            'type' => 'closure',
+            'label' => 'Обновлен',
+            'function' => function($entry) {
+                if ($entry->last_update) return Carbon::parse($entry->last_update)->format('d M Y - H:i:s');
+                return $entry->last_update;
+            }
         ]);
 
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
+        CRUD::addColumn([
+            'name' => 'schedule',
+            'label' => 'Автообновление',
+            'type' => 'check',
+            'wrapper' => [
+                'class' => 'font-xl',
+            ],
+        ]);
     }
 
-    /**
-     * Define what happens when the Create operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-create
-     * @return void
-     */
     protected function setupCreateOperation()
     {
         CRUD::setValidation(FeedsRequest::class);
@@ -127,15 +130,13 @@ class FeedsCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'schedule',
-            'label' => 'Расписание',
-            'type' => 'text',
+            'label' => 'Автообновление раз в сутки',
+            'type'        => 'checkbox',
+            'default'     => 0,
             'tab' => 'Информация',
-            'attributes' => [
-                'class' => 'form-control col-md-4'
+            'wrapper' => [
+                'class' => 'form-group col-md-6',
             ],
-            'wrapper'   => [
-                'class'      => 'form-group col-12'
-            ]
         ]);
 
         CRUD::addField([

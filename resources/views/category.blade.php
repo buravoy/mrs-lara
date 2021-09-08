@@ -2,7 +2,9 @@
 
 @section('meta')
 
-    <title>@if($products->links()->paginator->currentPage() > 1)Страница {{ $products->links()->paginator->currentPage() }} - @endif{{ $category->meta_title ?? $meta['meta_title'] ?? $category->name }}</title>
+    <title>@if($products->links()->paginator->currentPage() > 1)
+            Страница {{ $products->links()->paginator->currentPage() }}
+            - @endif{{ $category->meta_title ?? $meta['meta_title'] ?? $category->name }}</title>
     <meta name="description"
           content="@if($products->links()->paginator->currentPage() > 1)Страница {{ $products->links()->paginator->currentPage() }} - @endif{{ $category->meta_description ?? $meta['meta_description'] ?? 'Выбирайте - '. $category->name . ' в интернет каталоге Mr.Shopper' }}">
 @endsection
@@ -20,10 +22,8 @@
             <div class="mb-3 mb-md-5 wrapper">
                 <h1 class="mb-3">{!! $meta['title'] ?? $category->name !!}</h1>
                 @if($products->links()->paginator->currentPage() == 1)
-                    <div class="description ucfirst">{!! $category->short_description ?? $meta['description1'] !!}</div>
+                    <p class="description ucfirst">{!! $category->short_description ?? $meta['description1'] !!}</p>
                 @endif
-
-
             </div>
 
             <div class="row">
@@ -36,7 +36,8 @@
                         @foreach($category->allChild->sortByDesc('count') as $cat)
                             @if($cat->count)
                                 <div class="col-6 col-sm-3 col-lg-2 px-sm-2 px-1 mb-1">
-                                    <a href="{{ route('category',['category' => $cat->slug]) }}" class="deep-category mb-1">
+                                    <a href="{{ route('category',['category' => $cat->slug]) }}"
+                                       class="deep-category mb-1">
                                         @if($cat->short_name == true)
                                             <h3>{{ $cat->short_name }}</h3>
                                         @else
@@ -49,7 +50,8 @@
                     </div>
 
                     <div class="d-flex d-md-none justify-content-center mb-4">
-                        <button type="button" class="btn btn-cyan uppercase" data-toggle="modal" data-target="#filters-popup">
+                        <button type="button" class="btn btn-cyan uppercase" data-toggle="modal"
+                                data-target="#filters-popup">
                             <i class="fas fa-filter mr-2"></i>Фильтр товаров
                         </button>
                     </div>
@@ -63,10 +65,22 @@
                             </p>
                             <div class="sorting-group">
                                 <select name="sort" id="" style="min-width: 200px;">
-                                    <option value="asc" @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'asc') selected @endif>Сначала подешевле</option>
-                                    <option value="desc" @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'desc') selected @endif>Сначала подороже</option>
-                                    <option value="created" @if(!isset($_COOKIE['sorting']) || $_COOKIE['sorting'] == 'created') selected @endif>Сначала новинки</option>
-                                    <option value="discount-desc" @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'discount-desc') selected @endif>По размеру скидки</option>
+                                    <option value="asc"
+                                            @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'asc') selected @endif>
+                                        Сначала подешевле
+                                    </option>
+                                    <option value="desc"
+                                            @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'desc') selected @endif>
+                                        Сначала подороже
+                                    </option>
+                                    <option value="created"
+                                            @if(!isset($_COOKIE['sorting']) || $_COOKIE['sorting'] == 'created') selected @endif>
+                                        Сначала новинки
+                                    </option>
+                                    <option value="discount-desc"
+                                            @if(isset($_COOKIE['sorting']) && $_COOKIE['sorting'] == 'discount-desc') selected @endif>
+                                        По размеру скидки
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -74,9 +88,18 @@
                             <div class="sorting-group">
                                 <p class="mr-2">По </p>
                                 <select name="paginate" id="" class="pr-0">
-                                    <option value="20" @if(isset($_COOKIE['pagination']) && $_COOKIE['pagination'] == '20') selected @endif>20</option>
-                                    <option value="60" @if(isset($_COOKIE['pagination']) && $_COOKIE['pagination'] == '60') selected @endif>60</option>
-                                    <option value="100" @if(isset($_COOKIE['pagination']) && $_COOKIE['pagination'] == '100') selected @endif>100</option>
+                                    <option value="20"
+                                            @if(isset($_COOKIE['pagination']) && $_COOKIE['pagination'] == '20') selected @endif>
+                                        20
+                                    </option>
+                                    <option value="60"
+                                            @if(isset($_COOKIE['pagination']) && $_COOKIE['pagination'] == '60') selected @endif>
+                                        60
+                                    </option>
+                                    <option value="100"
+                                            @if(isset($_COOKIE['pagination']) && $_COOKIE['pagination'] == '100') selected @endif>
+                                        100
+                                    </option>
                                 </select>
                                 <p class="ml-2 d-none d-sm-block">на&nbsp;странице</p>
                             </div>
@@ -86,9 +109,11 @@
                     <div class="row product-list" style="margin: 0 -10px;">
                         @if(!empty($products->items()))
                             @foreach($products as $product)
+
                                 <div class="col-6 col-sm-4 col-lg-3 pb-2 px-0">
                                     @include('sections.product-card', ['product' => $product])
                                 </div>
+
                             @endforeach
                         @else
                             <div class="w-100 d-flex py-5 my-5 justify-content-center">
@@ -100,6 +125,18 @@
                 </div>
             </div>
 
+            @if(config('app.name') == 'Mr.Shopper')
+                <div class="my-5">
+                    <div id="yandex_rtb_R-A-1281564-2"></div>
+                    <script>window.yaContextCb.push(() => {
+                            Ya.Context.AdvManager.render({
+                                renderTo: 'yandex_rtb_R-A-1281564-2',
+                                blockId: 'R-A-1281564-2'
+                            })
+                        })</script>
+                </div>
+            @endif
+
             <div class="py-3 pagination-block">
                 {{ $products->links() }}
             </div>
@@ -109,7 +146,6 @@
                     <div class="description ucfirst">{!! $category->description ?? $meta['description2'] !!}</div>
                 </div>
             @endif
-
 
         </div>
     </div>

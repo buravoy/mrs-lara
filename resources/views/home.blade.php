@@ -10,12 +10,23 @@
     <div class="container-xxl">
         @include('sections.categories')
 
+        <div class="mt-5 mb-3 mb-md-5 wrapper">
+            <h1 class="mb-3">Интернет - каталог товаров</h1>
+            <p class="description ucfirst">
+                Огромный каталог товаров известных брендов. Все скидки и акции тут. Выбирай, сравнивай и покупай с выгодой.
+            </p>
+        </div>
+
         @if($collections->isNotEmpty())
             <div class="compilation my-5">
                 @foreach($collections as $collection)
                     <div class="mb-5">
-                        <h2 class="mb-2">{{ $collection->name }}</h2>
-                        <p class="mb-4 font-09">{{ $collection->description }}</p>
+                        <div class="wrapper mb-3">
+                            <h2 class="mb-2">{{ $collection->name }}</h2>
+                            <p class="description ucfirst">
+                                {{ $collection->description }}
+                            </p>
+                        </div>
 
                         <div class="row">
                             @foreach(json_decode($collection->content) as $element)
@@ -39,6 +50,19 @@
                                 </div>
                             @endforeach
                         </div>
+
+                        @if(config('app.name') == 'Mr.Shopper')
+                            <div class="my-3">
+                                <div id="yandex_rtb_R-A-1281564-2"></div>
+                                <script>window.yaContextCb.push(() => {
+                                        Ya.Context.AdvManager.render({
+                                            renderTo: 'yandex_rtb_R-A-1281564-2',
+                                            blockId: 'R-A-1281564-2'
+                                        })
+                                    })</script>
+                            </div>
+                        @endif
+
                     </div>
                 @endforeach
             </div>
