@@ -27,7 +27,7 @@
                 console.log(document.getElementById('count'))
                 document.getElementById('count').innerText = (text += '.');
             }, 500)
-            setTimeout(function (){ document.location.href='{{ $href }}' }, 2000)
+            setTimeout(function (){ document.location.href='{{ $href }}' }, 1500)
         });
     </script>
 @endpush

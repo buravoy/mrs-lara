@@ -2,12 +2,14 @@
 
 namespace App\Modules;
 
+use App\Http\Controllers\CategoriesController;
 use App\Models\Attributes;
 use App\Models\Categories;
 use App\Models\CategoryProduct;
 use App\Models\Feeds;
 use App\Models\Groups;
 use App\Models\Products;
+use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 
@@ -42,23 +44,24 @@ class Parser
         ];
     }
 
-    public static function parse($slug, $mode, $countFrom, $countTo)
+    public static function parse($slug, $mode, $countFrom, $countTo, $requestType = null)
     {
         $countIteration = 0;
-
         $filenameXML = $slug . '.xml';
-
-        $link = Feeds::where('slug', $slug)->pluck('xml_url')->first();
-
-        file_put_contents( base_path('uploads/xml/feeds/') . $filenameXML, fopen($link, 'r'));
-
-        $xml = simplexml_load_file(base_path('uploads/xml/feeds/') . $slug . '.xml');
-
-        $offers = $xml->shop->offers->offer;
+        $oldXml = simplexml_load_file(base_path('uploads/xml/feeds/') . $slug . '.xml');
+        $oldDate = Carbon::parse((string)$oldXml->attributes()->date)->format('Y-m-d H:i:s');
 
         $parserFields = Feeds::where('slug', $slug)->first();
-        $attributesGroups = Groups::all();
+        $link = $parserFields->xml_url;
+        file_put_contents( base_path('uploads/xml/feeds/') . $filenameXML, fopen($link, 'r'));
+        $xml = simplexml_load_file(base_path('uploads/xml/feeds/') . $slug . '.xml');
 
+        $newDate = Carbon::parse((string)$xml->attributes()->date)->format('Y-m-d H:i:s');
+
+        if ($newDate == $oldDate) return true;
+
+        $offers = $xml->shop->offers->offer;
+        $attributesGroups = Groups::all();
         $fields = (array)json_decode($parserFields->parser);
 
         $functions = [
@@ -184,8 +187,6 @@ class Parser
             }
         }
 
-        Feeds::where('slug', $slug)->update(['last_update' => now()]);
-
         $date = new \DateTime();
         $date->modify('-120 minutes');
         $formatted_date = $date->format('Y-m-d H:i:s');
@@ -193,6 +194,11 @@ class Parser
         Products::where('parser_slug', $slug)
             ->where('updated_at','<=', $formatted_date)
             ->update(['deleted_at' => now()]);
+
+        if($requestType == 'update') CategoriesController::countAllProductsInCategories();
+
+        Feeds::where('slug', $slug)->update(['last_update' => now()]);
+        return true;
     }
 
     public function parseXml(Request $request): bool

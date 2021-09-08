@@ -33,12 +33,11 @@ class Kernel extends ConsoleKernel
 
             foreach ($feeds as $feed) {
                 $date = new \DateTime();
-                $date->modify('-24 hours');
+                $date->modify('-12 hours');
                 $formatted_date = $date->format('Y-m-d H:i:s');
 
                 if ($feed->schedule && $formatted_date > $feed->last_update) {
-                    Parser::parse($feed->slug, 'false', 0, 0);
-                    CategoriesController::countAllProductsInCategories();
+                    Parser::parse($feed->slug, 'false', 0, 0, 'update');
                 }
             }
 

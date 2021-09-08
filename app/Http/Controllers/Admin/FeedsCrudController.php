@@ -130,7 +130,7 @@ class FeedsCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'schedule',
-            'label' => 'Автообновление раз в сутки',
+            'label' => 'Автообновление',
             'type'        => 'checkbox',
             'default'     => 0,
             'tab' => 'Информация',
