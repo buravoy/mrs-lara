@@ -6,7 +6,7 @@
             Страница {{ $products->links()->paginator->currentPage() }}
             - @endif{{ $category->meta_title ?? $meta['meta_title'] ?? $category->name }}</title>
     <meta name="description"
-          content="@if($products->links()->paginator->currentPage() > 1)Страница {{ $products->links()->paginator->currentPage() }} - @endif{{ $category->meta_description ?? $meta['meta_description'] ?? 'Выбирайте - '. $category->name . ' в интернет каталоге Mr.Shopper' }}">
+          content="@if($products->links()->paginator->currentPage() > 1)Страница {{ $products->links()->paginator->currentPage() }} - @endif{{ $category->meta_description ?? $meta['meta_description'] ?? 'Выбирайте - '. $category->name . ' в интернет каталоге Mr.Shopper' }}" />
 @endsection
 
 @section('content')

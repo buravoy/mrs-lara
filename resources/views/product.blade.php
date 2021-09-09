@@ -2,7 +2,7 @@
 
 @section('meta')
     <title>{{ $product->name }}</title>
-    <meta name="description" content="{{ $product->description_2 ?? $product->description_1 }}">
+    <meta name="description" content="{{ $product->description_1 }}" />
 @endsection
 
 
