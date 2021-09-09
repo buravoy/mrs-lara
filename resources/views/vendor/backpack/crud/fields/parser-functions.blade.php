@@ -80,6 +80,18 @@
     <script src="{{ asset('codemirror/addon/fold/markdown-fold.js') }}"></script>
     <script src="{{ asset('codemirror/addon/fold/xml-fold.js') }}"></script>
 
+    <script src="{{ asset('codemirror/addon/scroll/annotatescrollbar.js') }}"></script>
+
+    <script src="{{ asset('codemirror/addon/search/jump-to-line.js') }}"></script>
+    <script src="{{ asset('codemirror/addon/search/match-highlighter.js') }}"></script>
+
+    <script src="{{ asset('codemirror/addon/search/search.js') }}"></script>
+    <script src="{{ asset('codemirror/addon/search/searchcursor.js') }}"></script>
+    <script src="{{ asset('codemirror/addon/search/matchesonscrollbar.js') }}"></script>
+
+    <script src="{{ asset('codemirror/addon/dialog/dialog.js') }}"></script>
+    <script src="{{ asset('codemirror/addon/lint/lint.js') }}"></script>
+
     <script>
         const
 
@@ -179,7 +191,9 @@
                 autoCloseBrackets: true,
                 foldGutter: true,
                 gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-                comments: true
+                comments: true,
+                extraKeys: {"Alt-F": "findPersistent"},
+                lint: true
             })
 
             editor.area.on('change', function () {
@@ -245,4 +259,10 @@
     <link rel="stylesheet" href="{{ asset('codemirror/theme/liquibyte.css') }}">
     <link rel="stylesheet" href="{{ asset('codemirror/addon/scroll/simplescrollbars.css') }}">
     <link rel="stylesheet" href="{{ asset('codemirror/addon/fold/foldgutter.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('codemirror/addon/search/matchesonscrollbar.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('codemirror/addon/dialog/dialog.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('codemirror/addon/lint/lint.css') }}">
 @endpush

@@ -58,7 +58,7 @@ class Parser
 
         $newDate = Carbon::parse((string)$xml->attributes()->date)->format('Y-m-d H:i:s');
 
-        if ($newDate == $oldDate) return true;
+        if ($newDate == $oldDate && $requestType == 'update') return true;
 
         $offers = $xml->shop->offers->offer;
         $attributesGroups = Groups::all();

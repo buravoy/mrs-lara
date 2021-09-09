@@ -17,7 +17,7 @@
     </div>
 @endif
 
-<div class="filter common d-none d-md-block" data-url="{{ route('filter-ajax') }}">
+<div class="filter common d-none d-md-block main-filter-wrapper" data-url="{{ route('filter-ajax') }}">
     @if(isset($category->parent))
         <div class="filters-group">
             <div class="d-flex flex-wrap align-items-start filters-list" style="max-height: unset;">
