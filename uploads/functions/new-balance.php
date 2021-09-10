@@ -10,6 +10,7 @@ function newPrefix($offer) {
   if (isset($offer['typePrefix'])) {
   $newPrefix = $offer['typePrefix'];
   
+    
   if ($newPrefix == 'Backpack') $newPrefix = 'Рюкзак';
   if ($newPrefix == 'Crossbody') $newPrefix = 'Сумка';
   if ($newPrefix == 'Messenger') $newPrefix = 'Сумка';

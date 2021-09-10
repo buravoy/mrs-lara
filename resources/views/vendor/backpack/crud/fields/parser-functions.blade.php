@@ -1,50 +1,138 @@
 @if ($field['file_functions'])
-    <div class="form-group col-md-12 d-flex align-items-center">
-        <button type="button"
-                class="btn btn-primary mr-3 mb-2"
-                id="handle-offers"
-                data-name="{{ $field['file_info']['name'] }}">Получить офферы из XML
-        </button>
+    <div class="row px-3 mb-3 w-100 align-items-center">
+        <div class="col-md-8 d-flex flex-wrap">
+            <button type="button"
+                    class="btn btn-primary mr-3 mb-2"
+                    id="handle-offers"
+                    data-name="{{ $field['file_info']['name'] }}">Получить офферы из XML
+            </button>
 
-        <div class="form-group d-flex align-items-center mb-2 mr-3">
-            <label class="mb-0 mr-2">Загрузить офферы c</label>
-            <input type="text" name="count_from" class="text-center font-weight-bold form-control px-1" style="max-width: 70px" value="1">
-            <label class="mb-0 mx-2">по</label>
-            <input type="text" name="count" class="text-center font-weight-bold form-control px-1" style="max-width: 70px" value="100">
+            <div class="form-group d-flex flex-wrap align-items-center mb-2 mr-3">
+                <label class="mb-0 mr-2">Загрузить офферы c</label>
+                <input type="text" name="count_from" class="text-center font-weight-bold form-control px-1"
+                       style="max-width: 70px" value="1">
+                <label class="mb-0 mx-2">по</label>
+                <input type="text" name="count" class="text-center font-weight-bold form-control px-1"
+                       style="max-width: 70px" value="100">
+            </div>
+            <button type="button"
+                    class="btn btn-success d-block parse-xml mb-2"
+                    data-id="{{ $field['data']['id'] }}"
+                    data-name="{{ $field['data']['slug'] }}">Запустить парсер
+            </button>
+            <div class="form-group d-flex align-items-center mb-2 ml-3">
+                <input id="mode" type="checkbox" name="mode" class="" value="test">
+                <label for="mode" class="mb-0 ml-2">Тестовый режим</label>
+            </div>
         </div>
 
-        <button type="button"
-                class="btn btn-success d-block parse-xml mb-2"
-                data-id="{{ $field['data']['id'] }}"
-                data-name="{{ $field['data']['slug'] }}">Запустить парсер
-        </button>
-
-        <div class="form-group d-flex align-items-center mb-2 ml-3">
-            <input id="mode" type="checkbox" name="mode" class="" value="test">
-            <label for="mode" class="mb-0 ml-2">Тестовый режим</label>
+        <div class="col-md-4">
+            <div class="d-flex align-items-center justify-content-center ml-auto">
+                <button type="button" class="btn btn-sm btn-outline-primary mb-0 pb-0" onclick="renderXML(-1)"><i
+                        class="la la-angle-double-left"></i></button>
+                <input type="text" name="current" style="max-width: 110px;"
+                       class="w-auto form-control form-control-sm mx-2 font-weight-bold text-center border-0" readonly>
+                <button type="button" class="btn btn-sm btn-outline-primary mb-0 pb-0" onclick="renderXML(1)"><i
+                        class="la la-angle-double-right"></i></button>
+            </div>
         </div>
 
-
-        <div class="d-flex align-items-center justify-content-center ml-auto">
-            <button type="button" class="btn btn-sm btn-outline-primary mb-0 pb-0" onclick="renderXML(-1)"><i class="la la-angle-double-left"></i></button>
-            <input type="text" name="current" class="w-auto form-control form-control-sm mx-2 font-weight-bold text-center border-0" readonly>
-            <button type="button" class="btn btn-sm btn-outline-primary mb-0 pb-0" onclick="renderXML(1)"><i class="la la-angle-double-right"></i></button>
-        </div>
     </div>
 
-    <div class="col-md-8 d-flex font-sm">
-        <textarea id="code" name="code" rows="50" hidden>{{ $field['file_functions']['content'] }}</textarea>
+    <div class="col-md-8 mb-2 ace_wrapper">
+        <div id="ace_code">{{ $field['file_functions']['content'] }}</div>
     </div>
 
-    <div class="col-md-4 offer-info" style="display: none">
-
-        <div class="d-flex json-wrapper font-xs h-100">
-            <textarea id="json" class="json-view w-100"></textarea>
-        </div>
+    <div class="col-md-4 mb-2 ace_wrapper">
+        <div id="ace_json"></div>
     </div>
 
-    <div class="offer-info col-md-12 mt-3" style="display: none">
+    <div class="form-group col-md-8 mt-2">
+        <select name="ace_code_theme">
+            <option value="ambiance">ambiance</option>
+            <option value="chaos">chaos</option>
+            <option value="chrome">chrome</option>
+            <option value="clouds">clouds</option>
+            <option value="clouds_midnight">clouds_midnight</option>
+            <option value="cobalt">cobalt</option>
+            <option value="crimson_editor">crimson_editor</option>
+            <option value="dawn">dawn</option>
+            <option value="dracula">dracula</option>
+            <option value="dreamweaver">dreamweaver</option>
+            <option value="eclipse">eclipse</option>
+            <option value="github">github</option>
+            <option value="gob">gob</option>
+            <option value="gruvbox">gruvbox</option>
+            <option value="idle_fingers">idle_fingers</option>
+            <option value="iplastic">iplastic</option>
+            <option value="katzenmilch">katzenmilch</option>
+            <option value="kr_theme">kr_theme</option>
+            <option value="kuroir">kuroir</option>
+            <option value="merbivore">merbivore</option>
+            <option value="merbivore_soft">merbivore_soft</option>
+            <option value="mono_industrial">mono_industrial</option>
+            <option value="monokai">monokai</option>
+            <option value="nord_dark">nord_dark</option>
+            <option value="pastel_on_dark">pastel_on_dark</option>
+            <option value="solarized_dark">solarized_dark</option>
+            <option value="solarized_light">solarized_light</option>
+            <option value="sqlserver">sqlserver</option>
+            <option value="terminal">terminal</option>
+            <option value="textmate">textmate</option>
+            <option value="tomorrow">tomorrow</option>
+            <option value="tomorrow_night">tomorrow_night</option>
+            <option value="tomorrow_night_blue">tomorrow_night_blue</option>
+            <option value="tomorrow_night_bright">tomorrow_night_bright</option>
+            <option value="tomorrow_night_eighties">tomorrow_night_eighties</option>
+            <option value="twilight">twilight</option>
+            <option value="vibrant_ink">vibrant_ink</option>
+            <option value="xcode">xcode</option>
+        </select>
+    </div>
+    <div class="form-group col-md-4 mt-2">
+        <select name="ace_json_theme">
+            <option value="ambiance">ambiance</option>
+            <option value="chaos">chaos</option>
+            <option value="chrome">chrome</option>
+            <option value="clouds">clouds</option>
+            <option value="clouds_midnight">clouds_midnight</option>
+            <option value="cobalt">cobalt</option>
+            <option value="crimson_editor">crimson_editor</option>
+            <option value="dawn">dawn</option>
+            <option value="dracula">dracula</option>
+            <option value="dreamweaver">dreamweaver</option>
+            <option value="eclipse">eclipse</option>
+            <option value="github">github</option>
+            <option value="gob">gob</option>
+            <option value="gruvbox">gruvbox</option>
+            <option value="idle_fingers">idle_fingers</option>
+            <option value="iplastic">iplastic</option>
+            <option value="katzenmilch">katzenmilch</option>
+            <option value="kr_theme">kr_theme</option>
+            <option value="kuroir">kuroir</option>
+            <option value="merbivore">merbivore</option>
+            <option value="merbivore_soft">merbivore_soft</option>
+            <option value="mono_industrial">mono_industrial</option>
+            <option value="monokai">monokai</option>
+            <option value="nord_dark">nord_dark</option>
+            <option value="pastel_on_dark">pastel_on_dark</option>
+            <option value="solarized_dark">solarized_dark</option>
+            <option value="solarized_light">solarized_light</option>
+            <option value="sqlserver">sqlserver</option>
+            <option value="terminal">terminal</option>
+            <option value="textmate">textmate</option>
+            <option value="tomorrow">tomorrow</option>
+            <option value="tomorrow_night">tomorrow_night</option>
+            <option value="tomorrow_night_blue">tomorrow_night_blue</option>
+            <option value="tomorrow_night_bright">tomorrow_night_bright</option>
+            <option value="tomorrow_night_eighties">tomorrow_night_eighties</option>
+            <option value="twilight">twilight</option>
+            <option value="vibrant_ink">vibrant_ink</option>
+            <option value="xcode">xcode</option>
+        </select>
+    </div>
 
+    <div class="offer-info col-md-12 mt-2">
         <pre class="xml-view w-100 border rounded p-2 font-sm"></pre>
     </div>
 @else
@@ -53,68 +141,53 @@
     </div>
 @endif
 
-
 @push('crud_fields_scripts')
+    <script src="{{ asset('ace/ace.js') }}"></script>
     <script src="{{ asset('beautify/beautify.js') }}"></script>
     <script src="{{ asset('beautify/beautify-css.js') }}"></script>
     <script src="{{ asset('beautify/beautify-html.js') }}"></script>
-    <script src="{{ asset('codemirror/lib/codemirror.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/edit/matchbrackets.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/edit/closebrackets.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/edit/continuelist.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/edit/matchtags.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/edit/trailingspace.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/scroll/simplescrollbars.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/edit/active-line.js') }}"></script>
-    <script src="{{ asset('codemirror/mode/htmlmixed/htmlmixed.js') }}"></script>
-    <script src="{{ asset('codemirror/mode/xml/xml.js') }}"></script>
-    <script src="{{ asset('codemirror/mode/javascript/javascript.js') }}"></script>
-    <script src="{{ asset('codemirror/mode/css/css.js') }}"></script>
-    <script src="{{ asset('codemirror/mode/clike/clike.js') }}"></script>
-    <script src="{{ asset('codemirror/mode/php/php.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/fold/brace-fold.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/fold/comment-fold.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/fold/foldcode.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/fold/foldgutter.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/fold/indent-fold.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/fold/markdown-fold.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/fold/xml-fold.js') }}"></script>
-
-    <script src="{{ asset('codemirror/addon/scroll/annotatescrollbar.js') }}"></script>
-
-    <script src="{{ asset('codemirror/addon/search/jump-to-line.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/search/match-highlighter.js') }}"></script>
-
-    <script src="{{ asset('codemirror/addon/search/search.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/search/searchcursor.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/search/matchesonscrollbar.js') }}"></script>
-
-    <script src="{{ asset('codemirror/addon/dialog/dialog.js') }}"></script>
-    <script src="{{ asset('codemirror/addon/lint/lint.js') }}"></script>
 
     <script>
         const
+            $codeTheme = $('select[name=ace_code_theme]'),
+            $jsonTheme = $('select[name=ace_json_theme]');
 
-            editor = {area: null, isInit: false},
-            json = {area: null, isInit: false},
-            $code = $('#code'),
-            $tab = $code.closest('.tab-pane'),
-            $tabName = $tab.attr('id'),
-            $thisTabLink = $("a[href^='#" + $tabName + "']"),
+        $codeTheme.find('option[value=' + getCookie('ace_code') + ']').attr('selected', true);
+        $jsonTheme.find('option[value=' + getCookie('ace_json') + ']').attr('selected', true);
+
+        $codeTheme.on('change', function () {
+            ace_code.setTheme("ace/theme/" + $(this).val());
+            setCookie('ace_code', $(this).val(), {secure: true, 'max-age': 315360000})
+        })
+
+        $jsonTheme.on('change', function () {
+            ace_json.setTheme("ace/theme/" + $(this).val());
+            setCookie('ace_json', $(this).val(), {secure: true, 'max-age': 315360000})
+        })
+
+        const ace_code = ace.edit("ace_code");
+        ace_code.setTheme("ace/theme/" + getCookie('ace_code'));
+        ace_code.session.setMode("ace/mode/php");
+        ace_code.setShowPrintMargin(false);
+        ace_code.getSession().on('change', function () {
+            updateCode()
+        });
+
+        const ace_json = ace.edit("ace_json");
+        ace_json.setTheme("ace/theme/" + getCookie('ace_json'));
+        ace_json.session.setMode("ace/mode/json");
+        ace_json.setReadOnly(true)
+
+        const
             $xmlView = $('.xml-view'),
-            $jsonView = $('.json-view'),
+            $jsonView = $('#ace_json'),
             $xmlCounter = $('[name=current]'),
             $parseXml = $('.parse-xml'),
             $count = $('[name=count]'),
             $countFrom = $('[name=count_from]'),
             $handleOffers = $('#handle-offers');
 
-        if (!editor.isInit && $tab.hasClass('active')) setTimeout(() => { initCode() }, 100);
-
-        $thisTabLink.on('click', function () {
-            if (!editor.isInit) setTimeout(() => {initCode()}, 100)
-            setTimeout(() => {initJson()}, 100)
-        })
+        let parserData = {json: [], xml: []};
 
         $parseXml.on('click', function () {
             const
@@ -169,46 +242,25 @@
                     count_to: $count.val()
                 },
                 success: (response) => {
-                    parserData = response
+                    parserData = response;
                     renderXML();
-                    $('.offer-info').fadeIn(200);
-                    $('.json-wrapper').fadeIn(200);
-                    $xmlCounter.val(0)
+                    $xmlCounter.val(0);
                 }
             })
         })
 
-        function initCode() {
-            editor.isInit = true;
-            editor.area = CodeMirror.fromTextArea(document.getElementById("code"), {
-                theme: 'liquibyte',
-                lineNumbers: true,
-                matchBrackets: true,
-                mode: "application/x-httpd-php",
-                scrollbarStyle: 'simple',
-                coverGutterNextToScrollbar: true,
-                styleActiveLine: true,
-                autoCloseBrackets: true,
-                foldGutter: true,
-                gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-                comments: true,
-                extraKeys: {"Alt-F": "findPersistent"},
-                lint: true
-            })
+        function updateCode() {
+            const value = ace_code.getSession().getValue();
 
-            editor.area.on('change', function () {
-                const content = editor.area.getValue();
-
-                $.ajax({
-                    async: true,
-                    type: "POST",
-                    dataType: "json",
-                    url: '{{ route('save-function') }}',
-                    data: {
-                        value: content,
-                        filename: '{{ $field['file_functions']['name'] ?? null }}'
-                    },
-                })
+            $.ajax({
+                async: true,
+                type: "POST",
+                dataType: "json",
+                url: '{{ route('save-function') }}',
+                data: {
+                    value: value,
+                    filename: '{{ $field['file_functions']['name'] ?? null }}'
+                },
             })
         }
 
@@ -216,6 +268,7 @@
             const
                 currant = +$xmlCounter.val(),
                 currentView = currant + direction;
+
             if (currentView < 0 || currentView > (+$count.val() - (+$countFrom.val() + 1))) return;
 
             const
@@ -223,46 +276,60 @@
                     indent_size: 2,
                     space_in_empty_paren: true
                 }),
-                jsonString = JSON.stringify(parserData.json[currentView], null, "\t")
+                jsonString = JSON.stringify(parserData.json[currentView], null, "\t");
 
             $xmlView.text(beautifyString);
-            $jsonView.text(jsonString);
             $xmlCounter.val(currentView);
-            setTimeout(() => {
-                initJson()
-            }, 100)
+
+            ace_json.setValue(jsonString, 1);
         }
 
-        function initJson() {
-            $('.json-wrapper').find('.CodeMirror').remove();
+        function setCookie(name, value, options = {}) {
+            options = {
+                path: '/',
+                ...options
+            };
 
-            json.isInit = true;
-            json.area = CodeMirror.fromTextArea(document.getElementById("json"), {
-                lineNumbers: true,
-                matchBrackets: true,
-                mode: "application/ld+json",
-                scrollbarStyle: 'simple',
-                coverGutterNextToScrollbar: true,
-                styleActiveLine: true,
-                autoCloseBrackets: true,
-                foldGutter: true,
-                readOnly: true,
-                gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
-            })
+            if (options.expires instanceof Date) {
+                options.expires = options.expires.toUTCString();
+            }
 
+            let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+            for (let optionKey in options) {
+                updatedCookie += "; " + optionKey;
+                let optionValue = options[optionKey];
+                if (optionValue !== true) {
+                    updatedCookie += "=" + optionValue;
+                }
+            }
+
+            document.cookie = updatedCookie;
+        }
+
+        function getCookie(name) {
+            let matches = document.cookie.match(new RegExp(
+                "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+            ));
+            return matches ? decodeURIComponent(matches[1]) : 'monokai';
         }
     </script>
 @endpush
 
 @push('crud_fields_styles')
-    <link rel="stylesheet" href="{{ asset('codemirror/lib/codemirror.css') }}">
-    <link rel="stylesheet" href="{{ asset('codemirror/theme/liquibyte.css') }}">
-    <link rel="stylesheet" href="{{ asset('codemirror/addon/scroll/simplescrollbars.css') }}">
-    <link rel="stylesheet" href="{{ asset('codemirror/addon/fold/foldgutter.css') }}">
+    <style>
+        .ace_wrapper {
+            height: 700px;
+        }
 
-    <link rel="stylesheet" href="{{ asset('codemirror/addon/search/matchesonscrollbar.css') }}">
-
-    <link rel="stylesheet" href="{{ asset('codemirror/addon/dialog/dialog.css') }}">
-
-    <link rel="stylesheet" href="{{ asset('codemirror/addon/lint/lint.css') }}">
+        #ace_code, #ace_json {
+            position: absolute;
+            top: 0;
+            right: 15px;
+            bottom: 0;
+            left: 15px;
+            border: 1px solid #b7b7b7;
+            border-radius: 5px;
+        }
+    </style>
 @endpush

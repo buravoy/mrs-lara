@@ -106,7 +106,7 @@
             $parserFields = $('.parser-fields'),
             $addFunctionsInputs = $('.add_functions').find('input');
 
-        let parser = $parser.text(), parserData = {json:[], xml:[]};
+        let parser = $parser.text();
 
         if (parser !== '') {
             parser = JSON.parse(parser);
