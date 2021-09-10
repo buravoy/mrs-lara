@@ -19,7 +19,7 @@
 @endif
 
 @if(config('app.name') == 'Mr.Shopper')
-    <div class="advert-block">
+    <div class="advert-block mt-4">
         <div id="yandex_rtb_R-A-1281564-5"></div>
         <script>window.yaContextCb.push(() => {
                 Ya.Context.AdvManager.render({
