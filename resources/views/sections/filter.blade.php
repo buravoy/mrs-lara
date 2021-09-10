@@ -19,14 +19,18 @@
 @endif
 
 @if(config('app.name') == 'Mr.Shopper')
-    <div class="advert-block mt-4">
+    <div class="advert-block mt-4 d-none d-md-block">
         <div id="yandex_rtb_R-A-1281564-5"></div>
-        <script>window.yaContextCb.push(() => {
-                Ya.Context.AdvManager.render({
-                    renderTo: 'yandex_rtb_R-A-1281564-5',
-                    blockId: 'R-A-1281564-5'
+        <script>
+            if (document.getElementsByTagName("body")[0].offsetWidth >= 768 ) {
+                window.yaContextCb.push(() => {
+                    Ya.Context.AdvManager.render({
+                        renderTo: 'yandex_rtb_R-A-1281564-5',
+                        blockId: 'R-A-1281564-5'
+                    })
                 })
-            })</script>
+            }
+        </script>
     </div>
 @endif
 

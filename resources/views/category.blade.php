@@ -23,14 +23,16 @@
         @include('sections.breadcrumbs')
 
         @if(config('app.name') == 'Mr.Shopper')
-            <div class="advert-block">
+            <div class="advert-block mt-md-0">
                 <div id="yandex_rtb_R-A-1281564-4"></div>
-                <script>window.yaContextCb.push(() => {
+                <script>
+                    window.yaContextCb.push(() => {
                         Ya.Context.AdvManager.render({
                             renderTo: 'yandex_rtb_R-A-1281564-4',
                             blockId: 'R-A-1281564-4'
                         })
-                    })</script>
+                    })
+                </script>
             </div>
         @endif
 
@@ -133,7 +135,7 @@
                                 @if($loop->iteration == 12 && !Request::ajax())
 
                                     @if(config('app.name') == 'Mr.Shopper')
-                                        <div class="advert-block">
+                                        <div class="advert-block col-12 mt-0 mb-4">
                                             <div id="yandex_rtb_R-A-1281564-6"></div>
                                             <script>window.yaContextCb.push(()=>{
                                                     Ya.Context.AdvManager.render({
