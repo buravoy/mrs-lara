@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Facades\Request;
+@endphp
+
 @extends('layouts.main')
 
 @section('meta')
@@ -17,6 +21,18 @@
         @include('sections.categories')
 
         @include('sections.breadcrumbs')
+
+        @if(config('app.name') == 'Mr.Shopper')
+            <div class="advert-block">
+                <div id="yandex_rtb_R-A-1281564-4"></div>
+                <script>window.yaContextCb.push(() => {
+                        Ya.Context.AdvManager.render({
+                            renderTo: 'yandex_rtb_R-A-1281564-4',
+                            blockId: 'R-A-1281564-4'
+                        })
+                    })</script>
+            </div>
+        @endif
 
         <div class="pb-3">
             <div class="mb-3 mb-md-5 wrapper">
@@ -56,7 +72,7 @@
                         </button>
                     </div>
 
-                    <div class="mb-3 d-flex justify-content-between align-items-end" style="margin: 0 -5px;">
+                    <div class="mb-3 d-flex justify-content-between align-items-end" style="margin: 0 0px;">
                         <div class="d-flex align-items-center flex-wrap">
                             <p class="count-text mr-2 py-2">
                                 В каталоге
@@ -114,6 +130,22 @@
                                     @include('sections.product-card', ['product' => $product])
                                 </div>
 
+                                @if($loop->iteration == 12 && !Request::ajax())
+
+                                    @if(config('app.name') == 'Mr.Shopper')
+                                        <div class="advert-block">
+                                            <div id="yandex_rtb_R-A-1281564-6"></div>
+                                            <script>window.yaContextCb.push(()=>{
+                                                    Ya.Context.AdvManager.render({
+                                                        renderTo: 'yandex_rtb_R-A-1281564-6',
+                                                        blockId: 'R-A-1281564-6'
+                                                    })
+                                                })</script>
+                                        </div>
+                                    @endif
+
+                                @endif
+
                             @endforeach
                         @else
                             <div class="w-100 d-flex py-5 my-5 justify-content-center">
@@ -125,8 +157,12 @@
                 </div>
             </div>
 
+            <div class="py-3 pagination-block">
+                {{ $products->links() }}
+            </div>
+
             @if(config('app.name') == 'Mr.Shopper')
-                <div class="my-5">
+                <div class="advert-block">
                     <div id="yandex_rtb_R-A-1281564-2"></div>
                     <script>window.yaContextCb.push(() => {
                             Ya.Context.AdvManager.render({
@@ -136,10 +172,6 @@
                         })</script>
                 </div>
             @endif
-
-            <div class="py-3 pagination-block">
-                {{ $products->links() }}
-            </div>
 
             @if($products->links()->paginator->currentPage() == 1)
                 <div class="my-5 wrapper">

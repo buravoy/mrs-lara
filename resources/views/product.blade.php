@@ -12,6 +12,18 @@
 
         @include('sections.breadcrumbs')
 
+        @if(config('app.name') == 'Mr.Shopper')
+            <div class="advert-block">
+                <div id="yandex_rtb_R-A-1281564-4"></div>
+                <script>window.yaContextCb.push(() => {
+                        Ya.Context.AdvManager.render({
+                            renderTo: 'yandex_rtb_R-A-1281564-4',
+                            blockId: 'R-A-1281564-4'
+                        })
+                    })</script>
+            </div>
+        @endif
+
         <div class="row mb-4 mb-md-5">
             <div class="col-md-6 col-12 my-4">
                 <div class="single-product-image w-100">
@@ -102,7 +114,7 @@
                     </p>
                 </div>
 
-                <div class="single-attributes mb-3 mb-md-5">
+                <div class="single-attributes mb-4 mb-md-5">
                     <h2 class="mb-2 font-10">Характеристики:</h2>
                     <ul class="attributes w-100">
                         @foreach(\App\Modules\Functions::convertAttributes($product->attributes) as $group => $attribute)
@@ -119,7 +131,9 @@
                 @endif
 
                 <div class="w-100 t-center">
-                    <a href="{{ route('away', ['slug'=>$product->slug]) }}" class="btn btn-cyan px-5 py-3 font-13" rel="nofollow" target="_blank">ПОДРОБНЕЕ</a>
+                    <a href="{{ route('away', ['slug'=>$product->slug]) }}" class="btn btn-cyan px-5 py-3 font-13" rel="nofollow" target="_blank">
+                        ПОДРОБНЕЕ
+                    </a>
                 </div>
 
             </div>
@@ -139,18 +153,6 @@
                         </div>
                     @endforeach
                 </div>
-            </div>
-        @endif
-
-        @if(config('app.name') == 'Mr.Shopper')
-            <div class="my-3">
-                <div id="yandex_rtb_R-A-1281564-1"></div>
-                <script>window.yaContextCb.push(() => {
-                        Ya.Context.AdvManager.render({
-                            renderTo: 'yandex_rtb_R-A-1281564-1',
-                            blockId: 'R-A-1281564-1'
-                        })
-                    })</script>
             </div>
         @endif
 
@@ -204,6 +206,18 @@
                 </div>
             </div>
         </div>
+
+        @if(config('app.name') == 'Mr.Shopper')
+            <div class="advert-block">
+                <div id="yandex_rtb_R-A-1281564-1"></div>
+                <script>window.yaContextCb.push(() => {
+                        Ya.Context.AdvManager.render({
+                            renderTo: 'yandex_rtb_R-A-1281564-1',
+                            blockId: 'R-A-1281564-1'
+                        })
+                    })</script>
+            </div>
+        @endif
 
         @if($relatedProducts['up']->isNotEmpty() || $relatedProducts['down']->isNotEmpty())
             <div class="mb-5">

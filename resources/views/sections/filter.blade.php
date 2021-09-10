@@ -6,7 +6,8 @@
 @if (strpos(Request::path(), 'filter') !== false)
     <div class="selected t-center mb-5 d-md-block d-none">
         <div class="selected-filters"></div>
-        <a href="{{ route('category', ['category' => $category->slug]) }}" class="btn mt-2 btn-red font-09 uppercase">Сбросить фильтры</a>
+        <a href="{{ route('category', ['category' => $category->slug]) }}" class="btn mt-2 btn-red font-09 uppercase">Сбросить
+            фильтры</a>
     </div>
 @endif
 
@@ -14,6 +15,18 @@
     <div class="selected mb-3 d-md-none d-block t-right">
         <div class="selected-filters"></div>
         <a href="{{ route('category', ['category' => $category->slug]) }}" class="btn mt-2 btn-red font-08 uppercase">Сбросить</a>
+    </div>
+@endif
+
+@if(config('app.name') == 'Mr.Shopper')
+    <div class="advert-block">
+        <div id="yandex_rtb_R-A-1281564-5"></div>
+        <script>window.yaContextCb.push(() => {
+                Ya.Context.AdvManager.render({
+                    renderTo: 'yandex_rtb_R-A-1281564-5',
+                    blockId: 'R-A-1281564-5'
+                })
+            })</script>
     </div>
 @endif
 
@@ -56,9 +69,11 @@
                                 if ($discountSet) $filterUrlData['link'].'/discount';
                             @endphp
                             @if(count($filter['active_attributes']) > 1 || $filterUrlData['isActive'])
-                                <div class="filter-row" @if(isset($filterUrlData['isActive']) && $filterUrlData['isActive']) style="order: -1" @endif>
-                                    <div class="btn-filter @if(isset($filterUrlData['isActive']) && $filterUrlData['isActive']) active @endif"
-                                         data-href="{{ $filterUrlData['link'] }}">
+                                <div class="filter-row"
+                                     @if(isset($filterUrlData['isActive']) && $filterUrlData['isActive']) style="order: -1" @endif>
+                                    <div
+                                        class="btn-filter @if(isset($filterUrlData['isActive']) && $filterUrlData['isActive']) active @endif"
+                                        data-href="{{ $filterUrlData['link'] }}">
                                         <span>{{ $attribute['name'] }}</span>
 
                                         @if(isset($attribute['name']))
@@ -128,7 +143,7 @@
                     <div class="filter d-block d-md-none" data-url="{{ route('filter-ajax') }}">
                         @if(isset($category->parent))
                             <button class="btn btn-cyan-outline filter-show-categories mb-3">Категории</button>
-                            <div class="filters-group filter-categories"  style="display: none">
+                            <div class="filters-group filter-categories" style="display: none">
                                 <div class="d-flex flex-wrap align-items-start filters-list" style="max-height: unset;">
                                     @foreach(Functions::selectParallel($category->parent)->sortByDesc('count') as $categoryFirst)
                                         @if($categoryFirst->count > 0)
@@ -165,9 +180,11 @@
                                                     if ($discountSet) $filterUrlData['link'].'/discount';
                                                 @endphp
                                                 @if(count($filter['active_attributes']) > 1 || $filterUrlData['isActive'])
-                                                    <div class="filter-row" @if(isset($filterUrlData['isActive']) && $filterUrlData['isActive']) style="order: -1" @endif>
-                                                        <div class="btn-filter @if(isset($filterUrlData['isActive']) && $filterUrlData['isActive']) active @endif"
-                                                             data-href="{{ $filterUrlData['link'] }}">
+                                                    <div class="filter-row"
+                                                         @if(isset($filterUrlData['isActive']) && $filterUrlData['isActive']) style="order: -1" @endif>
+                                                        <div
+                                                            class="btn-filter @if(isset($filterUrlData['isActive']) && $filterUrlData['isActive']) active @endif"
+                                                            data-href="{{ $filterUrlData['link'] }}">
                                                             <span>{{ $attribute['name'] }}</span>
                                                             {!! Beautify::setThubm($attribute['name']) !!}
                                                         </div>
@@ -198,9 +215,11 @@
 
                                 <div class="filters-group" id="rasprodazha">
                                     <div class="d-flex flex-wrap align-items-start filters-list">
-                                        <div class="filter-row" @if(isset($filterUrlData['isActive']) && $filterUrlData['isActive']) style="order: -1" @endif>
-                                            <div class="btn-filter btn-sale @if(isset($filterUrlData['isActive']) && $discount['isActive']) active @endif"
-                                                 data-href="{{ $discount['link'] }}">
+                                        <div class="filter-row"
+                                             @if(isset($filterUrlData['isActive']) && $filterUrlData['isActive']) style="order: -1" @endif>
+                                            <div
+                                                class="btn-filter btn-sale @if(isset($filterUrlData['isActive']) && $discount['isActive']) active @endif"
+                                                data-href="{{ $discount['link'] }}">
 
                                                 <span>распродажа  <span class="red"> SALE</span></span>
                                                 @if(isset($attribute['name']))

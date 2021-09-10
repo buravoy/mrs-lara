@@ -20,7 +20,7 @@
 <url>
 <loc>{{ route('index') }}/{{ $type }}/{{ $link->slug }}</loc>
 <changefreq>weekly</changefreq>
-<lastmode>{{ \Carbon\Carbon::parse($link->updated_at)->format('c') }}</lastmode>
+<lastmod>{{ \Carbon\Carbon::parse($link->updated_at)->format('c') }}</lastmod>
 <priority>1.0</priority>
 </url>
 @endforeach
