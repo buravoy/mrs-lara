@@ -16,7 +16,6 @@
         <script>window.yaContextCb=window.yaContextCb||[]</script>
         <script src="https://yandex.ru/ads/system/context.js" async></script>
 
-        <script data-ad-client="ca-pub-4169030634163191" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4169030634163191"
                 crossorigin="anonymous"></script>
     @endif

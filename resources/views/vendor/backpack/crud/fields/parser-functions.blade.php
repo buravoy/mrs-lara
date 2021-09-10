@@ -40,15 +40,16 @@
     </div>
 
     <div class="col-md-8 mb-2 ace_wrapper">
+        <p class="message"></p>
         <div id="ace_code">{{ $field['file_functions']['content'] }}</div>
     </div>
 
     <div class="col-md-4 mb-2 ace_wrapper">
-        <div id="ace_json"></div>
+        <div id="ace_json">{"message": "Тут будут JSON данные из оффера"}</div>
     </div>
 
     <div class="form-group col-md-8 mt-2">
-        <select name="ace_code_theme">
+        <select class="form-control w-auto" name="ace_code_theme">
             <option value="ambiance">ambiance</option>
             <option value="chaos">chaos</option>
             <option value="chrome">chrome</option>
@@ -89,8 +90,9 @@
             <option value="xcode">xcode</option>
         </select>
     </div>
+
     <div class="form-group col-md-4 mt-2">
-        <select name="ace_json_theme">
+        <select class="form-control w-auto" name="ace_json_theme">
             <option value="ambiance">ambiance</option>
             <option value="chaos">chaos</option>
             <option value="chrome">chrome</option>
@@ -133,7 +135,7 @@
     </div>
 
     <div class="offer-info col-md-12 mt-2">
-        <pre class="xml-view w-100 border rounded p-2 font-sm"></pre>
+        <pre class="xml-view w-100 border rounded p-2 font-sm">Тут будет оффер, как в XML</pre>
     </div>
 @else
     <div class="form-group col-12">
@@ -143,12 +145,15 @@
 
 @push('crud_fields_scripts')
     <script src="{{ asset('ace/ace.js') }}"></script>
+    <script src="{{ asset('ace/ext-language_tools.js') }}"></script>
+
     <script src="{{ asset('beautify/beautify.js') }}"></script>
     <script src="{{ asset('beautify/beautify-css.js') }}"></script>
     <script src="{{ asset('beautify/beautify-html.js') }}"></script>
 
     <script>
         const
+            $message = $('.message'),
             $codeTheme = $('select[name=ace_code_theme]'),
             $jsonTheme = $('select[name=ace_json_theme]');
 
@@ -165,13 +170,27 @@
             setCookie('ace_json', $(this).val(), {secure: true, 'max-age': 315360000})
         })
 
+        ace.require("ace/ext/language_tools");
         const ace_code = ace.edit("ace_code");
         ace_code.setTheme("ace/theme/" + getCookie('ace_code'));
         ace_code.session.setMode("ace/mode/php");
         ace_code.setShowPrintMargin(false);
-        ace_code.getSession().on('change', function () {
-            updateCode()
+        ace_code.setOptions({
+            enableBasicAutocompletion: true,
+            enableSnippets: true,
+            enableLiveAutocompletion: true,
         });
+
+        ace_code.getSession().on('change', function (){
+            $message
+                .text('Есть несохраненые изменения')
+                .removeClass('text-success')
+                .addClass('text-error');
+        })
+
+        ace_code.getSession().on('change', delay(function (e){
+            updateCode()
+        }, 2000))
 
         const ace_json = ace.edit("ace_json");
         ace_json.setTheme("ace/theme/" + getCookie('ace_json'));
@@ -262,6 +281,14 @@
                     filename: '{{ $field['file_functions']['name'] ?? null }}'
                 },
             })
+                .done(function () {
+                    console.log('qwe')
+
+                    $message
+                        .text('Изменения сохранены')
+                        .removeClass('text-error')
+                        .addClass('text-success');
+                })
         }
 
         function renderXML(direction = 0) {
@@ -313,6 +340,14 @@
             ));
             return matches ? decodeURIComponent(matches[1]) : 'monokai';
         }
+
+        function delay(fn, ms) {
+            let timer = 0
+            return function(...args) {
+                clearTimeout(timer)
+                timer = setTimeout(fn.bind(this, ...args), ms || 0)
+            }
+        }
     </script>
 @endpush
 
@@ -320,6 +355,13 @@
     <style>
         .ace_wrapper {
             height: 700px;
+        }
+
+        .message {
+            position: absolute;
+            top: -20px;
+            font-size: 14px;
+            right: 15px;
         }
 
         #ace_code, #ace_json {

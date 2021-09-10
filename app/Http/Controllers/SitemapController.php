@@ -41,7 +41,7 @@ class SitemapController extends Controller
     {
         $skip = 10000 * ($page - 1);
 
-        $products = Products::withTrashed()->pluck('slug')->skip($skip)->take(10000);
+        $products = Products::withTrashed()->skip($skip)->take(10000)->get();
         $content =  view('sitemap', [
             'type' => 'product',
             'links' => $products

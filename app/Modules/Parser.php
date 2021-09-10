@@ -219,6 +219,9 @@ class Parser
         $content = $request->value;
         $filenamePHP = $request->filename;
         file_put_contents(base_path('uploads/functions/') . $filenamePHP, $content);
+
+
+        return true;
     }
 
     public function deleteAllGoods(Request $request)

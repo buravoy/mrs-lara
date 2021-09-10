@@ -1,4 +1,4 @@
-<?php echo '<?xml version="1.0" encoding="UTF-8"?>' ?>
+<?php /*echo '<?xml version="1.0" encoding="UTF-8"?>' */?>
 
 @if($type == 'sitemap')
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -18,8 +18,9 @@
 @if(isset($links) && !empty($links))
 @foreach($links as $key => $link)
 <url>
-<loc>{{ route('index') }}/{{ $type }}/{{ $link }}</loc>
+<loc>{{ route('index') }}/{{ $type }}/{{ $link->slug }}</loc>
 <changefreq>weekly</changefreq>
+<lastmode>{{ \Carbon\Carbon::parse($link->updated_at)->format('c') }}</lastmode>
 <priority>1.0</priority>
 </url>
 @endforeach
