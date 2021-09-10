@@ -135,7 +135,7 @@
                                 @if($loop->iteration == 12 && !Request::ajax())
 
                                     @if(config('app.name') == 'Mr.Shopper')
-                                        <div class="advert-block col-12 mt-0 mb-4">
+                                        <div class="advert-block col-12 mt-0 mb-5">
                                             <div id="yandex_rtb_R-A-1281564-6"></div>
                                             <script>window.yaContextCb.push(()=>{
                                                     Ya.Context.AdvManager.render({
