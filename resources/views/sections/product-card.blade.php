@@ -1,4 +1,4 @@
-<div class="product-card mx-2">
+<div class="product-card card-wrapper">
     @if($product->discount)
         <p class="discount">-{{ $product->discount }} %</p>
     @endif

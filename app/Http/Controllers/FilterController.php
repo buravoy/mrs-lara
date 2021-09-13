@@ -39,7 +39,7 @@ class FilterController extends Controller
         return view('category', [
             'products' => $filteredProductsQuery->orderBy($sorting['column'], $sorting['direction'])
                 ->orderBy('price', 'asc')
-                ->paginate($_COOKIE['pagination'] ?? 20),
+                ->paginate($_COOKIE['pagination'] ?? 60),
             'discountAvailable' => $filteredProductsQuery->where('discount','<>' , null)->first(),
             'category' => $productsData['category'],
             'meta' => Generator::filterMeta($params, $productsData, $filteredId, $discount),

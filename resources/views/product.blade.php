@@ -12,18 +12,6 @@
 
         @include('sections.breadcrumbs')
 
-        @if(config('app.name') == 'Mr.Shopper')
-            <div class="advert-block">
-                <div id="yandex_rtb_R-A-1281564-4"></div>
-                <script>window.yaContextCb.push(() => {
-                        Ya.Context.AdvManager.render({
-                            renderTo: 'yandex_rtb_R-A-1281564-4',
-                            blockId: 'R-A-1281564-4'
-                        })
-                    })</script>
-            </div>
-        @endif
-
         <div class="row mb-4 mb-md-5">
             <div class="col-md-6 col-12 my-4">
                 <div class="single-product-image w-100">
@@ -235,14 +223,14 @@
 
                     @foreach($relatedProducts['down'] as $key => $product)
                         @break($loop->iteration > $lengthDown)
-                        <div class="col-6 col-md-4 col-xl-2 px-0 mb-1" style="order: {{ -$key }}">
+                        <div class="col-6 col-md-4 col-xl-2 px-2 px-md-3" style="order: {{ -$key }}">
                             @include('sections.product-card', ['product' => $product, 'related' => true])
                         </div>
                     @endforeach
 
                     @foreach($relatedProducts['up'] as $product)
                         @break($loop->iteration > $lengthUp)
-                        <div class="col-6 col-md-4 col-xl-2 px-0 mb-1">
+                        <div class="col-6 col-md-4 col-xl-2 px-2 px-md-3">
                             @include('sections.product-card', ['product' => $product, 'related' => true])
                         </div>
                     @endforeach

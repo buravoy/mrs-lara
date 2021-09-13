@@ -18,18 +18,6 @@
             </p>
         </div>
 
-        @if(config('app.name') == 'Mr.Shopper')
-            <div class="advert-block">
-                <div id="yandex_rtb_R-A-1281564-4"></div>
-                <script>window.yaContextCb.push(() => {
-                        Ya.Context.AdvManager.render({
-                            renderTo: 'yandex_rtb_R-A-1281564-4',
-                            blockId: 'R-A-1281564-4'
-                        })
-                    })</script>
-            </div>
-        @endif
-
         @if($collections->isNotEmpty())
             <div class="compilation my-5">
                 @foreach($collections as $collection)

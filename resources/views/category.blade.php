@@ -22,20 +22,6 @@
 
         @include('sections.breadcrumbs')
 
-        @if(config('app.name') == 'Mr.Shopper')
-            <div class="advert-block mt-md-0">
-                <div id="yandex_rtb_R-A-1281564-4"></div>
-                <script>
-                    window.yaContextCb.push(() => {
-                        Ya.Context.AdvManager.render({
-                            renderTo: 'yandex_rtb_R-A-1281564-4',
-                            blockId: 'R-A-1281564-4'
-                        })
-                    })
-                </script>
-            </div>
-        @endif
-
         <div class="pb-3">
             <div class="mb-3 mb-md-5 wrapper">
                 <h1 class="mb-3">{!! $meta['title'] ?? $category->name !!}</h1>
@@ -111,7 +97,7 @@
                                         20
                                     </option>
                                     <option value="60"
-                                            @if(isset($_COOKIE['pagination']) && $_COOKIE['pagination'] == '60') selected @endif>
+                                            @if((isset($_COOKIE['pagination']) && $_COOKIE['pagination'] == '60') || !isset($_COOKIE['pagination'])) selected @endif>
                                         60
                                     </option>
                                     <option value="100"
@@ -128,25 +114,31 @@
                         @if(!empty($products->items()))
                             @foreach($products as $product)
 
-                                <div class="col-6 col-sm-4 col-lg-3 pb-2 px-0">
-                                    @include('sections.product-card', ['product' => $product])
+                                <div class="col-6 col-sm-4 col-lg-3 px-2 px-md-3">
+
+                                    @if($loop->iteration % 10 == 0 && config('app.name') == 'Mr.Shopper' && !Request::ajax())
+                                        @include('banners.ad-product', ['loopIteration' => $loop->iteration / 10])
+                                    @else
+                                        @include('sections.product-card', ['product' => $product])
+                                    @endif
                                 </div>
 
-                                @if($loop->iteration == 12 && !Request::ajax())
 
-                                    @if(config('app.name') == 'Mr.Shopper')
-                                        <div class="advert-block col-12 mt-0 mb-5">
-                                            <div id="yandex_rtb_R-A-1281564-6"></div>
-                                            <script>window.yaContextCb.push(()=>{
-                                                    Ya.Context.AdvManager.render({
-                                                        renderTo: 'yandex_rtb_R-A-1281564-6',
-                                                        blockId: 'R-A-1281564-6'
-                                                    })
-                                                })</script>
-                                        </div>
-                                    @endif
 
-                                @endif
+
+{{--                                @if($loop->iteration == 12 && !Request::ajax())--}}
+{{--                                    @if(config('app.name') == 'Mr.Shopper')--}}
+{{--                                        <div class="advert-block col-12 mt-0 mb-5">--}}
+{{--                                            <div id="yandex_rtb_R-A-1281564-6"></div>--}}
+{{--                                            <script>window.yaContextCb.push(()=>{--}}
+{{--                                                    Ya.Context.AdvManager.render({--}}
+{{--                                                        renderTo: 'yandex_rtb_R-A-1281564-6',--}}
+{{--                                                        blockId: 'R-A-1281564-6'--}}
+{{--                                                    })--}}
+{{--                                                })</script>--}}
+{{--                                        </div>--}}
+{{--                                    @endif--}}
+{{--                                @endif--}}
 
                             @endforeach
                         @else

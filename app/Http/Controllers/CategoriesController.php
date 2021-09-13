@@ -20,7 +20,7 @@ class CategoriesController extends Controller
         return view('category', [
             'products' => $productsQuery->orderBy($sorting['column'], $sorting['direction'])
                 ->orderBy('price', 'asc')
-                ->paginate($_COOKIE['pagination'] ?? 20),
+                ->paginate($_COOKIE['pagination'] ?? 60),
             'discountAvailable' => $productsQuery->where('discount','<>' , null)->first(),
             'category' => $productsData['category'],
             'filters' => Functions::collectFilters($productsData['productsId']),

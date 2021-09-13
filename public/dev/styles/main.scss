@@ -14,6 +14,16 @@
 @import "pages/home";
 @import "pages/products";
 
+.card-wrapper {
+    width: 100%;
+    height: 400px;
+    margin-bottom: 30px;
+    @media (max-width: 420px) {
+        height: 333px;
+        margin-bottom: 20px;
+    }
+}
+
 .advert-block {
     max-width: 100%;
     margin: 60px 0;
@@ -26,7 +36,7 @@
     position: sticky;
     top: 0;
     overflow-y: auto;
-    height: 100vh;
+    max-height: 100vh;
     padding-right: 20px;
 
     &::-webkit-scrollbar {
@@ -103,14 +113,14 @@
 
 .ajax-search {
     position: sticky;
-    bottom: 0;
-    padding: 10px 30px;
+    padding: 10px 20px;
     justify-content: center;
     box-shadow: 0 0 11px 6px #bfbfbf;
     z-index: 1;
     margin-left: 5%;
     width: calc(100% - 40px);
     flex-wrap: wrap;
+    bottom: 10px;
     @media (max-width: 768px) {
         display: none;
     }
