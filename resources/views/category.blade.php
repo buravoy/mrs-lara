@@ -6,9 +6,7 @@
 
 @section('meta')
 
-    <title>@if($products->links()->paginator->currentPage() > 1)
-            Страница {{ $products->links()->paginator->currentPage() }}
-            - @endif{{ $category->meta_title ?? $meta['meta_title'] ?? $category->name }}</title>
+    <title>@if($products->links()->paginator->currentPage() > 1)Страница {{ $products->links()->paginator->currentPage() }} - @endif{{ $category->meta_title ?? $meta['meta_title'] ?? $category->name }}</title>
     <meta name="description"
           content="@if($products->links()->paginator->currentPage() > 1)Страница {{ $products->links()->paginator->currentPage() }} - @endif{{ $category->meta_description ?? $meta['meta_description'] ?? 'Выбирайте - '. $category->name . ' в интернет каталоге Mr.Shopper' }}" />
 @endsection
@@ -97,7 +95,7 @@
                                         20
                                     </option>
                                     <option value="60"
-                                            @if((isset($_COOKIE['pagination']) && $_COOKIE['pagination'] == '60') || !isset($_COOKIE['pagination'])) selected @endif>
+                                            @if(!isset($_COOKIE['pagination']) || isset($_COOKIE['pagination']) && $_COOKIE['pagination'] == '60')) selected @endif>
                                         60
                                     </option>
                                     <option value="100"
@@ -112,15 +110,47 @@
 
                     <div class="row product-list" style="margin: 0 -10px;">
                         @if(!empty($products->items()))
+
+                            @php
+                                $bannersCount = 0;
+                                $firstBanner = rand(2, 5);
+
+                                $adBlocks = [
+                                    'R-A-1281564-7',
+                                    'R-A-1281564-8',
+                                    'R-A-1281564-9',
+                                    'R-A-1281564-10',
+                                    'R-A-1281564-11',
+                                    'R-A-1281564-12',
+                                    'R-A-1281564-13',
+                                    'R-A-1281564-14',
+                                    'R-A-1281564-15',
+                                    'R-A-1281564-16',
+                                    'R-A-1281564-17',
+                                    'R-A-1281564-18',
+                                    'R-A-1281564-19',
+                                    'R-A-1281564-20',
+                                    'R-A-1281564-21',
+                                    'R-A-1281564-22',
+                                ];
+                            @endphp
+
+
+
                             @foreach($products as $product)
 
                                 <div class="col-6 col-sm-4 col-lg-3 px-2 px-md-3">
+                                    @if($firstBanner == $loop->iteration && config('app.name') == 'Mr.Shopper' && !Request::ajax())
+                                        @include('banners.ad-product', ['bannerCount' => $bannersCount, 'blockId' => $adBlocks[$bannersCount]])
 
-                                    @if($loop->iteration % 10 == 0 && config('app.name') == 'Mr.Shopper' && !Request::ajax())
-                                        @include('banners.ad-product', ['loopIteration' => $loop->iteration / 10])
+                                        @php
+                                            $firstBanner = $firstBanner + rand(5, 8);
+                                            $bannersCount++;
+                                        @endphp
                                     @else
                                         @include('sections.product-card', ['product' => $product])
                                     @endif
+
                                 </div>
 
 

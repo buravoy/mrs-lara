@@ -1,9 +1,9 @@
 @if($field['data'])
     @if ($field['file_info'])
         <div class="form-group col-12 mb-3">
-            <label>Информация об XML фиде</label>
+            <label>Информация об XML файле</label>
             <div class="d-flex flex-wrap">
-                <div class="mr-3 border rounded p-2">Обновлен: <b id="info-upd">{{ $field['file_info']['upd'] }}</b></div>
+                <div class="mr-3 border rounded p-2">Загружен: <b id="info-upd">{{ $field['file_info']['upd'] }}</b></div>
                 <div class="mr-3 border rounded p-2">Размер: <b id="info-size">{{ $field['file_info']['size'] }} Mb</b></div>
                 <div class="mr-3 border rounded p-2">Файл: <b>{{ $field['file_info']['name'] }}</b></div>
             </div>
