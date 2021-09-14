@@ -16,8 +16,14 @@
         <script>window.yaContextCb=window.yaContextCb||[]</script>
         <script src="https://yandex.ru/ads/system/context.js" async></script>
 
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4169030634163191"
-                crossorigin="anonymous"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-7TRRZCT0K3"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-7TRRZCT0K3');
+        </script>
     @endif
 
     @stack('styles')
