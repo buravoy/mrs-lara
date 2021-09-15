@@ -160,12 +160,12 @@ class Parser
 
             if(isset($productAvailable) && !$productAvailable) $product['deleted_at'] = now();
 
-            if (Products::where('uniq_id', $uniqId)->exists()) {
+            if (Products::where('uniq_id', $uniqId)->withTrashed()->exists()) {
                 $productExistAttributes = json_decode(Products::where('uniq_id', $uniqId)->pluck('attributes')->first());
                 $productMergedAttributes = array_merge_recursive((array)$productExistAttributes, (array)$productAttributes);
                 $productMergedAttributes = array_map('array_unique', $productMergedAttributes);
                 $product['attributes'] = json_encode($productMergedAttributes);
-                $updatedProduct = Products::where('uniq_id', $uniqId)->first();
+                $updatedProduct = Products::where('uniq_id', $uniqId)->withTrashed()->first();
 
                 $updatedProduct->update($product);
 

@@ -82,7 +82,7 @@
 
             <div class="col-md-6 col-12 pl-md-5 pl-2">
                 <div class="mb-3 mb-md-4 wrapper">
-                    <h1 class="mb-1">{{ $product->name }}</h1>
+                    <h1 class="mb-1">{{}} {{ $product->name }}</h1>
 
                     <div class="mb-md-5 mb-3 relative rating-wrapper">
                         @include('sections.rating', ['value' => $product->rating])
