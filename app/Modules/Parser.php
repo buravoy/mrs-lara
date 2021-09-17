@@ -66,6 +66,7 @@ class Parser
 
         $functions = [
             'name' => $fields['offer_name'],
+            'special_name' => $fields['offer_special_name'],
             'desc_1' => $fields['offer_desc_1'],
             'desc_2' => $fields['offer_desc_2'],
             'price' => $fields['offer_price'],
@@ -95,6 +96,7 @@ class Parser
             $offerObj = self::offerToObject($offer);
 
             $offerName = $functions['name']($offerObj);
+            $offerSpecialName = $functions['special_name']($offerObj);
             $uniqId = $functions['uniq_id']($offerObj);
             $offerImg = $functions['image']($offerObj);
             $offerPrice = $functions['price']($offerObj);
@@ -145,6 +147,7 @@ class Parser
 
             $product = [
                 'name' => $offerName,
+                'special_name' => $offerSpecialName,
                 'uniq_id' => $uniqId,
                 'description_1' => $functions['desc_1']($offerObj),
                 'description_2' => $functions['desc_2']($offerObj),
@@ -155,30 +158,21 @@ class Parser
                 'parser_slug' => $slug,
                 'rating' => rand(40, 50) / 10,
                 'discount' => $offerDiscount,
-                'deleted_at' => null
+                'deleted_at' => null,
+                'attributes' => json_encode($productAttributes)
             ];
 
             if(isset($productAvailable) && !$productAvailable) $product['deleted_at'] = now();
 
             if (Products::where('uniq_id', $uniqId)->withTrashed()->exists()) {
-                $productExistAttributes = json_decode(Products::where('uniq_id', $uniqId)->pluck('attributes')->first());
-                $productMergedAttributes = array_merge_recursive((array)$productExistAttributes, (array)$productAttributes);
-                $productMergedAttributes = array_map('array_unique', $productMergedAttributes);
-                $product['attributes'] = json_encode($productMergedAttributes);
                 $updatedProduct = Products::where('uniq_id', $uniqId)->withTrashed()->first();
-
                 $updatedProduct->update($product);
-
                 self::insertProductCategory($productCatsArr, $updatedProduct);
-
             } else {
                 $product['slug'] = SlugService::createSlug(Products::class, 'slug', $offerName);
-                $product['attributes'] = json_encode($productAttributes);
                 $createdProduct = Products::create($product);
-
                 self::insertProductCategory($productCatsArr, $createdProduct);
             }
-
 
             if ($mode == 'true') {
                 $countIteration++;
@@ -232,6 +226,7 @@ class Parser
 
     static function offerToObject($offer){
         $offerArr = json_decode(json_encode($offer), true);
+
         $offerArr['attributes'] = $offerArr['@attributes'];
         unset($offerArr['@attributes'], $offerArr['param']);
 
@@ -239,9 +234,16 @@ class Parser
 
         foreach ($offer->param as $singleParam) {
             $singleParam = json_decode(json_encode($singleParam), true);
-            $paramsObj[$singleParam['@attributes']['name']] = $singleParam['@attributes'];
-            $paramsObj[$singleParam['@attributes']['name']]['val_'] = $singleParam[0];
-            $offerArr['params'] = $paramsObj;
+
+            if(array_key_exists($singleParam['@attributes']['name'], $paramsObj)) {
+                $paramsObj[$singleParam['@attributes']['name']]['val_'] = [$paramsObj[$singleParam['@attributes']['name']]['val_']];
+                array_push($paramsObj[$singleParam['@attributes']['name']]['val_'], $singleParam[0]);
+            } else {
+
+                $paramsObj[$singleParam['@attributes']['name']] = $singleParam['@attributes'];
+                $paramsObj[$singleParam['@attributes']['name']]['val_'] = $singleParam[0];
+                $offerArr['params'] = $paramsObj;
+            }
         }
 
         return $offerArr;

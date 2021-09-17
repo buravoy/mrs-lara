@@ -29,7 +29,7 @@ class SitemapController extends Controller
     {
         $skip = 10000 * ($page - 1);
 
-        $categories = Categories::where('count', '>', 0)->pluck('slug')->skip($skip)->take(10000);
+        $categories = Categories::where('count', '>', 0)->skip($skip)->take(10000)->get();
         $content =  view('sitemap', [
             'type' => 'category',
             'links' => $categories

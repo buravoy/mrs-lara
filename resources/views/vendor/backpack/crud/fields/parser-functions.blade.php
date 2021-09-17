@@ -236,9 +236,15 @@
 
                 .catch(function (error) {
                     $t.attr('disabled', false);
+                    const
+                        $fileArr = error.responseJSON.file.split('/'),
+                        $file = $fileArr[$fileArr.length - 1],
+                        $message = error.responseJSON.message,
+                        $line = error.responseJSON.line;
+
                     new Noty({
                         type: "error",
-                        text: error.responseJSON.exception + '<br>' + error.responseJSON.message,
+                        text: 'Error: ' + $message + '<br>File: ' + $file + '<br>Line: ' + $line,
                         timeout: false
                     }).show();
                     console.log(error.responseJSON)

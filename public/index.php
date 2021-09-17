@@ -59,5 +59,10 @@ $kernel->terminate($request, $response);
 $time_end = microtime(true);
 $time = $time_end - LARAVEL_START;
 if($request->route())
-    if (($request->route()->getPrefix() != 'admin') && ($request->route()->getPrefix() != 'sitemap') && !$request->ajax())
+    if (
+        ($request->route()->getPrefix() != 'admin')
+        && ($request->route()->getPrefix() != 'sitemap')
+        && !$request->ajax()
+        && ($request->route()->getPrefix() != 'rss')
+    )
         printf('<span class="script-time">%.4F</span>', $time);

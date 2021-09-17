@@ -37,13 +37,13 @@
 <div class="filter common d-none d-md-block main-filter-wrapper" data-url="{{ route('filter-ajax') }}">
     @if(isset($category->parent))
         <div class="filters-group">
-            <div class="d-flex flex-wrap align-items-start filters-list" style="max-height: unset;">
+            <div class="d-flex flex-wrap align-items-start filters-list pl-1" style="max-height: unset;">
                 @foreach(Functions::selectParallel($category->parent)->sortByDesc('count') as $categoryFirst)
                     @if($categoryFirst->count > 0)
                         <a href="{{ route('category',['category' => $categoryFirst->slug]) }}"
                            class="btn-assoc"
                            style="order:@if($categoryFirst->child->contains('id', $category->id))  0 @else 1 @endif">
-                            <span>{{ $categoryFirst->short_name }}</span>
+                            <span>{{ $categoryFirst->short_name ?? $categoryFirst->name }}</span>
                         </a>
                     @endif
 
@@ -52,7 +52,7 @@
                             @if($categorySecond->count > 0)
                                 <a href="{{ route('category',['category' => $categorySecond->slug]) }}"
                                    class="btn-assoc justify-content-start ml-md-3 ml-2 @if($categorySecond->id == $category->id) active @endif">
-                                    <span>{{ $categorySecond->short_name }}</span>
+                                    <span>{{ $categorySecond->short_name ?? $categorySecond->name }}</span>
                                 </a>
                             @endif
                         @endforeach

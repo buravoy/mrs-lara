@@ -68,6 +68,21 @@ class ProductsCrudController extends CrudController
                 $this->crud->addClause('where', 'parser_slug', $value);
             }
         );
+
+        CRUD::addFilter(
+            [
+                'name' => 'attr',
+                'type' => 'select2',
+                'label' => 'Аттрибут',
+            ],
+            function () {
+                return Attributes::pluck('name', 'slug')->toArray();
+            },
+            function ($value) {
+                $attribute = Attributes::with('group')->where('slug', $value)->first();
+                $this->crud->addClause('whereJsonContains', 'attributes->'.$attribute->group->slug, $attribute->id);
+            }
+        );
     }
 
     /**
@@ -91,10 +106,12 @@ class ProductsCrudController extends CrudController
             'label' => 'Название',
             'type' => 'closure',
             'function' => function($entry) {
-                return '<a href="'.route('product',['slug'=>$entry->slug]).'" target="_blank">'. $entry->name .'</a>';
+                return '<a href="'.route('product',['slug'=>$entry->slug]).'" target="_blank">'. $entry->name .'</a><br><span>'.$entry->special_name.'</span>';
             },
             'searchLogic' => function ($query, $column, $searchTerm) {
-                $query->orWhere('name', 'like', '%'.$searchTerm.'%');
+                $query
+                    ->orWhere('name', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('special_name', 'like', '%'.$searchTerm.'%');
             }
         ]);
 
@@ -169,6 +186,16 @@ class ProductsCrudController extends CrudController
             'type' => 'goto-product',
             'data' => $entry,
             'tab' => 'Информация',
+        ]);
+
+        CRUD::addField([
+            'name' => 'special_name',
+            'label' => 'Название для страницы товара',
+            'type' => 'text',
+            'tab' => 'Информация',
+            'wrapperAttributes' => [
+                'class' => 'form-group col-md-6',
+            ],
         ]);
 
         CRUD::addField([

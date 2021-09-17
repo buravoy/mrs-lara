@@ -20,6 +20,11 @@
         </div>
 
         <div class="form-group w-100 d-flex">
+            <label class="mr-3 font-sm">Название для стр. товара:</label>
+            <input name="offer_special_name" type="text" class="form-control funk">
+        </div>
+
+        <div class="form-group w-100 d-flex">
             <label class="mr-3 font-sm">Описание&nbsp;1:</label>
             <input name="offer_desc_1" type="text" class="form-control funk">
         </div>
@@ -92,7 +97,7 @@
 @endif
 
 <textarea
-        hidden
+
         class="w-100"
         name="{{ $field['name'] }}">{{ old(square_brackets_to_dots($field['name'])) ?? $field['value'] ?? $field['default'] ?? '' }}</textarea>
 

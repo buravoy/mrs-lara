@@ -14,6 +14,8 @@ $(function () {
         $filtersList = $('.filters-list');
 
 
+
+
     const $selectedFilters = $filters.find('.btn-filter.active').clone()
 
     $filtersList.each(function () {
@@ -81,6 +83,11 @@ $(function () {
 
         if ($t.hasClass('show')) $t.html('Скрыть <i class="ml-2 fas fa-chevron-up"></i>');
         else $t.html('Показать все <i class="ml-2 fas fa-chevron-down"></i>');
+
+        const $filterWrapper = $('.main-filter-wrapper');
+        $filterWrapper.css({
+            'top': `-${ $filterWrapper.height() - $(window).height() + 100 }px`
+        });
     })
 
     $(document).on('click', '.img-popup', function () {
@@ -204,6 +211,11 @@ $(function () {
                 $ajaxFilters.html('').html($html.children())
                 $ajaxFilters.closest('.modal-content').find('.filter-modal-button').html('').html($modalHref)
                 $filterField.removeClass('loader').fadeTo("fast", 1 );
+
+                const $filterWrapper = $('.main-filter-wrapper');
+                $filterWrapper.css({
+                    'top': `-${ $filterWrapper.height() - $(window).height() + 100 }px`
+                });
             },
         })
     })

@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\FilterController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\RssController;
 
 
 /*
@@ -40,4 +41,10 @@ Route::prefix('sitemap')->name('sitemap.')->group(function () {
     Route::get('/', [SitemapController::class, 'index'])->name('index');
     Route::get('/categories/{page?}', [SitemapController::class, 'categories'])->name('categories');
     Route::get('/products/{page?}', [SitemapController::class, 'products'])->name('products');
+});
+
+Route::prefix('rss')->name('rss.')->group(function () {
+    Route::get('/', [RssController::class, 'index'])->name('index');
+    Route::get('/categories', [RssController::class, 'categories'])->name('categories');
+    Route::get('/products', [RssController::class, 'products'])->name('products');
 });
