@@ -1,16 +1,12 @@
 <?php 
-    
-function available($offer) {
-  return true;
+ 
+function specialName($offer)
+{
+    return null;
 }
 
-function specName($offer)
-{
-    if (isset($offer['name'])) {
-        return 'ТЕСТ' . $offer['name'];
-    }
-    
-    return 'ТЕСТ';
+function available($offer) {
+  return true;
 }
 
 // (Рабочая) Получаем категорию в ед.числе

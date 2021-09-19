@@ -1,5 +1,11 @@
 <?php
 
+function specialName($offer)
+{
+    return null;
+}
+
+
 // Рабочая. Получаем артикул товара (Указан только в ссылке)
 function article($offer) {
   $prefix = $offer['url']; 

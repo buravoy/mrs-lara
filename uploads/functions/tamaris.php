@@ -1,5 +1,11 @@
 <?php
 
+function specialName($offer)
+{
+    return null;
+}
+
+
 // (Рабочая) Получаем артикул для описания
 function newArticle($offer) {
   if (isset($offer['vendorCode'])) {

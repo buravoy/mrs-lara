@@ -30,8 +30,8 @@ function polCat($offer) {
     $newPol = $offer['params']['Пол']['val_'] ?? null;
     if ($vozrast == 'для новорожденных') return 'новорожденные';
     if ($vozrast == 'для малышей') return 'малыши';
-    if ($vozrast == 'для детей' && $newPol == 'Девочки') return 'девочки';
-    if ($vozrast == 'для детей' && $newPol == 'Мальчики') return 'мальчики';
+    if ($vozrast == 'для детей' && $newPol == 'девочки') return 'девочки';
+    if ($vozrast == 'для детей' && $newPol == 'мальчики') return 'мальчики';
     if ($vozrast == 'для детей') return 'не указано';
     return null;
 }
@@ -55,7 +55,7 @@ function category($offer) {
   $vozrast = vozrast($offer);
   $pol = polCat($offer);
   if (isset($offer['model'])) {
-    $cat = $offer['model'];
+    $cat = mb_strtolower($offer['model']);
  
 	if (strstr($cat, 'комплект (боди+полукомбинезон)') && polCat($offer) == 'девочки') return ['боди для девочек', 'Детские боди', 'боди', 'полукомбинезоны для девочек', 'Детские полукомбинезоны', 'полукомбинезоны'];
 	if (strstr($cat, 'комплект (боди+полукомбинезон)') && polCat($offer) == 'мальчики') return ['боди для мальчиков', 'Детские боди', 'боди', 'полукомбинезоны для мальчиков', 'Детские полукомбинезоны', 'полукомбинезоны'];
@@ -491,7 +491,7 @@ function pol($offer) {
     if ($newPol == 'Девочки') return 'для девочек';
     if ($newPol == 'Мальчики') return 'для мальчиков';
     
-    return 'Не определено Original Marines';
+    return $newPol;
   }
     return null;
 }
@@ -507,7 +507,7 @@ function name($offer) {
   return $newName;
 }
 
-function nameCat($offer) {
+function specialName($offer) {
   if (isset($offer['name'])) {
     $newName = $offer['name'];
   } else $newName = 'Товар';
@@ -542,10 +542,98 @@ function descFirst($offer) {
   return $text;
 }
 
+//Рабочая - цвет для описания
+function cvetDesc($offer) {
+    $cvetDesc = cvet($offer);
+    if ($cvetDesc == null) return null;
+    if (is_array($cvetDesc)) {
+        $cvetDesc = implode(', ', $cvetDesc);
+    }
+  
+    return ', цвет - ' . $cvetDesc;
+}
+
+//Рабочая - сезон для описания
+function sezonDesc($offer) {
+    $sezonDesc = sezon($offer);
+    if ($sezonDesc == null) return null;
+    if (is_array($sezonDesc)) {
+        $sezonDesc = implode(', ', $sezonDesc);
+    }
+  
+    return ', сезон - ' . $sezonDesc;
+}
+
+//Рабочая - возраст для описания
+function vozrastDesc($offer) {
+    $vozrastDesc = vozrast($offer);
+    if ($vozrastDesc == null) return null;
+    if (is_array($vozrastDesc)) {
+        $vozrastDesc = implode(', ', $vozrastDesc);
+    }
+  
+    return ' специально ' . $vozrastDesc;
+}
+
+//Рабочая - пол для описания
+function polDesc($offer) {
+    $polDesc = pol($offer);
+    if ($polDesc == null) return null;
+    if (is_array($polDesc)) {
+        $polDesc = implode(' и ', $polDesc);
+    }
+  
+    return ' А если точнее, то ' . $polDesc . '.';
+}
+
+//Рабочая - состав для описания
+function sostavDesc($offer) {
+    if (isset($offer['params']['Состав']['val_'])) {
+    $sostavDesc = $offer['params']['Состав']['val_'];
+    if ($sostavDesc == null) return null;
+    if (is_array($sostavDesc)) {
+        $sostavDesc = implode(', ', $sostavDesc);
+    }
+  
+    return ' Нельзя не упомянуть о качестве состава материала - это ' . $sostavDesc . '.';
+    }
+}
+
+//Рабочая - вид застежки для описания
+function zastezhkaDesc($offer) {
+    if (isset($offer['params']['Вид застежки']['val_'])) {
+    $zastezhkaDesc = $offer['params']['Вид застежки']['val_'];
+    if ($zastezhkaDesc == null) return null;
+    if (is_array($zastezhkaDesc)) {
+        $zastezhkaDesc = implode(', ', $zastezhkaDesc);
+    }
+  
+    return ' Также стоит отметить классический и надежный вид застежки - ' . $zastezhkaDesc . '.';
+    }
+}
+
+//Рабочая - утеплитель для описания
+function uteplitelDesc($offer) {
+    if (isset($offer['params']['Утеплитель']['val_'])) {
+    $uteplitelDesc = $offer['params']['Утеплитель']['val_'];
+    if ($uteplitelDesc == null) return null;
+    if ($uteplitelDesc == 'без утепления') return ', без дополнительного утепления';
+    if (is_array($uteplitelDesc)) {
+        $uteplitelDesc = implode(', ', $uteplitelDesc);
+    }
+  
+    return ', в качестве утеплителя используется ' . $uteplitelDesc;
+    }
+}
+
+
 function descSecond($offer) {
   if (isset($offer['model'])) {
     $cat = $offer['model'];
   } else $cat = 'Товар';
-  $text = category($offer)[0] .' от итальянского бренда Original Marines. Артикул модели - ' . $offer['vendorCode'] . ', цвет ' . cvet($offer) . ', дизайн продуман специально ' . vozrast($offer) . '. В нашем интернет-магазине цена указана уже со скидкой. Товар также можно купить с доставкой как по Москве, так и по России. А также можно забрать самовывозом из официального магазина. ' . $cat;
-  return $text;
+  if (isset($offer['description'])) {
+  $desc = '<p>' . $offer['description'] . '</p>';
+  } else $desc = null;
+  $text = '<p>' . category($offer)[0] . cvetDesc($offer) . sezonDesc($offer) . uteplitelDesc($offer) . '. Данную модель разработали итальянские дизайнеры' . vozrastDesc($offer) . '.' . polDesc($offer) . sostavDesc($offer) . zastezhkaDesc($offer) . '</p>';
+  return $text . $desc;
 }

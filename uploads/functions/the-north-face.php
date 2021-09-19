@@ -1,5 +1,11 @@
 <?php
 
+function specialName($offer)
+{
+    return null;
+}
+
+
 function available($offer) {
   if($offer['attributes']['available'] == 'true') return true;
   if($offer['attributes']['available'] == 'false') return false;

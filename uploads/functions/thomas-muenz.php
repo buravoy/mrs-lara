@@ -1,5 +1,11 @@
 <?php
 
+function specialName($offer)
+{
+    return null;
+}
+
+
 function available($offer) {
   return true;
 }
@@ -229,11 +235,11 @@ function name($offer) {
 function sezon($offer) {
   if (isset($offer['params']['Сезон']['val_'])) {
     $newSezon = mb_strtolower($offer['params']['Сезон']['val_']);
-    if ($newSezon == 'межсезонная') return 'межсезон';
+    if ($newSezon == 'межсезонная') return 'демисезон';
     if ($newSezon == 'демисезонная') return 'демисезон';
     if ($newSezon == 'лето') return 'лето';
     if ($newSezon == 'всесезонная') return 'всесезон';
-    if ($newSezon == 'весна-осень') return 'весна-осень';
+    if ($newSezon == 'весна-осень') return ['весна', 'осень'];
     if ($newSezon == 'зима') return 'зима';
   return $newSezon;
   } else return null;
@@ -250,6 +256,7 @@ function vysota_kabluka($offer) {
 function material_verha($offer) {
   if (isset($offer['params']['Материал верха']['val_'])) {
     $newMaterial = mb_strtolower($offer['params']['Материал верха']['val_']);
+    if ($newMaterial == 'кожа из спилка') return 'спилок';
     return $newMaterial;
   } else return null;
 }
