@@ -4,7 +4,7 @@ Disallow: /admin
 Disallow: /filter-ajax
 Disallow: /away
 Disallow: /product-info
-Disallow: *?*
+Disallow: /rss
 
 User-agent: Googlebot
 Disallow: /login
@@ -12,7 +12,7 @@ Disallow: /admin
 Disallow: /filter-ajax
 Disallow: /away
 Disallow: /product-info
-Disallow: *?*
+Disallow: /rss
 
 User-agent: *
 Disallow: /login
@@ -20,6 +20,6 @@ Disallow: /admin
 Disallow: /filter-ajax
 Disallow: /away
 Disallow: /product-info
-Disallow: *?*
+Disallow: /rss
 
 Sitemap: https://mrshopper.ru/sitemap

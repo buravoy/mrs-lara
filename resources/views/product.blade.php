@@ -160,7 +160,7 @@
                     <div class="p-md-5 p-sm-3 p-1 pt-4">
                         <h2 class="mb-4 font-11">Описание товара</h2>
                         @if($product->description_2)
-                            <p class="description-product ucfirst">{{ $product->description_2 }}</p>
+                            <p class="description-product ucfirst">{!! $product->description_2 !!}</p>
                         @else
                             <p class="description-product ucfirst">Мы пока не составили описание.</p>
                         @endif

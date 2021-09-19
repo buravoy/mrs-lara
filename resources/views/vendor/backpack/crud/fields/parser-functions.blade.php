@@ -270,6 +270,12 @@
                     parserData = response;
                     renderXML();
                     $xmlCounter.val(0);
+
+                    new Noty({
+                        type: "info",
+                        text: 'Date: ' + response.date[0],
+                        timeout: false
+                    }).show();
                 }
             })
         })

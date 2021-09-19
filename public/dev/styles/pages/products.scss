@@ -6,6 +6,9 @@
 @import "~bootstrap/scss/transitions";
 @import "~bootstrap/scss/carousel";
 
+
+
+
 .price {
     font-family: $condensed;
     font-weight: 500;
@@ -60,26 +63,35 @@
             //margin: 0 5px 20px;
         }
 
+        .beige-wrapper {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+        }
+
+        .discount,
+        .new-product {
+            font-family: $condensed;
+            padding: 1px 5px;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
         .discount {
             background-color: #ff4c41;
             color: $white;
-            font-family: $condensed;
-            position: absolute;
-            min-width: 100px;
-            text-align: center;
-            transform: rotate(45deg);
-            z-index: 1;
-            top: 13px;
-            right: -27px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
+        }
 
-            @media (max-width: 420px) {
-                top: 7px;
-                right: -31px;
-                font-size: 1rem;
-            }
-
+        .new-product {
+            background-color: $green;
+            color: $white;
+            font-size: 0.9rem;
         }
 
         &:hover {

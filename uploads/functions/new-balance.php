@@ -4,6 +4,15 @@ function available($offer) {
   return true;
 }
 
+function specName($offer)
+{
+    if (isset($offer['name'])) {
+        return 'ТЕСТ' . $offer['name'];
+    }
+    
+    return 'ТЕСТ';
+}
+
 // (Рабочая) Получаем категорию в ед.числе
 function newPrefix($offer) {
   // Переименовываем некоторые непонятные названия категорий
@@ -206,6 +215,9 @@ function descFirst($offer) {
 }
 
 function descSecond($offer) {
+    if (isset($offer['description'])) $description = $offer['description'];
+    else $description = '';
+    
   $text = newPrefix($offer) .' от бренда New Balance. Артикул модели - ' . newArticle($offer) . ', цвет ' . cvet($offer) . ', дизайн разработан специально ' . vozrast($offer) . '. В интернет-магазине цена указана со скидкой и составляет ' . price($offer) . ' руб. ' . category($offer)[0] . ' можно купить с доставкой по Москве и России, либо самовывозом из магазина.';
-  return $text . ' ' . $offer['description'];
+  return $text . ' ' . $description;
 }

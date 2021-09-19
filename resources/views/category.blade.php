@@ -22,7 +22,7 @@
 
         <div class="pb-3">
             <div class="mb-3 mb-md-5 wrapper">
-                <h1 class="mb-3">{!! $meta['title'] ?? $category->name !!}</h1>
+                <h1 class="mb-3">{!! Str::ucfirst($meta['title'] ?? $category->name) !!}</h1>
                 @if($products->links()->paginator->currentPage() == 1)
                     <p class="description ucfirst">{!! $category->short_description ?? $meta['description1'] !!}</p>
                 @endif
@@ -190,7 +190,15 @@
     </div>
 @endsection
 
+@push('links')
+    <a href="{{ route('rss.products', ['category' => $category->slug]) }}" target="_blank">
+        <i class="fas fa-rss-square orange"></i>
+    </a>
+@endpush
 
 @push('modals')
+    <div class="scroll-up" style="display: none">
+        <i class="fas fa-arrow-up"></i>
+    </div>
     @include('sections.img-popup')
 @endpush

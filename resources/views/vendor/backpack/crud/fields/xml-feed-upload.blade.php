@@ -16,8 +16,9 @@
                 data-url="{{ $field['data']->xml_url }}"
                 data-name="{{ $field['data']->slug }}">
             Загрузить XML на сервер
-
         </button>
+
+
 
         <div id="uploading" class="row align-items-center ml-5" style="display: none !important;">
             <p class="mb-0">Загруженно: <span id="filesize" class="mx-2">0 B</span></p>

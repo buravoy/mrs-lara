@@ -4,5 +4,8 @@
             <i class="far fa-copyright mr-2" style="margin-top: -2px;"></i>
             <a href="{{ route('index') }}" class="mr-2" style="color:#1d91a8;">Mr.Shopper</a> {{ date('Y') }}
         </div>
+        <div>
+            @stack('links')
+        </div>
     </div>
 </div>

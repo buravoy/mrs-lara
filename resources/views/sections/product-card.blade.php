@@ -1,6 +1,18 @@
+@php
+    if($product->created_at) $dayDiff = date_diff($product->created_at, now())->days < 14;
+@endphp
+
 <div class="product-card card-wrapper">
-    @if($product->discount)
-        <p class="discount">-{{ $product->discount }} %</p>
+    @if($dayDiff || $product->discount)
+        <div class="beige-wrapper">
+            @if($product->discount)
+                <p class="discount">-{{ $product->discount }} %</p>
+            @endif
+
+            @if($dayDiff)
+                <p class="new-product">NEW</p>
+            @endif
+        </div>
     @endif
 
     <div

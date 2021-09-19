@@ -1,22 +1,16 @@
-{{ '<?xml version="1.0" encoding="utf-8"?>' }}
+@php '<?xml version="1.0" encoding="utf-8"?>' @endphp
 
-<feed xmlns="http://w3.org/2005/Atom">
-    <title>MHanson01 - Laravel Rss Demo</title>
-    <subtitle>Sample Rss Demo Project<subtitle>
-            <link href="http://mhanson01.com"/>
-            <updated>{{ \Carbon\Carbon::now()->toATOMString() }}</updated>
-            <author>
-                <name>Mark Hanson</name>
-            </author>
-            <id>tag:example.com,{{date('Y')}}:/feed</id>
-
-            @foreach($posts as $post)
-                <entry>
-                    <title>{{ $post->title }}</title>
-                    <link href="http://www.example.com/blog/{{ $post->slug }}"/>
-                    <id>{{ create_tag_uri($post) }}</id>
-                    <summary>{{ $post->excerpt }}</summary>
-                </entry>
-    @endforeach
-
-</feed>
+<rss version="2.0">
+    <channel>
+        @if($data)
+            @foreach($data as $item)
+                <item>
+                    <title>{{ $item->name }}</title>
+                    <link>{{ route('product', ['slug' => $item->slug]) }}</link>
+                    <description>{{ $item->description_2 ?? $item->description_1 }}</description>
+                    <pubDate>{{ $item->created_at }}</pubDate>
+                </item>
+            @endforeach
+        @endif
+    </channel>
+</rss>

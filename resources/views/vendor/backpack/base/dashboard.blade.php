@@ -17,7 +17,13 @@
                 <p class="mb-0">Не активных: <b>{{ $productsCount['trashed'] }}</b></p>
             </div>
 
-            <button class="btn btn-sm btn-primary count-goods-in-menu">Посчитать товары во всех категориях</button>
+            <button class="btn btn-sm btn-primary count-goods-in-menu mb-5">Посчитать товары во всех категориях</button>
+        </div>
+
+        <div class="col-12 col-md-9">
+            <div class="border rounded p-3 mb-4 bg-white">
+                <pre style="max-height: 600px; overflow-y: auto;"><b class="mb-3">Parsing.log</b><br><br>{{ $parserLog }}</pre>
+            </div>
         </div>
     </div>
 @endsection

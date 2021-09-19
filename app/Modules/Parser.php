@@ -11,7 +11,9 @@ use App\Models\Groups;
 use App\Models\Products;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Error;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class Parser
 {
@@ -20,6 +22,7 @@ class Parser
         $filename = $request->name;
         $xml = simplexml_load_file(base_path('uploads/xml/feeds/') . $filename);
         $offers = $xml->shop->offers->offer;
+        $date = $xml->attributes()->date;
 
         $countIteration = 1;
         $countFrom = $request->count_from;
@@ -37,15 +40,16 @@ class Parser
         }
 
 
-
         return [
+            'date' => $date,
             'json' => $selectedOffers,
             'xml' => $selectedOffersXML
         ];
     }
 
-    public static function parse($slug, $mode, $countFrom, $countTo, $requestType = null)
+    public static function parse($slug, $mode, $countFrom, $countTo, $requestType = null): bool
     {
+
         $countIteration = 0;
         $filenameXML = $slug . '.xml';
         $oldXml = simplexml_load_file(base_path('uploads/xml/feeds/') . $slug . '.xml');
@@ -53,7 +57,7 @@ class Parser
 
         $parserFields = Feeds::where('slug', $slug)->first();
         $link = $parserFields->xml_url;
-        file_put_contents( base_path('uploads/xml/feeds/') . $filenameXML, fopen($link, 'r'));
+        file_put_contents(base_path('uploads/xml/feeds/') . $filenameXML, fopen($link, 'r'));
         $xml = simplexml_load_file(base_path('uploads/xml/feeds/') . $slug . '.xml');
 
         $newDate = Carbon::parse((string)$xml->attributes()->date)->format('Y-m-d H:i:s');
@@ -77,15 +81,15 @@ class Parser
             'category' => $fields['offer_category']
         ];
 
-        if(isset($fields['offer_available'])) $functions['available'] = $fields['offer_available'];
+        if (isset($fields['offer_available'])) $functions['available'] = $fields['offer_available'];
 
         $functionsAttributes = [];
 
         foreach ($attributesGroups as $attributeGroup) {
-            if(isset( $fields['offer_'.$attributeGroup->slug] )) {
-                $functionsAttributes['offer_'.$attributeGroup->slug] = [
+            if (isset($fields['offer_' . $attributeGroup->slug])) {
+                $functionsAttributes['offer_' . $attributeGroup->slug] = [
                     'slug' => $attributeGroup->slug,
-                    'function' => $fields['offer_'.$attributeGroup->slug]
+                    'function' => $fields['offer_' . $attributeGroup->slug]
                 ];
             }
         }
@@ -104,7 +108,7 @@ class Parser
             $offerDiscount = $offerOldPrice ? ceil(($offerOldPrice - $offerPrice) / $offerOldPrice * 100) : null;
             $productCatsArr = $functions['category']($offerObj);
 
-            if(isset($fields['offer_available'])) {
+            if (isset($fields['offer_available'])) {
                 $functions['available'] = $fields['offer_available'];
                 $productAvailable = $functions['available']($offerObj);
             }
@@ -162,7 +166,7 @@ class Parser
                 'attributes' => json_encode($productAttributes)
             ];
 
-            if(isset($productAvailable) && !$productAvailable) $product['deleted_at'] = now();
+            if (isset($productAvailable) && !$productAvailable) $product['deleted_at'] = now();
 
             if (Products::where('uniq_id', $uniqId)->withTrashed()->exists()) {
                 $updatedProduct = Products::where('uniq_id', $uniqId)->withTrashed()->first();
@@ -186,10 +190,10 @@ class Parser
         $formatted_date = $date->format('Y-m-d H:i:s');
 
         Products::where('parser_slug', $slug)
-            ->where('updated_at','<=', $formatted_date)
+            ->where('updated_at', '<=', $formatted_date)
             ->update(['deleted_at' => now()]);
 
-        if($requestType == 'update') CategoriesController::countAllProductsInCategories();
+        if ($requestType == 'update') CategoriesController::countAllProductsInCategories();
 
         Feeds::where('slug', $slug)->update(['last_update' => now()]);
         return true;
@@ -200,12 +204,23 @@ class Parser
         $countFrom = $request->count_from ?? 0;
         $countTo = $request->count_to ?? 100;
         $mode = $request->mode;
-
         $slug = $request->name;
 
-        self::parse($slug, $mode, $countFrom, $countTo);
-
+        try {
+            self::parse($slug, $mode, $countFrom, $countTo);
+            $logString = now() . ' ' . $slug . ' SUCCESS';
+            self::writeLog($logString);
+        } catch (Error $error) {
+            $file = explode('/', $error->getFile());
+            $logString = now() . ' ' . $slug . ' ERROR:' . $error->getMessage() . ' File:' . end($file) . ' Line:' . $error->getLine();
+            self::writeLog($logString);
+            throw $error;
+        }
         return true;
+    }
+
+    function writeLog($logString) {
+        Storage::disk('logs')->prepend('parsing.log', $logString);
     }
 
     public function saveFunction(Request $request)
@@ -224,7 +239,8 @@ class Parser
         Products::where('parser_slug', $slug)->forceDelete();
     }
 
-    static function offerToObject($offer){
+    static function offerToObject($offer)
+    {
         $offerArr = json_decode(json_encode($offer), true);
 
         $offerArr['attributes'] = $offerArr['@attributes'];
@@ -235,7 +251,7 @@ class Parser
         foreach ($offer->param as $singleParam) {
             $singleParam = json_decode(json_encode($singleParam), true);
 
-            if(array_key_exists($singleParam['@attributes']['name'], $paramsObj)) {
+            if (array_key_exists($singleParam['@attributes']['name'], $paramsObj)) {
                 $paramsObj[$singleParam['@attributes']['name']]['val_'] = [$paramsObj[$singleParam['@attributes']['name']]['val_']];
                 array_push($paramsObj[$singleParam['@attributes']['name']]['val_'], $singleParam[0]);
             } else {
@@ -249,15 +265,15 @@ class Parser
         return $offerArr;
     }
 
-    static function insertProductCategory($productCatsArr, $product) {
+    static function insertProductCategory($productCatsArr, $product)
+    {
 
         CategoryProduct::where('product_id', $product->id)->forceDelete();
 
-        foreach ($productCatsArr as $productCatEntry)
-        {
+        foreach ($productCatsArr as $productCatEntry) {
             $catId = Categories::where('name', $productCatEntry)->first()->id ?? false;
 
-            if($catId) {
+            if ($catId) {
                 CategoryProduct::insert([
                     'category_id' => $catId,
                     'product_id' => $product->id,

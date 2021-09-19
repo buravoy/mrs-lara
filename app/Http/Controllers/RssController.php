@@ -4,17 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Categories;
 use App\Models\Products;
+use App\Modules\Functions;
+use App\Modules\Generator;
 
 class RssController extends Controller
 {
-    public function index() {
-        $content =  view('rss.index', [
-            'data' => Products::take(15)->orderBy('updated_at')->get()
-        ]);
-
-        return response($content)->header('Content-Type', 'text/xml;charset=utf-8');
-    }
-
     public function categories()
     {
 
@@ -25,10 +19,18 @@ class RssController extends Controller
         return response($content)->header('Content-Type', 'text/xml;charset=utf-8');
     }
 
-    public function products()
+    public function products($category = null)
     {
-        $content =  view('rss.index', [
-            '$data' => $categories
+        if(!$category || !Categories::where('slug', $category)->exists()) abort(404);
+
+
+
+        $productsData = Functions::productsData($category);
+        $productsQuery = $productsData['query'];
+        $products = $productsQuery->orderBy('created_at', 'desc')->take(1000)->get();
+
+        $content =  view('rss.products', [
+            'data' => $products
         ]);
 
         return response($content)->header('Content-Type', 'text/xml;charset=utf-8');

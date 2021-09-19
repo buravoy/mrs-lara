@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Categories;
 use App\Models\Products;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController
 {
@@ -22,6 +23,7 @@ class DashboardController
                 'trashed' => $productsTrashed
             ],
             'categoriesCount' => $categoriesCount,
+            'parserLog' => Storage::disk('logs')->get('parsing.log')
         ]);
     }
 }

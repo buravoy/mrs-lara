@@ -11,12 +11,19 @@ $(function () {
         $paginate = $('select[name=paginate]'),
         $filters = $('.filter.common'),
         $filterField = $('.filter'),
-        $filtersList = $('.filters-list');
-
-
-
+        $filtersList = $('.filters-list'),
+        $scrollUpBtn = $('.scroll-up');
 
     const $selectedFilters = $filters.find('.btn-filter.active').clone()
+
+    $( window ).on('scroll', function() {
+        if (window.pageYOffset > 500)  $scrollUpBtn.fadeIn(300);
+        else $scrollUpBtn.fadeOut(300);
+    });
+
+    $scrollUpBtn.on('click', function () {
+        $('html, body').animate( { scrollTop: 0 }, 600 );
+    })
 
     $filtersList.each(function () {
         const $t = $(this);
@@ -58,7 +65,7 @@ $(function () {
 
     })
 
-    $('.selected-filters').append($selectedFilters)
+    $('.selected-filters').append($selectedFilters);
 
     $(document).on('click', '.selected-filters > .btn-filter', function () {
         location = window.location.origin + '/' +$(this).data('href');

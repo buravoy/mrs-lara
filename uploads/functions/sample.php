@@ -1,39 +1,48 @@
 <?php
 
-function category($offer) {
+function category($offer)
+{
     return [1];
 }
 
-function uniq($offer) {
+function uniq($offer)
+{
     return $offer['typePrefix'] . $offer['param']['gender'] . $offer['name'];
 }
 
-function name($offer) {
+function name($offer)
+{
     if ($offer['typePrefix'] == 'Crossbody') $offer['typePrefix'] = 'Кросс-боди';
 
-    return $offer['typePrefix'].' '.$offer['name'];
+    return $offer['typePrefix'] . ' ' . $offer['name'];
 }
 
-function descFirst($offer) {
+function descFirst($offer)
+{
     return $offer['description'];
 }
 
-function descSecond($offer) {
+function descSecond($offer)
+{
     return null;
 }
 
-function price($offer) {
+function price($offer)
+{
     return $offer['price'];
 }
 
-function oldprice($offer) {
+function oldprice($offer)
+{
     return $offer['oldprice'] ?? null;
 }
 
-function image($offer) {
+function image($offer)
+{
     return $offer['picture'];
 }
 
-function href($offer) {
+function href($offer)
+{
     return $offer['url'];
 }
