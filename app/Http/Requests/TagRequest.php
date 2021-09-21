@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
-class FeedsRequest extends FormRequest
+class TagRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,16 +27,7 @@ class FeedsRequest extends FormRequest
     {
         return [
             'name' => 'bail|required|string|max:255',
-            'xml_url' => 'bail|required|string|max:65535',
-
-            'parser' => 'bail|nullable|string|max:65535',
-            'rules' => 'bail|nullable|string|max:65535',
-            'schedule' => 'bail|nullable|string|max:65535',
-            'last_update' => 'bail|nullable|string|max:65535',
-
-            'slug' => 'bail|nullable|string|max:255|unique:feeds,slug,'.request()->id,
-            'meta_title' => 'bail|nullable|string|max:255',
-            'meta_description' => 'bail|nullable|string|max:65535',
+            'slug' => 'bail|nullable|string|max:255|unique:tags,slug,'.request()->id,
             'sort' => 'bail|integer|max:99999',
         ];
     }
