@@ -9,6 +9,7 @@ use App\Models\CategoryProduct;
 use App\Models\Feeds;
 use App\Models\Groups;
 use App\Models\Products;
+use App\Models\Tag;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Error;
@@ -113,7 +114,6 @@ class Parser
                 $productAvailable = $functions['available']($offerObj);
             }
 
-
             $productAttributes = [];
 
             if (is_string($offerImg)) {
@@ -148,6 +148,22 @@ class Parser
                     }
                 }
             }
+
+//            $tagsArray = self::addTagInAttributes('asd');
+//
+//            $tagGroupId = Groups::where('slug', 'metka')->first()->id;
+//
+//            foreach ($tags as $tag) {
+//                $tagInAttributes = Attributes::where('group_id', $tagGroupId)
+//                    ->where('name', $tag)
+//                    ->pluck('id')->first();
+//            }
+
+
+            // pltcm
+
+//            dd(self::addTagInAttributes('asd'));
+
 
             $product = [
                 'name' => $offerName,
@@ -290,5 +306,14 @@ class Parser
                 ]);
             }
         }
+    }
+
+    static function addTagInAttributes($string)
+    {
+        $tags = Tag::all();
+
+        dd($tags);
+
+        return $productAttributes;
     }
 }

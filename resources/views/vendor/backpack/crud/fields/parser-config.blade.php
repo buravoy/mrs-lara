@@ -59,6 +59,7 @@
     <div class="col-md-4 parser-fields add_functions">
         <label class="mb-3">Функции аттрибутов:</label>
         @foreach($field['attr_groups'] as $attr)
+            @continue($attr->slug == 'metka')
             <div class="attr_group d-flex align-items-center mb-3">
                 <label class="ml-2 mr-3 attr_label">{{ $attr->name }}</label>
                 <input name="offer_{{ $attr->slug }}" type="text" class="form-control funk">
