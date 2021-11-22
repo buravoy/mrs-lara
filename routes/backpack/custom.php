@@ -70,4 +70,5 @@ Route::group([
     Route::post('delete-all-goods', [Parser::class, 'deleteAllGoods'])->name('delete-all-goods');
 
     Route::crud('longfeeds', 'LongFeedsCrudController');
+    Route::crud('tag', 'TagCrudController');
 }); // this should be the absolute last line of this file

@@ -27,7 +27,7 @@ class RssController extends Controller
 
         $productsData = Functions::productsData($category);
         $productsQuery = $productsData['query'];
-        $products = $productsQuery->orderBy('created_at', 'desc')->take(1000)->get();
+        $products = $productsQuery->orderBy('updated_at', 'desc')->take(1000)->get();
 
         $content =  view('rss.products', [
             'data' => $products
